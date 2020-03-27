@@ -1,35 +1,63 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components'
+
+import Upload from './components/Upload'
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  const [currentTime, setCurrentTime] = useState(0);
+const CSV_CONFIG = [
+  {
+    id: 1,
+    name: 'CSV 1'
+  },
+  {
+    id: 2,
+    name: 'CSV 2'
+  },
+  {
+    id: 3,
+    name: 'CSV 3'
+  }
+]
 
-  useEffect(() => {
-    fetch('/api/time').then(res => res.json()).then(data => {
-      setCurrentTime(data.time);
-    });
-  }, []);
+function App() {
+  const [activeUpload, setActiveUpload] = useState(1)
+
+  const next = () => {
+    setActiveUpload(activeUpload + 1)
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <p>The current time is {currentTime}.</p>
-      </header>
-    </div>
-  );
+    <AppContainer>
+      {
+        CSV_CONFIG.map((csvConfig) => {
+          return (
+            <Upload
+              title={csvConfig.name}
+              enabled={csvConfig.id <= activeUpload}
+              next={next}
+            />
+          )
+        })
+      }
+      {/* {
+        activeUpload === CSV_CONFIG.length &&
+          <Button>{'Upload'}</Button>
+      } */}
+    </AppContainer>
+  )
 }
+
+const AppContainer = styled.div`
+  width: 600px;
+  margin: 40px auto 0;
+`;
+
+const Button = styled.button`
+  width: 200px;
+  height: 40px;
+  color: white;
+  background: black;
+`
 
 export default App;
