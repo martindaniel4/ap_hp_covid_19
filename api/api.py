@@ -1,5 +1,5 @@
 import time
-from flask import Flask, redirect, url_for
+from flask import Flask, request, redirect, url_for, jsonify
 
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 
@@ -14,3 +14,8 @@ def index():
 @app.route('/api/time')
 def get_current_time():
     return {'time': time.time()}
+
+@app.route('/files', methods = ['POST'])
+def post_files():
+    print (request.is_json)
+    return {'files': 'JSON posted'}

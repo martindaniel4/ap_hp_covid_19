@@ -25,6 +25,10 @@ const CSV_CONFIG = [
 function App() {
   const [files, setFiles] = useState({})
 
+  const areAllFilesValid = () => {
+    return Object.keys(files).length === CSV_CONFIG.length
+  }
+
   const onFileComplete = (payload) => {
     const { id, data, fields } = payload
     const newFiles = {
@@ -32,10 +36,25 @@ function App() {
       [id]: {
         data,
         fields,
-        valid: true,
       },
     }
     setFiles(newFiles)
+  }
+
+  const submitFiles = () => {
+    console.log(files)
+    fetch(
+      '/files',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: files,
+      }
+    )
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+    })
   }
 
   return (
@@ -50,6 +69,7 @@ function App() {
           />
         )
       }
+      <Button disabled={!areAllFilesValid()}onClick={submitFiles}>{'Submit'}</Button>
     </AppContainer>
   )
 }
@@ -64,6 +84,11 @@ const Button = styled.button`
   height: 40px;
   color: white;
   background: black;
+
+  ${({ disabled }) => disabled && `
+    background: #aaa;
+    cursor-pointer: none;
+  `}
 `
 
 export default App;
