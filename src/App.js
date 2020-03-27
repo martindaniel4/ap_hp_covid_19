@@ -2,48 +2,54 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 
 import Upload from './components/Upload'
-import logo from './logo.svg';
 import './App.css';
 
 const CSV_CONFIG = [
   {
-    id: 1,
-    name: 'CSV 1'
+    id: 'orbis',
+    name: 'Orbis',
+    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
   },
   {
-    id: 2,
-    name: 'CSV 2'
+    id: 'grims',
+    name: 'Grims',
+    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
   },
   {
-    id: 3,
-    name: 'CSV 3'
+    id: 'capacity',
+    name: 'Capacity',
+    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
   }
 ]
 
 function App() {
-  const [activeUpload, setActiveUpload] = useState(1)
+  const [files, setFiles] = useState({})
 
-  const next = () => {
-    setActiveUpload(activeUpload + 1)
+  const onFileComplete = (payload) => {
+    const { id, data, fields } = payload
+    const newFiles = {
+      ...files,
+      [id]: {
+        data,
+        fields,
+        valid: true,
+      },
+    }
+    setFiles(newFiles)
   }
 
   return (
     <AppContainer>
       {
-        CSV_CONFIG.map((csvConfig) => {
-          return (
-            <Upload
-              title={csvConfig.name}
-              enabled={csvConfig.id <= activeUpload}
-              next={next}
-            />
-          )
-        })
+        CSV_CONFIG.map(csvConfig =>
+          <Upload
+            key={csvConfig.id}
+            csvConfig={csvConfig}
+            enabled={true}
+            onFileComplete={onFileComplete}
+          />
+        )
       }
-      {/* {
-        activeUpload === CSV_CONFIG.length &&
-          <Button>{'Upload'}</Button>
-      } */}
     </AppContainer>
   )
 }
