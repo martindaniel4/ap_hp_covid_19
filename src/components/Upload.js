@@ -1,9 +1,13 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import Papa from 'papaparse'
+import { Button } from '@material-ui/core'
+import { Done, Publish } from '@material-ui/icons'
+import { withStyles } from '@material-ui/core/styles'
 
-function Upload({ csvConfig, enabled, onFileComplete }) {
+function Upload({ csvConfig, onFileComplete }) {
   const fileInput = useRef(null)
+  const { id, name, description, valid, fields, data } = csvConfig
   
   const analyzeCSV = (e) => {
     Papa.parse(e.target.files[0], {
@@ -24,15 +28,32 @@ function Upload({ csvConfig, enabled, onFileComplete }) {
   }
 
   return (
-    <UploadContainer enabled={enabled}>
-      <Label>{csvConfig.name}</Label>
-      <Description>{csvConfig.description}</Description>
+    <UploadContainer>
+      <Left>
+        <Label>{name}</Label>
+        <Description>{description}</Description>
+      </Left>
       <UploadWrapper>
         <>
+          {
+            !valid &&
+              <Button variant="contained" color="primary" startIcon={<Publish />}>
+                <label htmlFor={`file-upload-${id}`}>Choisir un fichier</label>
+              </Button>
+          }
+          {
+            valid &&
+              <>
+                <ColorButton variant="contained" color="primary" startIcon={<Done />}>
+                  Fichier Valide
+                </ColorButton>
+                <Summary>{`${data.length} rangées, ${fields.length} colonnes.`}</Summary>
+              </>
+          }
           <Input
-            id="file"
+            id={`file-upload-${id}`}
             type="file"
-            name={csvConfig.id}
+            name={id}
             ref={fileInput}
             accept=".csv"
             onChange={analyzeCSV}
@@ -44,11 +65,17 @@ function Upload({ csvConfig, enabled, onFileComplete }) {
 }
 
 const UploadContainer = styled.div`
-  margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+`
 
-  ${({ enabled }) => !enabled && `
-    opacity: 0.3;
-  `}
+const Left = styled.div`
+  flex: 60% 0 0;
+  display: flex;
+  flex-direction: column;
 `
 
 const Label = styled.div`
@@ -63,22 +90,26 @@ const Description = styled.div`
 `
 
 const UploadWrapper = styled.div`
-  // min-height: 80px;
-  // padding: 20px;
-  // font-size: 12px;
-  // border: dotted 3px #888;
-  // background-color: white;
-  // display: flex;
-  // flex-direction: column;
 `
 
 const Input = styled.input`
   margin-bottom: 10px;
 `
 
-const CSVHeaders = styled.div`
-  font-weight: bold;
-  margin-bottom: 10px;
+const Summary = styled.div`
+  font-style: italic;
+  margin-top: 6px;
+  font-size: 12px;
 `
+
+const ColorButton = withStyles(theme => ({
+  root: {
+    color: theme.palette.text.primary,
+    backgroundColor: theme.palette.success.main,
+    '&:hover': {
+      backgroundColor: theme.palette.success.main,
+    },
+  },
+}))(Button);
 
 export default Upload

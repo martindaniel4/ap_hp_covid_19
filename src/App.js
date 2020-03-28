@@ -1,41 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
+import { Divider, Button } from '@material-ui/core'
+import { Assessment } from '@material-ui/icons'
+import { withStyles } from '@material-ui/core/styles'
 
 import Upload from './components/Upload'
 import './App.css';
 
-const CSV_CONFIG = [
-  {
+const CSV_CONFIG = {
+  'orbis': {
     id: 'orbis',
     name: 'Orbis',
     description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
   },
-  {
+  'grims': {
     id: 'grims',
     name: 'Grims',
     description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
   },
-  {
+  'capacity': {
     id: 'capacity',
     name: 'Capacity',
     description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
   }
-]
+}
 
 function App() {
-  const [files, setFiles] = useState({})
+  const [files, setFiles] = useState(CSV_CONFIG)
 
   const areAllFilesValid = () => {
-    return Object.keys(files).length === CSV_CONFIG.length
+    return Object.values(files).every(csv => csv.valid)
   }
 
   const onFileComplete = (payload) => {
+    console.log(payload)
     const { id, data, fields } = payload
     const newFiles = {
       ...files,
       [id]: {
+        ...files[id],
         data,
         fields,
+        valid: true
       },
     }
     setFiles(newFiles)
@@ -59,36 +65,54 @@ function App() {
 
   return (
     <AppContainer>
+      <Divider /> 
       {
-        CSV_CONFIG.map(csvConfig =>
-          <Upload
-            key={csvConfig.id}
-            csvConfig={csvConfig}
-            enabled={true}
-            onFileComplete={onFileComplete}
-          />
+        Object.keys(files).map(csvId =>
+          <>
+            <Upload
+              key={csvId}
+              csvConfig={files[csvId]}
+              onFileComplete={onFileComplete}
+            />
+            <Divider /> 
+          </>
         )
       }
-      <Button disabled={!areAllFilesValid()}onClick={submitFiles}>{'Submit'}</Button>
+      {
+        !areAllFilesValid() &&
+          <ColorButton
+            variant="contained"
+            color="primary"
+            startIcon={<Assessment />}>
+            {'Analyser'}
+          </ColorButton>
+      }
+      {
+        areAllFilesValid() &&
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Assessment />}>
+            {'Analyser'}
+          </Button>
+      }
     </AppContainer>
   )
 }
 
 const AppContainer = styled.div`
-  width: 600px;
+  width: 1000px;
   margin: 40px auto 0;
 `;
 
-const Button = styled.button`
-  width: 200px;
-  height: 40px;
-  color: white;
-  background: black;
-
-  ${({ disabled }) => disabled && `
-    background: #aaa;
-    cursor-pointer: none;
-  `}
-`
+const ColorButton = withStyles(theme => ({
+  root: {
+    color: theme.palette.text.disabled,
+    backgroundColor: theme.palette.action.disabled,
+    '&:hover': {
+      backgroundColor: theme.palette.action.disabled,
+    },
+  },
+}))(Button);
 
 export default App;
