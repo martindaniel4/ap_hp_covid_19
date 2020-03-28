@@ -17,5 +17,6 @@ def get_current_time():
 
 @app.route('/files', methods = ['POST'])
 def post_files():
+    time.sleep(2)
     print (request.is_json)
     return {'files': 'JSON posted'}

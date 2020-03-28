@@ -69,7 +69,7 @@ const UploadContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: 10px 0;
 `
 
 const Left = styled.div`
@@ -80,13 +80,13 @@ const Left = styled.div`
 
 const Label = styled.div`
   font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: #555;
 `
 
 const Description = styled.div`
   font-size: 12px;
-  margin-bottom: 10px;
 `
 
 const UploadWrapper = styled.div`
