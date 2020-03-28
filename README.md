@@ -8,3 +8,5 @@ Start web server `yarn start`
 Start python server `yarn start-api`
 
 Viz => https://github.com/uber/react-vis
+
+Build pack mars/create-react-app
