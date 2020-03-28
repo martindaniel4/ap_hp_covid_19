@@ -1,12 +1,15 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-A Flask based API backend was added in the *api* directory.
-Read my [tutorial](https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project) on how to create Flask + React combined projects.
+https://github.com/martindaniel4/ap_hp_covid_19
+https://mighty-beach-52670.herokuapp.com/
 
 ## Run in dev
 
-Start web server `yarn start`
-Start python server `yarn start-api`
+```
+yarn
+yarn start
+```
 
-Viz => https://github.com/uber/react-vis
+## Deploy
 
-Build pack mars/create-react-app
+```
+git push heroku master
+```
