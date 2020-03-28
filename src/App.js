@@ -5,6 +5,7 @@ import { Assessment } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
 
 import Upload from './components/Upload'
+import Results from './components/Results'
 import './App.css';
 
 const CSV_CONFIG = {
@@ -27,6 +28,7 @@ const CSV_CONFIG = {
 
 function App() {
   const [files, setFiles] = useState(CSV_CONFIG)
+  const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const areAllFilesValid = () => {
@@ -59,8 +61,8 @@ function App() {
       }
     )
     .then(res => res.json())
-    .then(data => {
-      console.log(data);
+    .then(json => {
+      setData(json)
       setIsLoading(false)
     })
   }
@@ -110,6 +112,8 @@ function App() {
             </Button>
         }
       </LastRow>
+
+      {data && <Results />}
     </AppContainer>
   )
 }
