@@ -22,11 +22,13 @@ function Results({ filesData }) {
         Header: 'covidPatientsChildCount',
         accessor: 'covidPatientsChildCount'
       }
-    ]
+    ],
+    []
   )
 
   const data = useMemo(
-    () => tableData
+    () => tableData,
+    [tableData]
   )
 
   return (
