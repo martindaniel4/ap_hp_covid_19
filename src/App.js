@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'
 import { Divider, Button, CircularProgress } from '@material-ui/core'
 import { Assessment } from '@material-ui/icons'
@@ -6,37 +6,20 @@ import { withStyles } from '@material-ui/core/styles'
 
 import Upload from './components/Upload'
 import Results from './components/Results'
+import { CSV_CONFIG } from './constants'
+import { processFiles } from './processing-utils'
 import './App.css';
-
-const CSV_CONFIG = {
-  'orbis': {
-    id: 'orbis',
-    name: 'Orbis',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
-  },
-  'grims': {
-    id: 'grims',
-    name: 'Grims',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
-  },
-  'capacity': {
-    id: 'capacity',
-    name: 'Capacity',
-    description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
-  }
-}
 
 function App() {
   const [files, setFiles] = useState(CSV_CONFIG)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const areAllFilesValid = () => {
-    return Object.values(files).every(csv => csv.valid)
+  const areAllFilesValid = (filesOb) => {
+    return Object.values(filesOb).every(csv => csv.valid)
   }
 
   const onFileComplete = (payload) => {
-    console.log(payload)
     const { id, data, fields } = payload
     const newFiles = {
       ...files,
@@ -48,23 +31,14 @@ function App() {
       },
     }
     setFiles(newFiles)
+    areAllFilesValid(newFiles) && process(newFiles)
   }
 
-  const submitFiles = () => {
+  const process = (newFiles) => {
     setIsLoading(true)
-    fetch(
-      '/files',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: files,
-      }
-    )
-    .then(res => res.json())
-    .then(json => {
-      setData(json)
-      setIsLoading(false)
-    })
+    const data = processFiles(newFiles)
+    setData(data)
+    setIsLoading(false)
   }
 
   return (
@@ -76,44 +50,16 @@ function App() {
       <Divider /> 
       {
         Object.keys(files).map(csvId =>
-          <>
+          <div key={csvId}>
             <Upload
-              key={csvId}
               csvConfig={files[csvId]}
               onFileComplete={onFileComplete}
             />
             <Divider /> 
-          </>
+          </div>
         )
       }
-
-      <LastRow>
-        <StepTitle>{`Etape 2 - Analyser les données`}</StepTitle>
-        {
-          isLoading && <CircularProgress />
-        }
-        {
-          !isLoading && !areAllFilesValid() &&
-            <ColorButton
-              variant="contained"
-              color="primary"
-              startIcon={<Assessment />}>
-              {'Analyser les données'}
-            </ColorButton>
-        }
-        {
-          !isLoading && areAllFilesValid() &&
-            <Button
-              onClick={submitFiles}
-              variant="contained"
-              color="primary"
-              startIcon={<Assessment />}>
-              {'Analyser les données'}
-            </Button>
-        }
-      </LastRow>
-
-      {data && <Results />}
+      {data && <Results filesData={data} />}
     </AppContainer>
   )
 }
