@@ -19,7 +19,7 @@ export const processFiles = (files) => {
         .forEach(uma => {
           const currentPatients = patientsGroupedByUMA[uma]
           const currentPatientsByAge = _.countBy(currentPatients, p => {
-            return p.dob && moment(p.dob, 'DD/MM/YYYY').add(18, 'year').isBefore(moment()) ? 'adult': 'child'
+            return p.dob && moment(p.dob, 'DD/MM/YYYY').add(18, 'year').isAfter(moment()) ? 'child': 'adult'
           })
 
           newPatientsGroupedByUMA.push({

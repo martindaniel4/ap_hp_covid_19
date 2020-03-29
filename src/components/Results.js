@@ -18,8 +18,7 @@ function Results({ filesData }) {
   } = filesData
 
   const sortedHospital = _.sortBy(Object.keys(mapByHospital), h => -mapByHospital[h].currentPatientsCount)
-  const initHospital = sortedHospital[0]
-  const [activeHospital, setActiveHospital] = useState(initHospital)
+  const [activeHospital, setActiveHospital] = useState(sortedHospital[0])
 
   if (!filesData) return null
 
