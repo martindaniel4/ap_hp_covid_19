@@ -4,6 +4,7 @@ import _ from 'underscore'
 
 import { HospitalResults } from './HospitalResults'
 import { BigNumber } from './ui/BigNumber'
+import { GROUP_NAME } from '../constants'
 
 function Results({ filesData }) {
   const {
@@ -21,7 +22,7 @@ function Results({ filesData }) {
   return (
     <ResultsContainer>
       <Summary>
-        <Title>{'Paris Saclay FC'}</Title>
+        <Title>{GROUP_NAME}</Title>
         <BigNumber number={currentCovidPatientsCount} label={'patients Covid'} />
         <div>{`Dernier admis: ${lastAdmitedPatientDate}`}</div>
 
@@ -59,7 +60,7 @@ const Summary = styled.div`
   background-color: white;
   border: solid 3px #b7b7b7;
   padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 `
 
 const Title = styled.div`

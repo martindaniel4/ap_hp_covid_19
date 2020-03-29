@@ -1,3 +1,5 @@
+export const GROUP_NAME = 'Paris Saclay FC'
+
 export const CSV_CONFIG = {
   'orbis': {
     id: 'orbis',

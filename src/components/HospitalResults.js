@@ -5,11 +5,9 @@ import 'react-tabs/style/react-tabs.css'
 
 import { StyledTable } from './ui/Table'
 import { BigNumber } from './ui/BigNumber'
+import { GROUP_NAME } from '../constants'
 
 export function HospitalResults({ hospitalName, hospitalData }) {
-
-  console.log(hospitalData)
-
   const columns = useMemo(
     () => [
       {
@@ -39,9 +37,15 @@ export function HospitalResults({ hospitalName, hospitalData }) {
 
   return (
     <HospitalContainer>
-      <div>{hospitalName}</div>
-      <BigNumber number={hospitalData.currentPatientsCount} label={'patients Covid'} />
-      <div>{`Dernier admis: ${hospitalData.lastPatientAdmitted}`}</div>
+      <HospitalTitleContainer>
+        <GroupTitle>{GROUP_NAME}</GroupTitle>
+        <HospitalTitle>{hospitalName}</HospitalTitle>
+      </HospitalTitleContainer>
+      
+      <Summary>
+        <BigNumber number={hospitalData.currentPatientsCount} label={'patients Covid'} />
+        <div>{`Dernier admis: ${hospitalData.lastPatientAdmitted}`}</div>
+      </Summary>
 
       <Tabs>
         <TabList>
@@ -63,5 +67,27 @@ export function HospitalResults({ hospitalName, hospitalData }) {
     </HospitalContainer>
   )
 }
+
+const HospitalTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+`
+
+const Summary = styled.div`
+  margin-bottom: 30px;
+`
+
+const GroupTitle = styled.div`
+  font-size: 30px;
+  color: #888;
+  font-weight: bold;
+  margin-right: 10px;
+`
+
+const HospitalTitle = styled.div`
+  font-size: 30px;
+  font-weight: bold;
+`
 
 const HospitalContainer = styled.div``
