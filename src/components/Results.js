@@ -1,39 +1,16 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import 'react-tabs/style/react-tabs.css'
 
-import { StyledTable } from './ui/Table'
+import { HospitalResults } from './HospitalResults'
 
 function Results({ filesData }) {
+  const [activeHospital, setActiveHospital] = useState(null)
+
   const {
     currentCovidPatientsCount,
-    tableData,
     lastAdmitedPatientDate,
+    mapByHospital,
   } = filesData
-
-  const columns = useMemo(
-    () => [
-      {
-        Header: 'hopUma',
-        accessor: 'hopUma'
-      },
-      {
-        Header: 'covidPatientsAdultCount',
-        accessor: 'covidPatientsAdultCount'
-      },
-      {
-        Header: 'covidPatientsChildCount',
-        accessor: 'covidPatientsChildCount'
-      }
-    ],
-    []
-  )
-
-  const data = useMemo(
-    () => tableData,
-    [tableData]
-  )
 
   return (
     <ResultsContainer>
@@ -44,21 +21,28 @@ function Results({ filesData }) {
           <div>patients Covid</div>
         </BigNumberContainer>
         <div>{`Dernier admis: ${lastAdmitedPatientDate}`}</div>
+
+        <HospitalList>
+          {
+            Object.keys(mapByHospital).map(h => {
+              return (
+                <HospitalLabel
+                  key={h}
+                  active={activeHospital === h}
+                  onClick={() => setActiveHospital(h)}
+                >
+                  {h}
+                </HospitalLabel>
+              )
+            })
+          }
+        </HospitalList>
       </Summary>
 
-      <Tabs>
-        <TabList>
-          <Tab>{'Capacité'}</Tab>
-          <Tab>{'Sorties'}</Tab>
-        </TabList>
-
-        <TabPanel>
-          <StyledTable data={data} columns={columns} />
-        </TabPanel>
-        <TabPanel>
-          <h2>{'Hello'}</h2>
-        </TabPanel>
-      </Tabs>
+      {
+        activeHospital &&
+          <HospitalResults hospitalName={activeHospital} hospitalData={mapByHospital[activeHospital]} />
+      }
 
     </ResultsContainer>
   )
@@ -88,6 +72,25 @@ const BigNumber = styled.div`
   font-size: 50px;
   font-weight: bold;
   margin-right: 5px;
+`
+
+const HospitalList = styled.div`
+  margin: 20px 0;
+`
+
+const HospitalLabel = styled.div`
+  color: blue;
+  font-weight: 500;
+  margin-bottom: 4px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  ${({ active }) => active && `
+    font-weight: bold;
+  `}
 `
 
 const ResultsContainer = styled.div`

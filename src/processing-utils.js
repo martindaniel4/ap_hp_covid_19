@@ -4,44 +4,49 @@ import moment from 'moment'
 export const processFiles = (files) => {
   const { orbis, grims } = files
 
-  const orbisMappedByIPP = _.groupBy(orbis.data, patient => patient['IPP'])
+  const orbisMappedByIPP = _.groupBy(orbis.data, p => p['IPP'])
   const currentCovidPatients = mergeOrbisInGrims(grims, orbisMappedByIPP)
+  const tempMapByHospital = _.groupBy(currentCovidPatients, p => p['hop'])
 
-  // { 'hop-uma': [ Patient<>, Patient<>, Patient<> ], 'hop-uma2': [], ...}
-  const mapByUMA = _.groupBy(currentCovidPatients, patient => `${patient['hop']} - ${patient['last_uma']}`)
+  const mapByHospital = {}
+  Object.keys(tempMapByHospital)
+    .forEach(h => {
+      const listOfPatientsForHospital = tempMapByHospital[h]
+      const patientsGroupedByUMA = _.groupBy(listOfPatientsForHospital, p => p['last_uma'])
 
-  // [
-  //   {
-  //     hopUma: 'K BICETRE - UMA X',
-  //     covidPatientsAdultCount: 12,
-  //     covidPatientsChildCount: 45,
-  //   },
-  //   {...}
-  // ]
-  const tableData = Object.keys(mapByUMA).reduce((acc, hopUma) => {
-    // {adult: 18, child: 24}
-    const covidPatientsInHopUmaByAge = _.countBy(mapByUMA[hopUma], patient => {
-      return patient.dob && moment(patient.dob, 'DD/MM/YYYY').add(18, 'year').isBefore(moment()) ? 'adult': 'child'
+      const newPatientsGroupedByUMA = []
+      Object.keys(patientsGroupedByUMA)
+        .forEach(uma => {
+          const currentPatients = patientsGroupedByUMA[uma]
+          const currentPatientsByAge = _.countBy(currentPatients, p => {
+            return p.dob && moment(p.dob, 'DD/MM/YYYY').add(18, 'year').isBefore(moment()) ? 'adult': 'child'
+          })
+
+          newPatientsGroupedByUMA.push({
+            uma,
+            currentPatientsCount: patientsGroupedByUMA[uma].length,
+            currentPatientsCountAdult: currentPatientsByAge['adult'] || 0,
+            currentPatientsCountChild: currentPatientsByAge['child'] || 0,
+          })
+        })
+
+      mapByHospital[h] = {
+        lastPatientAdmitted: getLastAdmitedPatientDate(listOfPatientsForHospital),
+        currentPatientsCount: listOfPatientsForHospital.length,
+        byUma: newPatientsGroupedByUMA,
+      }
     })
-
-    acc.push({
-      hopUma,
-      covidPatientsAdultCount: covidPatientsInHopUmaByAge['adult'],
-      covidPatientsChildCount: covidPatientsInHopUmaByAge['child'],
-    })
-    return acc
-  }, [])
   
   return {
     currentCovidPatientsCount: currentCovidPatients.length,
     lastAdmitedPatientDate: getLastAdmitedPatientDate(currentCovidPatients),
-    tableData,
+    mapByHospital
   }
 }
 
 // return a string "25th March 2020 à 22:03"
-function getLastAdmitedPatientDate(currentCovidPatients) {
-  const date = _.max(currentCovidPatients, patient => moment(patient.dt_deb_visite)).dt_deb_visite
+function getLastAdmitedPatientDate(listOfPatients) {
+  const date = _.max(listOfPatients, patient => moment(patient.dt_deb_visite)).dt_deb_visite
   return moment(date).format('Do MMMM YYYY à H:MM')
 }
 
