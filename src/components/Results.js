@@ -1,12 +1,16 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import 'react-tabs/style/react-tabs.css'
 
-import {
-  useTable,
-} from 'react-table'
+import { StyledTable } from './ui/Table'
 
 function Results({ filesData }) {
-  const { currentCovidPatientsCount, tableData } = filesData
+  const {
+    currentCovidPatientsCount,
+    tableData,
+    lastAdmitedPatientDate,
+  } = filesData
 
   const columns = useMemo(
     () => [
@@ -33,77 +37,57 @@ function Results({ filesData }) {
 
   return (
     <ResultsContainer>
-      <div>{`${currentCovidPatientsCount} current covid patients`}</div>
+      <Title>{'Groupe Hospitalier, Paris Saclay'}</Title>
+      <Summary>
+        <BigNumberContainer>
+          <BigNumber>{currentCovidPatientsCount}</BigNumber>
+          <div>patients Covid</div>
+        </BigNumberContainer>
+        <div>{`Dernier admis: ${lastAdmitedPatientDate}`}</div>
+      </Summary>
 
-      <Styles>
-        <Table
-          data={data}
-          columns={columns}
-        />
-      </Styles>
+      <Tabs>
+        <TabList>
+          <Tab>{'Capacité'}</Tab>
+          <Tab>{'Sorties'}</Tab>
+        </TabList>
+
+        <TabPanel>
+          <StyledTable data={data} columns={columns} />
+        </TabPanel>
+        <TabPanel>
+          <h2>{'Hello'}</h2>
+        </TabPanel>
+      </Tabs>
 
     </ResultsContainer>
   )
 }
 
-function Table({columns, data}) {
-  const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable({columns, data})
+const Title = styled.div`
+  font-size: 40px;
+  color: black;
+  font-weight: bold;
+  margin-bottom: 20px;
+`
 
-  // Render Data Table UI
-  return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup
-              .headers
-              .map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row
-                .cells
-                .map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                })}
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
-  )
-}
+const Summary = styled.div`
+  background-color: white;
+  border: solid 1px #eee;
+  padding: 20px;
+  margin-bottom: 20px;
+`
 
-const Styles = styled.div `
-  table {
-    width: 100%;
-    border-spacing: 0;
-    border: 1px solid black;
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-    th,
-    td {
-      margin: 0;
-      padding: 1rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
+const BigNumberContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+`
+
+const BigNumber = styled.div`
+  font-size: 50px;
+  font-weight: bold;
+  margin-right: 5px;
 `
 
 const ResultsContainer = styled.div`

@@ -44,10 +44,6 @@ function App() {
   return (
     <AppContainer>
       <Header><span role="img" aria-label="Hospital">&#x1F3E5;</span> Hopitaux de Paris FC.</Header>
-      <StepTitleContainer>
-        <StepTitle>{`Etape 1 - Uploader les ${Object.keys(CSV_CONFIG).length} fichiers`}</StepTitle>
-      </StepTitleContainer>
-      <Divider /> 
       {
         Object.keys(files).map(csvId =>
           <div key={csvId}>
@@ -73,16 +69,7 @@ const Header = styled.div`
   font-size: 40px;
   color: #ff6a6a;
   font-weight: bold;
-  margin-bottom: 50px;
-`
-
-const StepTitle = styled.div`
-  font-size: 26px;
-  font-weight: bold;
-`
-
-const StepTitleContainer = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 `
 
 export default App;

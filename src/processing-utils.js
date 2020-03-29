@@ -4,23 +4,8 @@ import moment from 'moment'
 export const processFiles = (files) => {
   const { orbis, grims } = files
 
-  // orbisMappedByIPP = {'08290756': {}, '08028476': {}, ...}
   const orbisMappedByIPP = _.groupBy(orbis.data, patient => patient['IPP'])
-
-  // [ {gims_fields + dob}, {}, {} ]
-  const currentCovidPatients = grims.data
-    .filter(patient => {
-      return patient.ipp !== '' && patient.is_pcr === 'Positif' && patient.dt_fin_visite === ''
-    })
-    .map(patient => {
-      const findOrbisData = orbisMappedByIPP[patient.ipp]
-      const dob = findOrbisData ? findOrbisData[0]['Né(e) le'] : ''
-
-      return {
-        ...patient,
-        dob,
-      }
-    })
+  const currentCovidPatients = mergeOrbisInGrims(grims, orbisMappedByIPP)
 
   // { 'hop-uma': [ Patient<>, Patient<>, Patient<> ], 'hop-uma2': [], ...}
   const mapByUMA = _.groupBy(currentCovidPatients, patient => `${patient['hop']} - ${patient['last_uma']}`)
@@ -49,6 +34,36 @@ export const processFiles = (files) => {
   
   return {
     currentCovidPatientsCount: currentCovidPatients.length,
+    lastAdmitedPatientDate: getLastAdmitedPatientDate(currentCovidPatients),
     tableData,
   }
+}
+
+// return a string "25th March 2020 à 22:03"
+function getLastAdmitedPatientDate(currentCovidPatients) {
+  const date = _.max(currentCovidPatients, patient => moment(patient.dt_deb_visite)).dt_deb_visite
+  return moment(date).format('Do MMMM YYYY à H:MM')
+}
+
+// [
+//   {
+//     ...gims_fields,
+//     dob,
+//   },
+//   {}
+// ]
+function mergeOrbisInGrims(grims, orbisMappedByIPP) {
+  return grims.data
+    .filter(patient => {
+      return patient.ipp !== '' && patient.is_pcr === 'Positif' && patient.dt_fin_visite === ''
+    })
+    .map(patient => {
+      const findOrbisData = orbisMappedByIPP[patient.ipp]
+      const dob = findOrbisData ? findOrbisData[0]['Né(e) le'] : ''
+
+      return {
+        ...patient,
+        dob,
+      }
+    })
 }
