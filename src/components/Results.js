@@ -6,8 +6,7 @@ import {
 } from 'react-table'
 
 function Results({ filesData }) {
-  const { currentCovidPatientsCount, tableData } = filesData
-
+  const { currentCovidPatientsCount, tableData, sortedInOutTable} = filesData
   const columns = useMemo(
     () => [
       {
@@ -26,9 +25,36 @@ function Results({ filesData }) {
     []
   )
 
+  const columnsInOut = useMemo(
+    () => [
+      {
+        Header: 'hopUma',
+        accessor: 'hopUma'
+      },
+      {
+        Header: 'date',
+        accessor: 'date'
+      },
+      {
+        Header: 'covidInCount',
+        accessor: 'covidInCount'
+      },
+      {
+        Header: 'covidOutCount',
+        accessor: 'covidOutCount'
+      }
+    ],
+    []
+  )
+
   const data = useMemo(
     () => tableData,
     [tableData]
+  )
+
+  const dataInOut = useMemo(
+    () => sortedInOutTable,
+    [sortedInOutTable]
   )
 
   return (
@@ -40,8 +66,12 @@ function Results({ filesData }) {
           data={data}
           columns={columns}
         />
+        <div>{'Entrées et sorties des patients covid'}</div>
+        <Table
+          data={dataInOut}
+          columns={columnsInOut}
+        />
       </Styles>
-
     </ResultsContainer>
   )
 }
