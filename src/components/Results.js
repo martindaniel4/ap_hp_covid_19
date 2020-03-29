@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import _ from 'underscore'
 
+import { XYPlot, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
 import { HospitalResults } from './HospitalResults'
 import { BigNumber } from './ui/BigNumber'
 import { GROUP_NAME } from '../constants'
@@ -12,6 +13,7 @@ function Results({ filesData }) {
   const {
     currentCovidPatientsCount,
     lastPatientAdmittedOn,
+    patientCountPerDay,
     mapByHospital,
   } = filesData
 
@@ -25,25 +27,38 @@ function Results({ filesData }) {
     <ResultsContainer>
       <Summary>
         <Title>{GROUP_NAME}</Title>
-        <BigNumber number={currentCovidPatientsCount} label={'patients Covid'} />
-        <div>{`Dernier admis: ${lastPatientAdmittedOn}`}</div>
+        
+        <FirstRow>
+          <div>
+            <BigNumber number={currentCovidPatientsCount} label={'patients Covid'} />
+            <div>{`Dernier admis: ${lastPatientAdmittedOn}`}</div>
 
-        <HospitalList>
-          <HospitalsLabel>Hospitals</HospitalsLabel>
-          {
-            sortedHospital.map(h => {
-              return (
-                <HospitalRow
-                  key={h}
-                  onClick={() => setActiveHospital(h)}
-                >
-                  <HospitalLabel active={activeHospital === h}>{h}</HospitalLabel>
-                  <div>{`${mapByHospital[h].currentPatientsCount} patients`}</div>
-                </HospitalRow>
-              )
-            })
-          }
-        </HospitalList>
+            <HospitalList>
+              <HospitalsLabel>Hospitals</HospitalsLabel>
+              {
+                sortedHospital.map(h => {
+                  return (
+                    <HospitalRow
+                      key={h}
+                      onClick={() => setActiveHospital(h)}
+                    >
+                      <HospitalLabel active={activeHospital === h}>{h}</HospitalLabel>
+                      <div>{`${mapByHospital[h].currentPatientsCount} patients`}</div>
+                    </HospitalRow>
+                  )
+                })
+              }
+            </HospitalList>
+          </div>
+
+          <div>
+            <XYPlot height={200} width={400} xType="ordinal">
+              <VerticalGridLines />
+              <HorizontalGridLines />
+              <VerticalBarSeries data={patientCountPerDay} />
+            </XYPlot>
+          </div>
+        </FirstRow>
       </Summary>
 
       {
@@ -69,6 +84,12 @@ const Title = styled.div`
   font-size: 30px;
   font-weight: bold;
   margin-bottom: 20px;
+`
+
+const FirstRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `
 
 const HospitalsLabel = styled.div`
