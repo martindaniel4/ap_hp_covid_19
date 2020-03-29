@@ -2,7 +2,13 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
-import { XYPlot, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
+import { XYPlot, 
+         VerticalBarSeries, 
+         HorizontalGridLines, 
+         VerticalGridLines,
+         XAxis,
+         YAxis,
+         ChartLabel} from 'react-vis'
 
 import { StyledTable } from './ui/Table'
 import { BigNumber } from './ui/BigNumber'
@@ -12,19 +18,19 @@ export function HospitalResults({ hospitalName, hospitalData }) {
   const columns = useMemo(
     () => [
       {
-        Header: 'uma',
+        Header: 'Unité de Soin',
         accessor: 'uma'
       },
       {
-        Header: 'currentPatientsCount',
+        Header: 'Patients',
         accessor: 'currentPatientsCount'
       },
       {
-        Header: 'currentPatientsCountAdult',
+        Header: 'Adultes',
         accessor: 'currentPatientsCountAdult'
       },
       {
-        Header: 'currentPatientsCountChild',
+        Header: 'Enfants',
         accessor: 'currentPatientsCountChild'
       }
     ],
@@ -50,9 +56,26 @@ export function HospitalResults({ hospitalName, hospitalData }) {
         </div>
 
         <div>
-          <XYPlot height={200} width={333} xType="ordinal">
-            <VerticalGridLines />
+          <XYPlot height={300} width={400} xType="ordinal">
             <HorizontalGridLines />
+            <VerticalGridLines />
+            <XAxis tickLabelAngle={-45} tickTotal={5} />
+            <YAxis />
+            <ChartLabel 
+              className="alt-x-label"
+              includeMargin={false}
+              xPercent={0.025}
+              yPercent={1.01}
+              />
+            <ChartLabel 
+              text="Nombre de patients Covid+"
+              className="alt-y-label"
+              includeMargin={false}
+              style={{
+                transform: 'rotate(-90)',
+                textAnchor: 'end'
+              }}
+              />
             <VerticalBarSeries data={hospitalData.patientCountPerDay} />
           </XYPlot>
         </div>

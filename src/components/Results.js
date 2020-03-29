@@ -2,7 +2,13 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import _ from 'underscore'
 
-import { XYPlot, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
+import { XYPlot, 
+         XAxis,
+         YAxis,
+         ChartLabel,
+         VerticalBarSeries, 
+         HorizontalGridLines, 
+         VerticalGridLines} from 'react-vis'
 import { HospitalResults } from './HospitalResults'
 import { BigNumber } from './ui/BigNumber'
 import { GROUP_NAME } from '../constants'
@@ -51,8 +57,25 @@ function Results({ filesData }) {
 
           <div>
             <XYPlot height={300} width={400} xType="ordinal">
-              <VerticalGridLines />
               <HorizontalGridLines />
+              <VerticalGridLines />
+              <XAxis tickLabelAngle={-45} tickTotal={5} />
+              <YAxis />
+              <ChartLabel 
+                className="alt-x-label"
+                includeMargin={false}
+                xPercent={0.025}
+                yPercent={1.01}
+                />
+              <ChartLabel 
+                text="Nombre de patients Covid+"
+                className="alt-y-label"
+                includeMargin={false}
+                style={{
+                  transform: 'rotate(-90)',
+                  textAnchor: 'end'
+                }}
+                />
               <VerticalBarSeries data={patientCountPerDay} />
             </XYPlot>
           </div>
@@ -72,8 +95,6 @@ function Results({ filesData }) {
 }
 
 const Summary = styled.div`
-  background-color: white;
-  border: solid 3px #b7b7b7;
   padding: 20px;
   margin-bottom: 50px;
 `
