@@ -44,7 +44,7 @@ function App() {
 
   return (
     <AppContainer>
-      <Header><span role="img" aria-label="Hospital">&#x1F3E5;</span>{'Groupe Hospitalier, Paris Saclay'}</Header>
+      <Header><span role="img" aria-label="Hospital">&#x1F3E5;</span>{'GH, Paris Saclay'}</Header>
       <UploadFiles files={files} onFileComplete={onFileComplete} />
       {data && <Results filesData={data} />}
     </AppContainer>
