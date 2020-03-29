@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import _ from 'underscore'
 
 import { HospitalResults } from './HospitalResults'
+import { BigNumber } from './ui/BigNumber'
 
 function Results({ filesData }) {
   const {
@@ -10,7 +12,8 @@ function Results({ filesData }) {
     mapByHospital,
   } = filesData
 
-  const initHospital = mapByHospital ? Object.keys(mapByHospital)[0] : null
+  const sortedHospital = _.sortBy(Object.keys(mapByHospital), h => -mapByHospital[h].currentPatientsCount)
+  const initHospital = sortedHospital[0]
   const [activeHospital, setActiveHospital] = useState(initHospital)
 
   if (!filesData) return null
@@ -18,17 +21,14 @@ function Results({ filesData }) {
   return (
     <ResultsContainer>
       <Summary>
-        <Title>{'Groupe Hospitalier, Paris Saclay'}</Title>
-        <BigNumberContainer>
-          <BigNumber>{currentCovidPatientsCount}</BigNumber>
-          <div>patients Covid</div>
-        </BigNumberContainer>
+        <Title>{'Paris Saclay FC'}</Title>
+        <BigNumber number={currentCovidPatientsCount} label={'patients Covid'} />
         <div>{`Dernier admis: ${lastAdmitedPatientDate}`}</div>
 
         <HospitalList>
           <HospitalsLabel>Hospitals</HospitalsLabel>
           {
-            Object.keys(mapByHospital).map(h => {
+            sortedHospital.map(h => {
               return (
                 <HospitalRow
                   key={h}
@@ -66,18 +66,6 @@ const Title = styled.div`
   font-size: 30px;
   font-weight: bold;
   margin-bottom: 20px;
-`
-
-const BigNumberContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-`
-
-const BigNumber = styled.div`
-  font-size: 40px;
-  font-weight: bold;
-  margin-right: 5px;
 `
 
 const HospitalsLabel = styled.div`

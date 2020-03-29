@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 
 import { StyledTable } from './ui/Table'
+import { BigNumber } from './ui/BigNumber'
 
 export function HospitalResults({ hospitalName, hospitalData }) {
 
@@ -39,10 +40,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
   return (
     <HospitalContainer>
       <div>{hospitalName}</div>
-      <BigNumberContainer>
-        <BigNumber>{hospitalData.currentPatientsCount}</BigNumber>
-        <div>patients Covid</div>
-      </BigNumberContainer>
+      <BigNumber number={hospitalData.currentPatientsCount} label={'patients Covid'} />
       <div>{`Dernier admis: ${hospitalData.lastPatientAdmitted}`}</div>
 
       <Tabs>
@@ -65,17 +63,5 @@ export function HospitalResults({ hospitalName, hospitalData }) {
     </HospitalContainer>
   )
 }
-
-const BigNumberContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-`
-
-const BigNumber = styled.div`
-  font-size: 50px;
-  font-weight: bold;
-  margin-right: 5px;
-`
 
 const HospitalContainer = styled.div``
