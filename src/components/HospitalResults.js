@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
+import { XYPlot, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
 
 import { StyledTable } from './ui/Table'
 import { BigNumber } from './ui/BigNumber'
@@ -42,10 +43,20 @@ export function HospitalResults({ hospitalName, hospitalData }) {
         <HospitalTitle>{hospitalName}</HospitalTitle>
       </HospitalTitleContainer>
       
-      <Summary>
-        <BigNumber number={hospitalData.currentPatientsCount} label={'patients Covid'} />
-        <div>{`Dernier admis: ${hospitalData.lastPatientAdmittedOn}`}</div>
-      </Summary>
+      <FirstRow>
+        <div>
+          <BigNumber number={hospitalData.currentPatientsCount} label={'patients Covid'} />
+          <div>{`Dernier admis: ${hospitalData.lastPatientAdmittedOn}`}</div>
+        </div>
+
+        <div>
+          <XYPlot height={200} width={333} xType="ordinal">
+            <VerticalGridLines />
+            <HorizontalGridLines />
+            <VerticalBarSeries data={hospitalData.patientCountPerDay} />
+          </XYPlot>
+        </div>
+      </FirstRow>
 
       <Tabs>
         <TabList>
@@ -74,8 +85,10 @@ const HospitalTitleContainer = styled.div`
   margin-bottom: 20px;
 `
 
-const Summary = styled.div`
-  margin-bottom: 30px;
+const FirstRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `
 
 const GroupTitle = styled.div`

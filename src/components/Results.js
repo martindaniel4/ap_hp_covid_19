@@ -34,7 +34,6 @@ function Results({ filesData }) {
             <div>{`Dernier admis: ${lastPatientAdmittedOn}`}</div>
 
             <HospitalList>
-              <HospitalsLabel>Hospitals</HospitalsLabel>
               {
                 sortedHospital.map(h => {
                   return (
@@ -52,7 +51,7 @@ function Results({ filesData }) {
           </div>
 
           <div>
-            <XYPlot height={200} width={400} xType="ordinal">
+            <XYPlot height={300} width={400} xType="ordinal">
               <VerticalGridLines />
               <HorizontalGridLines />
               <VerticalBarSeries data={patientCountPerDay} />
@@ -90,12 +89,6 @@ const FirstRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-`
-
-const HospitalsLabel = styled.div`
-  font-weight: bold;
-  color: black;
-  margin-bottom: 10px;
 `
 
 const HospitalList = styled.div`
