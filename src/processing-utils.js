@@ -19,7 +19,40 @@ export const processFiles = (files) => {
         dob,
       }
     })
+    
+    // Compute the number of current Covid patients that are not in Grims
+    const currentCovidPatientsGroupbyIpp = 
+      _.groupBy(currentCovidPatients, patient => patient['ipp'])
+    
+    const currentCovidPatientsIpp = Object.keys(currentCovidPatientsGroupbyIpp)
+    const orbisIpp = Object.keys(orbisMappedByIPP)
+    
+    const grimsIppNotInOrbis = _.difference(currentCovidPatientsIpp, orbisIpp)
 
+    // Last patient admitted 
+    
+    const dateLastPatient = 
+      _.max(currentCovidPatients, 
+        function(patient){
+          return moment(patient.dt_deb_visite)
+        }).dt_deb_visite
+        
+    const dateLastPatientText = moment(dateLastPatient)
+      .format('MMMM Do YYYY à h:mm:ss a')
+      
+    // Data for number of patients per day
+      
+    const countPatientPerDay = _.chain(currentCovidPatients)
+      .sortBy(patient => {return moment(patient.dt_deb_visite)})
+      .countBy(patient => {return moment(patient.dt_deb_visite).format("MMMM Do YYYY")})
+      .value()
+    
+    const countPatientPerDayGraph =[]
+    
+    Object.keys(countPatientPerDay).reduce((x, date) => {
+      countPatientPerDayGraph.push({'x': date, 'y': countPatientPerDay[date]})
+    })
+    
   const mapByUMA = _.groupBy(currentCovidPatients, patient => `${patient['hop']} - ${patient['last_uma']}`)
   const tableData = Object.keys(mapByUMA).reduce((acc, hopUma) => {
     const covidPatientsInHopUmaByAge = _.countBy(mapByUMA[hopUma], patient => {
@@ -36,6 +69,8 @@ export const processFiles = (files) => {
   
   return {
     currentCovidPatientsCount: currentCovidPatients.length,
+    lastPatientAdmitted: dateLastPatientText,
+    countPatientPerDayGraph: countPatientPerDayGraph,
     tableData
   }
 }
