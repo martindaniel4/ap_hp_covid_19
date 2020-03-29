@@ -38,7 +38,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
   return (
     <HospitalContainer>
       <HospitalTitleContainer>
-        <GroupTitle>{GROUP_NAME}</GroupTitle>
+        <GroupTitle>{`${GROUP_NAME} / `}</GroupTitle>
         <HospitalTitle>{hospitalName}</HospitalTitle>
       </HospitalTitleContainer>
       
