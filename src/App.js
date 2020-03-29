@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 import { Divider } from '@material-ui/core'
 
 import Upload from './components/Upload'
 import Results from './components/Results'
 import { CSV_CONFIG } from './constants'
+import { CSV_CONFIG_FIXTURE } from './fixtures/csv_fixture'
 import { processFiles } from './processing-utils'
 import './App.css';
 
 function App() {
-  const [files, setFiles] = useState(CSV_CONFIG)
+  const [files, setFiles] = useState(CSV_CONFIG_FIXTURE)
   const [data, setData] = useState(null)
+
+  useEffect(() => {
+    areAllFilesValid(files) && process(files)
+  }, [])
 
   const areAllFilesValid = (filesOb) => {
     return Object.values(filesOb).every(csv => csv.valid)
