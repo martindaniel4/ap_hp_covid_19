@@ -33,6 +33,7 @@ export const processFiles = (files) => {
       mapByHospital[h] = {
         lastPatientAdmittedOn: getLastAdmitedPatientDate(listOfPatientsForHospital),
         currentPatientsCount: listOfPatientsForHospital.length,
+        patientCountPerDay: getPatientCountPerDay(listOfPatientsForHospital),
         byUma: newPatientsGroupedByUMA,
       }
     })
@@ -40,23 +41,20 @@ export const processFiles = (files) => {
   return {
     currentCovidPatientsCount: currentCovidPatients.length,
     lastPatientAdmittedOn: getLastAdmitedPatientDate(currentCovidPatients),
+    patientCountPerDay: getPatientCountPerDay(currentCovidPatients),
     mapByHospital
   }
 }
 
-// return a string "25th March 2020 à 22:03"
+// =============================================
+// "PRIVATE" UTILS
+// =============================================
+
 function getLastAdmitedPatientDate(listOfPatients) {
   const date = _.max(listOfPatients, patient => moment(patient.dt_deb_visite)).dt_deb_visite
   return moment(date).format('Do MMMM YYYY à H:MM')
 }
 
-// [
-//   {
-//     ...gims_fields,
-//     dob,
-//   },
-//   {}
-// ]
 function mergeOrbisInGrims(grims, orbisMappedByIPP) {
   return grims.data
     .filter(patient => {
@@ -71,4 +69,19 @@ function mergeOrbisInGrims(grims, orbisMappedByIPP) {
         dob,
       }
     })
+}
+
+function getPatientCountPerDay(patientsList) {
+  const patientCountPerDay = _.chain(patientsList)
+    .sortBy(p => {return moment(p.dt_deb_visite)})
+    .countBy(p => {return moment(p.dt_deb_visite).format("MMMM Do YYYY")})
+    .value()
+
+  return Object.keys(patientCountPerDay).reduce((acc, date) => {
+    acc.push({
+      x: date,
+      y: patientCountPerDay[date]
+    })
+    return acc
+  }, [])
 }

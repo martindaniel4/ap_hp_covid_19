@@ -7,6 +7,8 @@ import { BigNumber } from './ui/BigNumber'
 import { GROUP_NAME } from '../constants'
 
 function Results({ filesData }) {
+  console.log(filesData)
+  
   const {
     currentCovidPatientsCount,
     lastPatientAdmittedOn,
