@@ -4,18 +4,21 @@ import styled from 'styled-components'
 import { HospitalResults } from './HospitalResults'
 
 function Results({ filesData }) {
-  const [activeHospital, setActiveHospital] = useState(null)
-
   const {
     currentCovidPatientsCount,
     lastAdmitedPatientDate,
     mapByHospital,
   } = filesData
 
+  const initHospital = mapByHospital ? Object.keys(mapByHospital)[0] : null
+  const [activeHospital, setActiveHospital] = useState(initHospital)
+
+  if (!filesData) return null
+
   return (
     <ResultsContainer>
-      <Title>{'Groupe Hospitalier, Paris Saclay'}</Title>
       <Summary>
+        <Title>{'Groupe Hospitalier, Paris Saclay'}</Title>
         <BigNumberContainer>
           <BigNumber>{currentCovidPatientsCount}</BigNumber>
           <div>patients Covid</div>
@@ -23,16 +26,17 @@ function Results({ filesData }) {
         <div>{`Dernier admis: ${lastAdmitedPatientDate}`}</div>
 
         <HospitalList>
+          <HospitalsLabel>Hospitals</HospitalsLabel>
           {
             Object.keys(mapByHospital).map(h => {
               return (
-                <HospitalLabel
+                <HospitalRow
                   key={h}
-                  active={activeHospital === h}
                   onClick={() => setActiveHospital(h)}
                 >
-                  {h}
-                </HospitalLabel>
+                  <HospitalLabel active={activeHospital === h}>{h}</HospitalLabel>
+                  <div>{`${mapByHospital[h].currentPatientsCount} patients`}</div>
+                </HospitalRow>
               )
             })
           }
@@ -41,24 +45,26 @@ function Results({ filesData }) {
 
       {
         activeHospital &&
-          <HospitalResults hospitalName={activeHospital} hospitalData={mapByHospital[activeHospital]} />
+          <HospitalResults
+            hospitalName={activeHospital}
+            hospitalData={mapByHospital[activeHospital]}
+          />
       }
 
     </ResultsContainer>
   )
 }
 
-const Title = styled.div`
-  font-size: 40px;
-  color: black;
-  font-weight: bold;
+const Summary = styled.div`
+  background-color: white;
+  border: solid 3px #b7b7b7;
+  padding: 20px;
   margin-bottom: 20px;
 `
 
-const Summary = styled.div`
-  background-color: white;
-  border: solid 1px #eee;
-  padding: 20px;
+const Title = styled.div`
+  font-size: 30px;
+  font-weight: bold;
   margin-bottom: 20px;
 `
 
@@ -69,20 +75,32 @@ const BigNumberContainer = styled.div`
 `
 
 const BigNumber = styled.div`
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bold;
   margin-right: 5px;
 `
 
+const HospitalsLabel = styled.div`
+  font-weight: bold;
+  color: black;
+  margin-bottom: 10px;
+`
+
 const HospitalList = styled.div`
-  margin: 20px 0;
+  margin: 40px 0 0 0;
+`
+
+const HospitalRow = styled.div`
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
 `
 
 const HospitalLabel = styled.div`
   color: blue;
-  font-weight: 500;
-  margin-bottom: 4px;
   cursor: pointer;
+  margin-right: 10px;
 
   &:hover {
     text-decoration: underline;
@@ -94,7 +112,6 @@ const HospitalLabel = styled.div`
 `
 
 const ResultsContainer = styled.div`
-  margin: 100px 0;
 `
 
 export default Results

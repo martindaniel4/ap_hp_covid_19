@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 import { Divider } from '@material-ui/core'
 
-import Upload from './components/Upload'
-import Results from './components/Results'
 import { CSV_CONFIG } from './constants'
 import { CSV_CONFIG_FIXTURE } from './fixtures/csv_fixture'
 import { processFiles } from './processing-utils'
 import './App.css';
+
+import UploadFiles from './components/UploadFiles'
+import Results from './components/Results'
 
 function App() {
   const [files, setFiles] = useState(CSV_CONFIG_FIXTURE)
@@ -43,18 +44,8 @@ function App() {
 
   return (
     <AppContainer>
-      <Header><span role="img" aria-label="Hospital">&#x1F3E5;</span> Hopitaux de Paris FC.</Header>
-      {
-        Object.keys(files).map(csvId =>
-          <div key={csvId}>
-            <Upload
-              csvConfig={files[csvId]}
-              onFileComplete={onFileComplete}
-            />
-            <Divider /> 
-          </div>
-        )
-      }
+      <Header><span role="img" aria-label="Hospital">&#x1F3E5;</span>{'Groupe Hospitalier, Paris Saclay'}</Header>
+      <UploadFiles files={files} onFileComplete={onFileComplete} />
       {data && <Results filesData={data} />}
     </AppContainer>
   )
