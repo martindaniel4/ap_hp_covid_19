@@ -31,7 +31,7 @@ export const processFiles = (files) => {
         })
 
       mapByHospital[h] = {
-        lastPatientAdmitted: getLastAdmitedPatientDate(listOfPatientsForHospital),
+        lastPatientAdmittedOn: getLastAdmitedPatientDate(listOfPatientsForHospital),
         currentPatientsCount: listOfPatientsForHospital.length,
         byUma: newPatientsGroupedByUMA,
       }
@@ -39,7 +39,7 @@ export const processFiles = (files) => {
   
   return {
     currentCovidPatientsCount: currentCovidPatients.length,
-    lastAdmitedPatientDate: getLastAdmitedPatientDate(currentCovidPatients),
+    lastPatientAdmittedOn: getLastAdmitedPatientDate(currentCovidPatients),
     mapByHospital
   }
 }

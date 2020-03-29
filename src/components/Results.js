@@ -9,7 +9,7 @@ import { GROUP_NAME } from '../constants'
 function Results({ filesData }) {
   const {
     currentCovidPatientsCount,
-    lastAdmitedPatientDate,
+    lastPatientAdmittedOn,
     mapByHospital,
   } = filesData
 
@@ -24,7 +24,7 @@ function Results({ filesData }) {
       <Summary>
         <Title>{GROUP_NAME}</Title>
         <BigNumber number={currentCovidPatientsCount} label={'patients Covid'} />
-        <div>{`Dernier admis: ${lastAdmitedPatientDate}`}</div>
+        <div>{`Dernier admis: ${lastPatientAdmittedOn}`}</div>
 
         <HospitalList>
           <HospitalsLabel>Hospitals</HospitalsLabel>

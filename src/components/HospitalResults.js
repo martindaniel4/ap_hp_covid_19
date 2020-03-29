@@ -44,7 +44,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
       
       <Summary>
         <BigNumber number={hospitalData.currentPatientsCount} label={'patients Covid'} />
-        <div>{`Dernier admis: ${hospitalData.lastPatientAdmitted}`}</div>
+        <div>{`Dernier admis: ${hospitalData.lastPatientAdmittedOn}`}</div>
       </Summary>
 
       <Tabs>
