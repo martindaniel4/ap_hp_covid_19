@@ -80,13 +80,12 @@ const Left = styled.div`
 
 const Label = styled.div`
   font-weight: bold;
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 6px;
-  color: #555;
 `
 
 const Description = styled.div`
-  font-size: 12px;
+  font-size: 16px;
 `
 
 const UploadWrapper = styled.div`

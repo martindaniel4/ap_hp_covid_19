@@ -74,7 +74,7 @@ function mergeOrbisInGrims(grims, orbisMappedByIPP) {
 function getPatientCountPerDay(patientsList) {
   const patientCountPerDay = _.chain(patientsList)
     .sortBy(p => {return moment(p.dt_deb_visite)})
-    .countBy(p => {return moment(p.dt_deb_visite).format("MMMM Do YYYY")})
+    .countBy(p => {return moment(p.dt_deb_visite).format("DD/MM")})
     .value()
 
   return Object.keys(patientCountPerDay).reduce((acc, date) => {

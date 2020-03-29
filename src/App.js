@@ -44,7 +44,8 @@ function App() {
 
   return (
     <AppContainer>
-      <Header><span role="img" aria-label="Hospital">&#x1F3E5;</span>{'GH, Paris Saclay'}</Header>
+      <Header>{'Groupe Hospitalier, Paris Saclay'}</Header>
+      <Subheader>{'Suivi des patients Covid-19 et de capacité'}</Subheader>
       <UploadFiles files={files} onFileComplete={onFileComplete} />
       {data && <Results filesData={data} />}
     </AppContainer>
@@ -57,9 +58,13 @@ const AppContainer = styled.div`
 `;
 
 const Header = styled.div`
-  font-size: 40px;
-  color: #ff6a6a;
+  font-size: 30px;
   font-weight: bold;
+  margin-bottom: 10px;
+`
+
+const Subheader = styled.div`
+  font-size: 20px;
   margin-bottom: 40px;
 `
 
