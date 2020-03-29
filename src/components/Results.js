@@ -5,9 +5,15 @@ import {
   useTable,
 } from 'react-table'
 
-function Results({ filesData }) {
-  const { currentCovidPatientsCount, tableData } = filesData
+import {XYPlot, VerticalBarSeries, HorizontalGridLines,
+        VerticalGridLines} from 'react-vis';
 
+function Results({ filesData }) {
+  const { currentCovidPatientsCount, 
+          lastPatientAdmitted, 
+          countPatientPerDayGraph,
+          tableData } = filesData
+  
   const columns = useMemo(
     () => [
       {
@@ -33,8 +39,15 @@ function Results({ filesData }) {
 
   return (
     <ResultsContainer>
-      <div>{`${currentCovidPatientsCount} current covid patients`}</div>
-
+      <div>{`Dernier patient admis le ${lastPatientAdmitted}`}</div>
+      <div>{`Nombre de patients Covid+: ${currentCovidPatientsCount}`}</div>
+      
+      <XYPlot height={200} width={400} xType="ordinal">
+        <VerticalGridLines />
+        <HorizontalGridLines />
+        <VerticalBarSeries data={countPatientPerDayGraph} />
+      </XYPlot>
+      
       <Styles>
         <Table
           data={data}
