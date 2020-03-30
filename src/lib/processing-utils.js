@@ -9,17 +9,17 @@ export const processFiles = (files) => {
   const orbisMappedByIPP = _.groupBy(orbis.data, p => p['IPP'])
   const capacityMappedByService = _.groupBy(capacity.data, s => s['last_uma'])
   const currentCovidPatients = mergeOrbisInGlims(glims, orbisMappedByIPP)
-  console.log(currentCovidPatients)
-  console.log(capacityMappedByService)
   const tempMapByHospital = _.groupBy(currentCovidPatients, p => p['hop'])
 
   const mapByHospital = {}
+
   Object.keys(tempMapByHospital)
     .forEach(h => {
       const listOfPatientsForHospital = tempMapByHospital[h]
       const patientsGroupedByService = _.groupBy(listOfPatientsForHospital, p => p['last_uma'])
 
       const newPatientsGroupedByService = []
+
       Object.keys(patientsGroupedByService)
         .forEach(service => {
           const currentPatients = patientsGroupedByService[service]
@@ -29,7 +29,8 @@ export const processFiles = (files) => {
           const findService = capacityMappedByService[service]
           const serviceCapacity = findService ? findService[0]['capacity'] : ''
           const currentPatientsCount = patientsGroupedByService[service].length
-          const availableBeds = serviceCapacity ? serviceCapacity-currentPatientsCount : 0
+          const availableBeds = serviceCapacity ? serviceCapacity-currentPatientsCount : '-'
+          
           newPatientsGroupedByService.push({
             service,
             currentPatientsCount,
@@ -47,7 +48,7 @@ export const processFiles = (files) => {
         byService: newPatientsGroupedByService,
       }
     })
-  console.log(mapByHospital)
+    
   return {
     currentCovidPatientsCount: currentCovidPatients.length,
     lastPatientAdmittedOn: getLastAdmitedPatientDate(currentCovidPatients),
