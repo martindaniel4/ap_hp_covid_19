@@ -5921,8 +5921,392 @@ export const CSV_CONFIG_FIXTURE = {
     "description": 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n last_uma, capacity',
     "data": [
       {
-        "uma": "APR CSULT MEDECINE",
-        "capacity": 10,
+        "last_uma": "APR PNEUMOLOGIE",
+        "capacity": "33"
+      },
+      {
+        "last_uma": "BCT CS RETOUR DE VOYAGE",
+        "capacity": "39"
+      },
+      {
+        "last_uma": "BCT CHIR ORTHO TRAUMA",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "ABC MAL INFECTIEUSES (UF)",
+        "capacity": "46"
+      },
+      {
+        "last_uma": "BCT REANIMATION MEDICALE",
+        "capacity": "49"
+      },
+      {
+        "last_uma": "ABC GERIATRIE AIGUE",
+        "capacity": "39"
+      },
+      {
+        "last_uma": "RPC MAL.INF.TROPIC (UF)",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "PBR GERIATRIE AIGUE",
+        "capacity": "36"
+      },
+      {
+        "last_uma": "CCH CS HEPATOLOGIE PR",
+        "capacity": "39"
+      },
+      {
+        "last_uma": "BCT PNEUMOLOGIE (UF)",
+        "capacity": "30"
+      },
+      {
+        "last_uma": "BCT URGENCES ADULTE",
+        "capacity": "45"
+      },
+      {
+        "last_uma": "APR CSULT MEDECINE",
+        "capacity": "50"
+      },
+      {
+        "last_uma": "RPC CS ISOLEMENT M. INF.",
+        "capacity": "32"
+      },
+      {
+        "last_uma": "ABC MED ADULTE NON PROG (UF)",
+        "capacity": "40"
+      },
+      {
+        "last_uma": "BCT REA CHIR - SURV CONT (UF)",
+        "capacity": "35"
+      },
+      {
+        "last_uma": "APR MED INTERNE",
+        "capacity": "30"
+      },
+      {
+        "last_uma": "BCT CS MED VOYAGE VACCIN",
+        "capacity": "32"
+      },
+      {
+        "last_uma": "ABC LITS D'AVAL URGENCES (UF)",
+        "capacity": "40"
+      },
+      {
+        "last_uma": "BCT HEPATO GASTRO ENTERO",
+        "capacity": "33"
+      },
+      {
+        "last_uma": "BCT CARDIOLOGIE",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "RPC REA MEDICO-CHIR (UF)",
+        "capacity": "33"
+      },
+      {
+        "last_uma": "BCT MED INTERNE IMMUNO",
+        "capacity": "46"
+      },
+      {
+        "last_uma": "ABC REA POLYVALENTE",
+        "capacity": "37"
+      },
+      {
+        "last_uma": "APR CSULT SOIGNANTS",
+        "capacity": "37"
+      },
+      {
+        "last_uma": "APR PEDIATRIE",
+        "capacity": "50"
+      },
+      {
+        "last_uma": "APR COURT SEJ GERIA (UF)",
+        "capacity": "36"
+      },
+      {
+        "last_uma": "PBR REA - SURV CONTINUE (UF)",
+        "capacity": "50"
+      },
+      {
+        "last_uma": "APR URGENCES ADULTE",
+        "capacity": "49"
+      },
+      {
+        "last_uma": "PBR PRELEVEMENTS",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "BJN GASTRO MICI ASS NUTR",
+        "capacity": "38"
+      },
+      {
+        "last_uma": "APR REA MEDICO-CHIR",
+        "capacity": "43"
+      },
+      {
+        "last_uma": "BCT MAL INFECTIEUSES",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "ABC OBSTETRIQUE (UF)",
+        "capacity": "41"
+      },
+      {
+        "last_uma": "BCT GERIATRIE AIGUE",
+        "capacity": "42"
+      },
+      {
+        "last_uma": "SLS POLICLIN HEMATO (UF)",
+        "capacity": "49"
+      },
+      {
+        "last_uma": "BCT USIP (UF)",
+        "capacity": "35"
+      },
+      {
+        "last_uma": "ABC CHIR ORTHO TRAUMA",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "ABC CHIR DIG MINI INVAS",
+        "capacity": "38"
+      },
+      {
+        "last_uma": "RPC CS INFECT. NETTER 0",
+        "capacity": "42"
+      },
+      {
+        "last_uma": "ABC CS PRELEVEMENT",
+        "capacity": "39"
+      },
+      {
+        "last_uma": "APR HEPA-GAST-ENTER",
+        "capacity": "39"
+      },
+      {
+        "last_uma": "SPR SSR GERIA SAND-CH-BA (UF)",
+        "capacity": "49"
+      },
+      {
+        "last_uma": "ABC URGENCES OBSTETRIQUE",
+        "capacity": "41"
+      },
+      {
+        "last_uma": "BCT NEPHROLOGIE",
+        "capacity": "42"
+      },
+      {
+        "last_uma": "RPC PATHO. CEREBRALE MPR (UF)",
+        "capacity": "49"
+      },
+      {
+        "last_uma": "PBR CHIR HB ONCO TRANSPL (UF)",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "PBR HEPATOLOGIE (UF)",
+        "capacity": "44"
+      },
+      {
+        "last_uma": "LMR URGENCES",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "APR NEPHRO E DIALYSE (UF)",
+        "capacity": "43"
+      },
+      {
+        "last_uma": "HAD SOINS ADULTES",
+        "capacity": "46"
+      },
+      {
+        "last_uma": "RPC MPR WIDAL (UF)",
+        "capacity": "34"
+      },
+      {
+        "last_uma": "ABC ACC URGENCES UHCD (UF)",
+        "capacity": "48"
+      },
+      {
+        "last_uma": "ABC PEDIATRIE (UF)",
+        "capacity": "34"
+      },
+      {
+        "last_uma": "PSL MIR-R3S (UF)",
+        "capacity": "46"
+      },
+      {
+        "last_uma": "PBR SSR POLYPATHO",
+        "capacity": "50"
+      },
+      {
+        "last_uma": "TNN HISTORIQUE DOSSIERS",
+        "capacity": "47"
+      },
+      {
+        "last_uma": "BCT CS GYNECOLOGIE",
+        "capacity": "32"
+      },
+      {
+        "last_uma": "BCT OBSTETRIQUE (UF)",
+        "capacity": "38"
+      },
+      {
+        "last_uma": "PSL CANCEROLOGIE",
+        "capacity": "35"
+      },
+      {
+        "last_uma": "BCH PNEUMOLOGIE B",
+        "capacity": "39"
+      },
+      {
+        "last_uma": "SLS URGENCES",
+        "capacity": "39"
+      },
+      {
+        "last_uma": "PBR CONSULTANTS EXTERNES",
+        "capacity": "48"
+      },
+      {
+        "last_uma": "PSL MAL INFECT TROPICALE (UF)",
+        "capacity": "45"
+      },
+      {
+        "last_uma": "LMR CONSULTATION CARDIOL",
+        "capacity": "47"
+      },
+      {
+        "last_uma": "PBR UCC (UF)",
+        "capacity": "45"
+      },
+      {
+        "last_uma": "BCT CS RHUMATOLOGIE",
+        "capacity": "40"
+      },
+      {
+        "last_uma": "APR URGENCES PEDIATRIQ (UF)",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "BCT CONSULT NEURO PED",
+        "capacity": "32"
+      },
+      {
+        "last_uma": "PBR CS LIAISON SSR ADULT",
+        "capacity": "31"
+      },
+      {
+        "last_uma": "BCT REA PED SC (UF)",
+        "capacity": "33"
+      },
+      {
+        "last_uma": "BCT URGENCES PED (UF)",
+        "capacity": "50"
+      },
+      {
+        "last_uma": "APR CARDIOLOGIE",
+        "capacity": "36"
+      },
+      {
+        "last_uma": "APR UCA DMU 10",
+        "capacity": "35"
+      },
+      {
+        "last_uma": "APR DERMATO GLE E ONCO",
+        "capacity": "36"
+      },
+      {
+        "last_uma": "BCT SRPR (UF)",
+        "capacity": "44"
+      },
+      {
+        "last_uma": "PSL NEUROLOGIE 2",
+        "capacity": "36"
+      },
+      {
+        "last_uma": "ABC CS IMMUNO",
+        "capacity": "37"
+      },
+      {
+        "last_uma": "RPC CHIR ORTHO (UF)",
+        "capacity": "43"
+      },
+      {
+        "last_uma": "BCT PEDIATRIE GENERALE",
+        "capacity": "41"
+      },
+      {
+        "last_uma": "ABC SURVEILLANCE CONTINU (UF)",
+        "capacity": "41"
+      },
+      {
+        "last_uma": "PSL CONSULT NEUROCHIR",
+        "capacity": "39"
+      },
+      {
+        "last_uma": "APR CONS-DERMATO",
+        "capacity": "35"
+      },
+      {
+        "last_uma": "ABC HGE E NUTRITION",
+        "capacity": "36"
+      },
+      {
+        "last_uma": "BCH ENDO DIAB MET N",
+        "capacity": "37"
+      },
+      {
+        "last_uma": "HAD MERE ENFANT",
+        "capacity": "41"
+      },
+      {
+        "last_uma": "LRB ORTHOPEDIE",
+        "capacity": "35"
+      },
+      {
+        "last_uma": "APR UMA DMU 7",
+        "capacity": "37"
+      },
+      {
+        "last_uma": "BCT URGENCES OBSTETRIQUE",
+        "capacity": "47"
+      },
+      {
+        "last_uma": "BJN URGENCES (UF)",
+        "capacity": "48"
+      },
+      {
+        "last_uma": "BCT GYNECOLOGIE (UF)",
+        "capacity": "38"
+      },
+      {
+        "last_uma": "BCT CS OPHTALMOLOGIE",
+        "capacity": "50"
+      },
+      {
+        "last_uma": "PSL MAL SYSTEMIQU MYOSIT (UF)",
+        "capacity": "41"
+      },
+      {
+        "last_uma": "NCK CS GEST RISQ AD L0B",
+        "capacity": "49"
+      },
+      {
+        "last_uma": "SLS DERMATOLOGIE",
+        "capacity": "35"
+      },
+      {
+        "last_uma": "PBR SSR ALZHEIMER",
+        "capacity": "32"
+      },
+      {
+        "last_uma": "APR CONSULTATION-GASTRO",
+        "capacity": "47"
+      },
+      {
+        "last_uma": "PBR SSR ORTHO AVAL AVC G",
+        "capacity": "48"
       }
     ],
     "fields": [
