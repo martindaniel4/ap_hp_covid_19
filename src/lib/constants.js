@@ -12,11 +12,11 @@ export const CSV_CONFIG = {
     name: 'Glims',
     description: 'Uploadez ici un export de la base Glims au format CSV. Les champs attendus sont: \n ipp, dt_deb_visite, dt_fin_visite, is_pcr, hop, last_uma',
   },
-  // 'capacity': {
-  //   id: 'capacity',
-  //   name: 'Capacity',
-  //   description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
-  // }
+  'capacity': {
+    id: 'capacity',
+    name: 'Capacitaire',
+    description: 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n last_uma, capacity',
+  }
 }
 
 export const capacityTableColumns = [
@@ -35,5 +35,13 @@ export const capacityTableColumns = [
   {
     Header: 'Enfants',
     accessor: 'currentPatientsCountChild'
+  },
+  {
+    Header: 'Capacitaire ouvert COVID +',
+    accessor: 'serviceCapacity'
+  },
+  {
+    Header: 'Nombre de lits disponibles',
+    accessor: 'availableBeds'
   }
 ]
