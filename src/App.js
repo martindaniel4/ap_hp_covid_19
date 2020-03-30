@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { Divider } from '@material-ui/core'
 
-import { CSV_CONFIG } from './constants'
+import { CSV_CONFIG } from './lib/constants'
 import { CSV_CONFIG_FIXTURE } from './fixtures/csv_fixture'
-import { processFiles } from './processing-utils'
-import './App.css';
+import { processFiles } from './lib/processing-utils'
+import './stylesheets/App.css'
 
 import UploadFiles from './components/UploadFiles'
 import Results from './components/Results'
 
 function App() {
-  const [files, setFiles] = useState(CSV_CONFIG)
+  const [files, setFiles] = useState(CSV_CONFIG_FIXTURE)
   const [data, setData] = useState(null)
 
   useEffect(() => {

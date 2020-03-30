@@ -14,7 +14,7 @@ import {
 
 import { StyledTable } from './ui/Table'
 import { BigNumber } from './ui/BigNumber'
-import { GROUP_NAME } from '../constants'
+import { GROUP_NAME } from '../lib/constants'
 
 export function HospitalResults({ hospitalName, hospitalData }) {
   const columns = useMemo(

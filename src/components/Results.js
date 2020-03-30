@@ -13,7 +13,7 @@ import {
 
 import { HospitalResults } from './HospitalResults'
 import { BigNumber } from './ui/BigNumber'
-import { GROUP_NAME } from '../constants'
+import { GROUP_NAME } from '../lib/constants'
 
 function Results({ filesData }) {
   console.log(filesData)
@@ -97,7 +97,6 @@ function Results({ filesData }) {
 }
 
 const Summary = styled.div`
-  padding: 20px;
   margin-bottom: 50px;
 `
 
