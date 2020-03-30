@@ -4,11 +4,13 @@ import moment from 'moment'
 import { CHILD_ADULT_CUTOFF_AGE } from './constants'
 
 export const processFiles = (files) => {
-  const { orbis, glims } = files
+  const { orbis, glims, capacity } = files
 
   const orbisMappedByIPP = _.groupBy(orbis.data, p => p['IPP'])
+  const capacityMappedByService = _.groupBy(capacity.data, s => s['last_uma'])
   const currentCovidPatients = mergeOrbisInGlims(glims, orbisMappedByIPP)
   console.log(currentCovidPatients)
+  console.log(capacityMappedByService)
   const tempMapByHospital = _.groupBy(currentCovidPatients, p => p['hop'])
 
   const mapByHospital = {}
@@ -23,13 +25,18 @@ export const processFiles = (files) => {
           const currentPatients = patientsGroupedByService[service]
           const currentPatientsByAge = _.countBy(currentPatients, p => {
             return p.dob && moment(p.dob, 'DD/MM/YYYY').add(CHILD_ADULT_CUTOFF_AGE, 'year').isAfter(moment()) ? 'child': 'adult'
-          })
-
+          }) 
+          const findService = capacityMappedByService[service]
+          const serviceCapacity = findService ? findService[0]['capacity'] : ''
+          const currentPatientsCount = patientsGroupedByService[service].length
+          const availableBeds = serviceCapacity ? serviceCapacity-currentPatientsCount : 0
           newPatientsGroupedByService.push({
             service,
-            currentPatientsCount: patientsGroupedByService[service].length,
+            currentPatientsCount,
             currentPatientsCountAdult: currentPatientsByAge['adult'] || 0,
             currentPatientsCountChild: currentPatientsByAge['child'] || 0,
+            serviceCapacity,
+            availableBeds,
           })
         })
 
@@ -40,7 +47,7 @@ export const processFiles = (files) => {
         byService: newPatientsGroupedByService,
       }
     })
-  
+  console.log(mapByHospital)
   return {
     currentCovidPatientsCount: currentCovidPatients.length,
     lastPatientAdmittedOn: getLastAdmitedPatientDate(currentCovidPatients),
