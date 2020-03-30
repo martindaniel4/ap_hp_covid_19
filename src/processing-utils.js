@@ -1,11 +1,13 @@
 import _ from 'underscore'
 import moment from 'moment'
 
+import { CHILD_ADULT_CUTOFF_AGE } from './constants'
+
 export const processFiles = (files) => {
-  const { orbis, grims } = files
+  const { orbis, glims } = files
 
   const orbisMappedByIPP = _.groupBy(orbis.data, p => p['IPP'])
-  const currentCovidPatients = mergeOrbisInGrims(grims, orbisMappedByIPP)
+  const currentCovidPatients = mergeOrbisInGlims(glims, orbisMappedByIPP)
   const tempMapByHospital = _.groupBy(currentCovidPatients, p => p['hop'])
 
   const mapByHospital = {}
@@ -19,7 +21,7 @@ export const processFiles = (files) => {
         .forEach(uma => {
           const currentPatients = patientsGroupedByUMA[uma]
           const currentPatientsByAge = _.countBy(currentPatients, p => {
-            return p.dob && moment(p.dob, 'DD/MM/YYYY').add(18, 'year').isAfter(moment()) ? 'child': 'adult'
+            return p.dob && moment(p.dob, 'DD/MM/YYYY').add(CHILD_ADULT_CUTOFF_AGE, 'year').isAfter(moment()) ? 'child': 'adult'
           })
 
           newPatientsGroupedByUMA.push({
@@ -55,8 +57,8 @@ function getLastAdmitedPatientDate(listOfPatients) {
   return moment(date).format('Do MMMM YYYY à H:MM')
 }
 
-function mergeOrbisInGrims(grims, orbisMappedByIPP) {
-  return grims.data
+function mergeOrbisInGlims(glims, orbisMappedByIPP) {
+  return glims.data
     .filter(patient => {
       return patient.ipp !== '' && patient.is_pcr === 'Positif' && patient.dt_fin_visite === ''
     })
