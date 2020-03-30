@@ -54,6 +54,7 @@ function App() {
 const AppContainer = styled.div`
   width: 1000px;
   margin: 40px auto 0;
+  padding-bottom: 100px;
 `;
 
 const Header = styled.div`

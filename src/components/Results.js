@@ -97,7 +97,9 @@ function Results({ filesData }) {
 }
 
 const Summary = styled.div`
-  margin-bottom: 50px;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: solid 2px #aaa;
 `
 
 const Title = styled.div`

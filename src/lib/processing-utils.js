@@ -62,7 +62,7 @@ export const processFiles = (files) => {
 // =============================================
 
 function getLastAdmitedPatientDate(listOfPatients) {
-  const date = _.max(listOfPatients, patient => moment(patient.dt_deb_visite)).dt_deb_visite
+  const date = _.max(listOfPatients, patient => moment(patient.entryDate)).entryDate
   return moment(date).format('Do MMMM YYYY à H:MM')
 }
 
@@ -86,8 +86,8 @@ function mergeOrbisInGlims(glims, orbisMappedByIPP) {
 
 function getPatientCountPerDay(patientsList) {
   const patientCountPerDay = _.chain(patientsList)
-    .sortBy(p => {return moment(p.dt_deb_visite)})
-    .countBy(p => {return moment(p.dt_deb_visite).format("DD/MM")})
+    .sortBy(p => {return moment(p.entryDate)})
+    .countBy(p => {return moment(p.entryDate).format("DD/MM")})
     .value()
 
   return Object.keys(patientCountPerDay).reduce((acc, date) => {

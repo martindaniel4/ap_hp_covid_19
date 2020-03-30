@@ -5914,5 +5914,21 @@ export const CSV_CONFIG_FIXTURE = {
       "last_uma"
     ],
     "valid": true
+  },
+  "capacity": {
+    "id": 'capacity',
+    "name": 'Capacitaire',
+    "description": 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n last_uma, capacity',
+    "data": [
+      {
+        "uma": "APR CSULT MEDECINE",
+        "capacity": 10,
+      }
+    ],
+    "fields": [
+      "uma",
+      "capacity",
+    ],
+    "valid": true
   }
 }
