@@ -21,7 +21,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
     () => [
       {
         Header: 'Unité de Soin',
-        accessor: 'uma'
+        accessor: 'service'
       },
       {
         Header: 'Patients',
@@ -40,7 +40,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
   )
 
   const data = useMemo(
-    () => hospitalData.byUma,
+    () => hospitalData.byService,
     [hospitalData]
   )
 

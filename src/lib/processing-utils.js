@@ -14,19 +14,19 @@ export const processFiles = (files) => {
   Object.keys(tempMapByHospital)
     .forEach(h => {
       const listOfPatientsForHospital = tempMapByHospital[h]
-      const patientsGroupedByUMA = _.groupBy(listOfPatientsForHospital, p => p['last_uma'])
+      const patientsGroupedByService = _.groupBy(listOfPatientsForHospital, p => p['last_uma'])
 
-      const newPatientsGroupedByUMA = []
-      Object.keys(patientsGroupedByUMA)
-        .forEach(uma => {
-          const currentPatients = patientsGroupedByUMA[uma]
+      const newPatientsGroupedByService = []
+      Object.keys(patientsGroupedByService)
+        .forEach(service => {
+          const currentPatients = patientsGroupedByService[service]
           const currentPatientsByAge = _.countBy(currentPatients, p => {
             return p.dob && moment(p.dob, 'DD/MM/YYYY').add(CHILD_ADULT_CUTOFF_AGE, 'year').isAfter(moment()) ? 'child': 'adult'
           })
 
-          newPatientsGroupedByUMA.push({
-            uma,
-            currentPatientsCount: patientsGroupedByUMA[uma].length,
+          newPatientsGroupedByService.push({
+            service,
+            currentPatientsCount: patientsGroupedByService[service].length,
             currentPatientsCountAdult: currentPatientsByAge['adult'] || 0,
             currentPatientsCountChild: currentPatientsByAge['child'] || 0,
           })
@@ -36,7 +36,7 @@ export const processFiles = (files) => {
         lastPatientAdmittedOn: getLastAdmitedPatientDate(listOfPatientsForHospital),
         currentPatientsCount: listOfPatientsForHospital.length,
         patientCountPerDay: getPatientCountPerDay(listOfPatientsForHospital),
-        byUma: newPatientsGroupedByUMA,
+        byService: newPatientsGroupedByService,
       }
     })
   

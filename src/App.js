@@ -10,7 +10,7 @@ import UploadFiles from './components/UploadFiles'
 import Results from './components/Results'
 
 function App() {
-  const [files, setFiles] = useState(CSV_CONFIG)
+  const [files, setFiles] = useState(CSV_CONFIG_FIXTURE)
   const [data, setData] = useState(null)
 
   useEffect(() => {
