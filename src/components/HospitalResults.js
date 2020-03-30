@@ -2,40 +2,16 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
-import {
-  XYPlot, 
-  XAxis,
-  YAxis,
-  ChartLabel,
-  VerticalBarSeries, 
-  HorizontalGridLines, 
-  VerticalGridLines
-} from 'react-vis'
+import { CSVLink } from 'react-csv'
+import { XYPlot,  XAxis, YAxis, ChartLabel, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
 
 import { StyledTable } from './ui/Table'
 import { BigNumber } from './ui/BigNumber'
-import { GROUP_NAME } from '../lib/constants'
+import { GROUP_NAME, capacityTableColumns } from '../lib/constants'
 
 export function HospitalResults({ hospitalName, hospitalData }) {
   const columns = useMemo(
-    () => [
-      {
-        Header: 'Unité de Soin',
-        accessor: 'service'
-      },
-      {
-        Header: 'Patients',
-        accessor: 'currentPatientsCount'
-      },
-      {
-        Header: 'Adultes',
-        accessor: 'currentPatientsCountAdult'
-      },
-      {
-        Header: 'Enfants',
-        accessor: 'currentPatientsCountChild'
-      }
-    ],
+    () => capacityTableColumns,
     []
   )
 
@@ -44,6 +20,9 @@ export function HospitalResults({ hospitalName, hospitalData }) {
     [hospitalData]
   )
 
+  const dataForCSVDownload = [capacityTableColumns.map(c => c['Header'])]
+    .concat(hospitalData.byService.map(s => Object.values(s) ))
+
   return (
     <HospitalContainer>
       <HospitalTitleContainer>
@@ -51,7 +30,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
         <HospitalTitle>{hospitalName}</HospitalTitle>
       </HospitalTitleContainer>
       
-      <FirstRow>
+      <SpacedRow>
         <div>
           <BigNumber number={hospitalData.currentPatientsCount} label={'patients Covid'} />
           <div>{`Dernier admis: ${hospitalData.lastPatientAdmittedOn}`}</div>
@@ -81,7 +60,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
             <VerticalBarSeries data={hospitalData.patientCountPerDay} />
           </XYPlot>
         </div>
-      </FirstRow>
+      </SpacedRow>
 
       <Tabs>
         <TabList>
@@ -90,6 +69,11 @@ export function HospitalResults({ hospitalName, hospitalData }) {
         </TabList>
 
         <TabPanel>
+          <SpacedRow>
+            <TableName>{'Table de patients par unité de soins'}</TableName>
+            <CSVLinkStyled data={dataForCSVDownload}>{'Telecharger un .csv des données'}</CSVLinkStyled>
+          </SpacedRow>
+
           <StyledTable
             data={data}
             columns={columns}
@@ -110,10 +94,11 @@ const HospitalTitleContainer = styled.div`
   margin-bottom: 20px;
 `
 
-const FirstRow = styled.div`
+const SpacedRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin: 20px 0;
 `
 
 const GroupTitle = styled.div`
@@ -125,6 +110,16 @@ const GroupTitle = styled.div`
 
 const HospitalTitle = styled.div`
   font-size: 30px;
+  font-weight: bold;
+`
+
+const TableName = styled.div`
+  font-size: 20px;
+  font-weight: bold;
+`
+
+const CSVLinkStyled = styled(CSVLink)`
+  color: #3e4bfffa;
   font-weight: bold;
 `
 

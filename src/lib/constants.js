@@ -18,3 +18,22 @@ export const CSV_CONFIG = {
   //   description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a',
   // }
 }
+
+export const capacityTableColumns = [
+  {
+    Header: 'Unité de Soin',
+    accessor: 'service'
+  },
+  {
+    Header: 'Patients',
+    accessor: 'currentPatientsCount'
+  },
+  {
+    Header: 'Adultes',
+    accessor: 'currentPatientsCountAdult'
+  },
+  {
+    Header: 'Enfants',
+    accessor: 'currentPatientsCountChild'
+  }
+]
