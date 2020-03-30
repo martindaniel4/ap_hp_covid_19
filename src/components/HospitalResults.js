@@ -2,13 +2,15 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
-import { XYPlot, 
-         VerticalBarSeries, 
-         HorizontalGridLines, 
-         VerticalGridLines,
-         XAxis,
-         YAxis,
-         ChartLabel} from 'react-vis'
+import {
+  XYPlot, 
+  XAxis,
+  YAxis,
+  ChartLabel,
+  VerticalBarSeries, 
+  HorizontalGridLines, 
+  VerticalGridLines
+} from 'react-vis'
 
 import { StyledTable } from './ui/Table'
 import { BigNumber } from './ui/BigNumber'

@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import _ from 'underscore'
+import {
+  XYPlot, 
+  XAxis,
+  YAxis,
+  ChartLabel,
+  VerticalBarSeries, 
+  HorizontalGridLines, 
+  VerticalGridLines
+} from 'react-vis'
 
-import { XYPlot, 
-         XAxis,
-         YAxis,
-         ChartLabel,
-         VerticalBarSeries, 
-         HorizontalGridLines, 
-         VerticalGridLines} from 'react-vis'
 import { HospitalResults } from './HospitalResults'
 import { BigNumber } from './ui/BigNumber'
 import { GROUP_NAME } from '../constants'
