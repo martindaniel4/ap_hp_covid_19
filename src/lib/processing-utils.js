@@ -8,6 +8,7 @@ export const processFiles = (files) => {
 
   const orbisMappedByIPP = _.groupBy(orbis.data, p => p['IPP'])
   const currentCovidPatients = mergeOrbisInGlims(glims, orbisMappedByIPP)
+  console.log(currentCovidPatients)
   const tempMapByHospital = _.groupBy(currentCovidPatients, p => p['hop'])
 
   const mapByHospital = {}
@@ -65,10 +66,12 @@ function mergeOrbisInGlims(glims, orbisMappedByIPP) {
     .map(patient => {
       const findOrbisData = orbisMappedByIPP[patient.ipp]
       const dob = findOrbisData ? findOrbisData[0]['Né(e) le'] : ''
+      const entryDate = findOrbisData ? findOrbisData[0]["Date d'entrée du dossier"] : ''
 
       return {
         ...patient,
         dob,
+        entryDateFromOrbis: entryDate,
       }
     })
 }
