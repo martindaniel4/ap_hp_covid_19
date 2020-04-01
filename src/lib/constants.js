@@ -22,19 +22,19 @@ export const CSV_CONFIG = {
 export const capacityTableColumns = [
   {
     Header: 'Unité de Soin',
-    accessor: 'service'
+    accessor: 'service',
   },
   {
     Header: 'Total Patients',
-    accessor: 'patientsCount'
+    accessor: 'patientsCount',
   },
   {
     Header: 'Covid19 Positifs',
-    accessor: 'patientsCountPCR'
+    accessor: 'patientsCountPCR',
   },
   {
     Header: 'Taux de Covid19 Positifs',
-    accessor: 'pcrRatio'
+    accessor: 'pcrRatio',
   },
 ]
 

@@ -76,6 +76,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
           <StyledTable
             data={data}
             columns={columns}
+            defaultSortColumn={'patientsCount'}
           />
         </TabPanel>
         <TabPanel>

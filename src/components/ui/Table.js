@@ -1,20 +1,30 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 
-export function StyledTable({columns, data}) {
+export function StyledTable({ columns, data, defaultSortColumn }) {
   return (
     <Styles>
       <Table
         data={data}
         columns={columns}
+        defaultSortColumn={defaultSortColumn}
       />
     </Styles>
   )
 }
 
-function Table({columns, data}) {
-  const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable({columns, data})
+function Table({ columns, data, defaultSortColumn }) {
+  const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        sortBy: [{ id: defaultSortColumn, desc: true }]
+      }
+    },
+    useSortBy
+  )
 
   return (
     <table {...getTableProps()}>
@@ -24,7 +34,12 @@ function Table({columns, data}) {
             {headerGroup
               .headers
               .map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th {...column.getHeaderProps(column.getSortByToggleProps)}>
+                  <div className={column.isSorted ? 'sortedColumn' : ''}>{column.render('Header')}</div>
+                  <div className={column.isSorted ? 'sortedColumnIcon' : ''}>
+                    {column.isSorted ? (column.isSortedDesc ? ' ▼' : ' ▲') : '▶'}
+                  </div>
+                </th>
               ))}
           </tr>
         ))}
