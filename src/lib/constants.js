@@ -25,23 +25,24 @@ export const capacityTableColumns = [
     accessor: 'service'
   },
   {
-    Header: 'Patients',
-    accessor: 'currentPatientsCount'
+    Header: 'Total Patients',
+    accessor: 'patientsCount'
   },
   {
-    Header: 'Adultes',
-    accessor: 'currentPatientsCountAdult'
+    Header: 'Covid19 Positifs',
+    accessor: 'patientsCountPCR'
   },
   {
-    Header: 'Enfants',
-    accessor: 'currentPatientsCountChild'
+    Header: 'Taux de Covid19 Positifs',
+    accessor: 'pcrRatio'
   },
-  {
-    Header: 'Capacitaire ouvert COVID +',
-    accessor: 'serviceCapacity'
-  },
-  {
-    Header: 'Nombre de lits disponibles',
-    accessor: 'availableBeds'
-  }
 ]
+
+export const HOSPITAL_MAP = {
+  'BCT': 'BICETRE',
+  'PBR': 'PAUL-BROUSSE',
+  'ABC': 'ANTOINE BECLERE',
+  'SPR': 'SAINTE PERINE',
+  'APR': 'AMBROISE PARE',
+  'RPC': 'RAYMOND POINCARE',
+}

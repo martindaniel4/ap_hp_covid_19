@@ -7,7 +7,7 @@ import { XYPlot,  XAxis, YAxis, ChartLabel, VerticalBarSeries, HorizontalGridLin
 
 import { StyledTable } from './ui/Table'
 import { BigNumber } from './ui/BigNumber'
-import { GROUP_NAME, capacityTableColumns } from '../lib/constants'
+import { HOSPITAL_MAP, capacityTableColumns } from '../lib/constants'
 
 export function HospitalResults({ hospitalName, hospitalData }) {
   const columns = useMemo(
@@ -26,12 +26,12 @@ export function HospitalResults({ hospitalName, hospitalData }) {
   return (
     <HospitalContainer>
       <HospitalTitleContainer>
-        <HospitalTitle>{hospitalName}</HospitalTitle>
+        <HospitalTitle>{HOSPITAL_MAP[hospitalName]}</HospitalTitle>
       </HospitalTitleContainer>
       
       <SpacedRow>
         <div>
-          <BigNumber number={hospitalData.currentPatientsCount} label={'patients Covid'} />
+          <BigNumber number={hospitalData.patientsCountPCR} label={'patients Covid'} />
           <div>{`Dernier admis: ${hospitalData.lastPatientAdmittedOn}`}</div>
         </div>
 
@@ -56,7 +56,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
                 textAnchor: 'end'
               }}
               />
-            <VerticalBarSeries data={hospitalData.patientCountPerDay} />
+            <VerticalBarSeries data={hospitalData.patientsCountPerDay} />
           </XYPlot>
         </div>
       </SpacedRow>

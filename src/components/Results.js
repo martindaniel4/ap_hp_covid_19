@@ -13,19 +13,17 @@ import {
 
 import { HospitalResults } from './HospitalResults'
 import { BigNumber } from './ui/BigNumber'
-import { GROUP_NAME } from '../lib/constants'
+import { GROUP_NAME, HOSPITAL_MAP } from '../lib/constants'
 
 function Results({ filesData }) {
-  console.log(filesData)
-  
   const {
     currentCovidPatientsCount,
     lastPatientAdmittedOn,
-    patientCountPerDay,
-    mapByHospital,
+    patientsCountPerDay,
+    breakdownPerHospital,
   } = filesData
 
-  const sortedHospital = _.sortBy(Object.keys(mapByHospital), h => -mapByHospital[h].currentPatientsCount)
+  const sortedHospital = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].currentPatientsCount)
   const [activeHospital, setActiveHospital] = useState(sortedHospital[0])
 
   if (!filesData) return null
@@ -33,8 +31,7 @@ function Results({ filesData }) {
   return (
     <ResultsContainer>
       <Summary>
-        <Title>{GROUP_NAME}</Title>
-        
+      
         <FirstRow>
           <div>
             <BigNumber number={currentCovidPatientsCount} label={'patients Covid'} />
@@ -42,14 +39,14 @@ function Results({ filesData }) {
 
             <HospitalList>
               {
-                sortedHospital.map(h => {
+                sortedHospital.map(hospital => {
                   return (
                     <HospitalRow
-                      key={h}
-                      onClick={() => setActiveHospital(h)}
+                      key={hospital}
+                      onClick={() => setActiveHospital(hospital)}
                     >
-                      <HospitalLabel active={activeHospital === h}>{h}</HospitalLabel>
-                      <div>{`${mapByHospital[h].currentPatientsCount} patients`}</div>
+                      <HospitalLabel active={activeHospital === hospital}>{HOSPITAL_MAP[hospital]}</HospitalLabel>
+                      <div>{`${breakdownPerHospital[hospital].patientsCountPCR} patients`}</div>
                     </HospitalRow>
                   )
                 })
@@ -78,7 +75,7 @@ function Results({ filesData }) {
                   textAnchor: 'end'
                 }}
                 />
-              <VerticalBarSeries data={patientCountPerDay} />
+              <VerticalBarSeries data={patientsCountPerDay} />
             </XYPlot>
           </div>
         </FirstRow>
@@ -88,7 +85,7 @@ function Results({ filesData }) {
         activeHospital &&
           <HospitalResults
             hospitalName={activeHospital}
-            hospitalData={mapByHospital[activeHospital]}
+            hospitalData={breakdownPerHospital[activeHospital]}
           />
       }
 
@@ -97,9 +94,9 @@ function Results({ filesData }) {
 }
 
 const Summary = styled.div`
-  margin-bottom: 30px;
-  padding-bottom: 30px;
-  border-bottom: solid 2px #aaa;
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+  border-bottom: solid 1px #ccc;
 `
 
 const Title = styled.div`

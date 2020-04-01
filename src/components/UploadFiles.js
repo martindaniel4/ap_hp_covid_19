@@ -23,5 +23,5 @@ export default function UploadFiles({files, onFileComplete}) {
 }
 
 const UploadContainer = styled.div`
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 `

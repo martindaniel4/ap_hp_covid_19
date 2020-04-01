@@ -1,59 +1,49 @@
 import _ from 'underscore'
 import moment from 'moment'
 
-import { CHILD_ADULT_CUTOFF_AGE } from './constants'
-
 export const processFiles = (files) => {
   const { orbis, glims, capacity } = files
 
-  const orbisMappedByIPP = _.groupBy(orbis.data, p => p['IPP'])
-  const capacityMappedByService = _.groupBy(capacity.data, s => s['last_uma'])
-  const currentCovidPatients = mergeOrbisInGlims(glims, orbisMappedByIPP)
-  const tempMapByHospital = _.groupBy(currentCovidPatients, p => p['hop'])
+  const glimsByIPP = _.groupBy(glims.data, p => p['ipp'])
 
-  const mapByHospital = {}
-
-  Object.keys(tempMapByHospital)
-    .forEach(h => {
-      const listOfPatientsForHospital = tempMapByHospital[h]
-      const patientsGroupedByService = _.groupBy(listOfPatientsForHospital, p => p['last_uma'])
+  const allPatients = extendOrbisWithGlims(orbis, glimsByIPP)
+  const allPatientsPCR = allPatients.filter(p => p.isPCR)
+  const patientsByHospital = _.groupBy(allPatients, p => getHospitalKey(p['U.ResponsabilitÈ']))
+  
+  const breakdownPerHospital = {}
+  Object.keys(patientsByHospital)
+    .forEach(hospital => {
+      const patientsForHospital = patientsByHospital[hospital]
+      const patientsByService = _.groupBy(patientsForHospital, p => p['U.Soins'].split(hospital)[1].trim())
+      const patientsPCRForHospital = patientsForHospital.filter(p => p.isPCR)
 
       const newPatientsGroupedByService = []
-
-      Object.keys(patientsGroupedByService)
-        .forEach(service => {
-          const currentPatients = patientsGroupedByService[service]
-          const currentPatientsByAge = _.countBy(currentPatients, p => {
-            return p.dob && moment(p.dob, 'DD/MM/YYYY').add(CHILD_ADULT_CUTOFF_AGE, 'year').isAfter(moment()) ? 'child': 'adult'
-          }) 
-          const findService = capacityMappedByService[service]
-          const serviceCapacity = findService ? findService[0]['capacity'] : ''
-          const currentPatientsCount = patientsGroupedByService[service].length
-          const availableBeds = serviceCapacity ? serviceCapacity-currentPatientsCount : '-'
-          
-          newPatientsGroupedByService.push({
-            service,
-            currentPatientsCount,
-            currentPatientsCountAdult: currentPatientsByAge['adult'] || 0,
-            currentPatientsCountChild: currentPatientsByAge['child'] || 0,
-            serviceCapacity,
-            availableBeds,
-          })
+      Object.keys(patientsByService).forEach(service => {
+        const patientsInService = patientsByService[service]
+        const patientsInServicePCR = patientsInService.filter(p => p.isPCR)
+        const pcrRatio = `${Math.floor((patientsInServicePCR.length / patientsInService.length) * 100)}%`
+        
+        newPatientsGroupedByService.push({
+          service,
+          patientsCount: patientsInService.length,
+          patientsCountPCR: patientsInServicePCR.length,
+          pcrRatio: pcrRatio,
         })
+      })
 
-      mapByHospital[h] = {
-        lastPatientAdmittedOn: getLastAdmitedPatientDate(listOfPatientsForHospital),
-        currentPatientsCount: listOfPatientsForHospital.length,
-        patientCountPerDay: getPatientCountPerDay(listOfPatientsForHospital),
+      breakdownPerHospital[hospital] = {
+        lastPatientAdmittedOn: getLastAdmitedPatientDate(patientsPCRForHospital),
+        patientsCountPCR: patientsPCRForHospital.length,
+        patientsCountPerDay: getPatientsCountPerDay(patientsPCRForHospital),
         byService: newPatientsGroupedByService,
       }
     })
     
   return {
-    currentCovidPatientsCount: currentCovidPatients.length,
-    lastPatientAdmittedOn: getLastAdmitedPatientDate(currentCovidPatients),
-    patientCountPerDay: getPatientCountPerDay(currentCovidPatients),
-    mapByHospital
+    currentCovidPatientsCount: allPatientsPCR.length,
+    lastPatientAdmittedOn: getLastAdmitedPatientDate(allPatientsPCR),
+    patientsCountPerDay: getPatientsCountPerDay(allPatientsPCR),
+    breakdownPerHospital
   }
 }
 
@@ -61,39 +51,36 @@ export const processFiles = (files) => {
 // "PRIVATE" UTILS
 // =============================================
 
-function getLastAdmitedPatientDate(listOfPatients) {
-  const date = _.max(listOfPatients, patient => moment(patient.entryDate)).entryDate
-  return moment(date).format('Do MMMM YYYY à H:MM')
+function getHospitalKey(orbisHospitalString) {
+  return orbisHospitalString.split('- ')[1].slice(0,3)
 }
 
-function mergeOrbisInGlims(glims, orbisMappedByIPP) {
-  return glims.data
-    .filter(patient => {
-      return patient.ipp !== '' && patient.is_pcr === 'Positif' && patient.dt_fin_visite === ''
-    })
-    .map(patient => {
-      const findOrbisData = orbisMappedByIPP[patient.ipp]
-      const dob = findOrbisData ? findOrbisData[0]['Né(e) le'] : ''
-      const entryDate = findOrbisData ? findOrbisData[0]["Date d'entrée du dossier"] : ''
-
-      return {
-        ...patient,
-        dob,
-        entryDateFromOrbis: entryDate,
-      }
-    })
+function getLastAdmitedPatientDate(patients) {
+  const dateKey = "Date d'entrée du dossier"
+  const lastDate = _.max(patients, patient => moment(patient[dateKey], 'DD/MM/YYYY hh:mm').valueOf() )[dateKey]
+  return moment(lastDate, 'DD/MM/YYYY hh:mm').format('Do MMMM YYYY à HH:mm')
 }
 
-function getPatientCountPerDay(patientsList) {
-  const patientCountPerDay = _.chain(patientsList)
-    .sortBy(p => {return moment(p.entryDate)})
-    .countBy(p => {return moment(p.entryDate).format("DD/MM")})
-    .value()
+function extendOrbisWithGlims(orbis, glimsByIPP) {
+  return orbis.data.map(patient => {
+    const findPatientInGlims = glimsByIPP[patient['IPP']]
+    const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === "Positif"
 
-  return Object.keys(patientCountPerDay).reduce((acc, date) => {
+    return {
+      ...patient,
+      isPCR,
+    }
+  })
+}
+
+function getPatientsCountPerDay(patientsList) {
+  const patientsCountPerDay = _.countBy(patientsList, patient => moment(patient["Date d'entrée du dossier"], 'DD/MM/YYYY').format('DD/MM/YYYY') )
+  const sortedDays = _.sortBy(Object.keys(patientsCountPerDay), date => moment(date, 'DD/MM/YYYY').format('X'))
+
+  return sortedDays.reduce((acc, date) => {
     acc.push({
       x: date,
-      y: patientCountPerDay[date]
+      y: patientsCountPerDay[date]
     })
     return acc
   }, [])
