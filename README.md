@@ -1,11 +1,8 @@
-
-https://git.heroku.com/ap-hp-paris-saclay.git
-
 ## Context 
 
-The app was 
+This app aims at displaying the remaining bed capacity for Covid-19 patients in the Groupe Hospitalier Paris Saclay of AP-HP. More details are available in [this one-pager](https://docs.google.com/document/d/1sQ_swM_F5y89ie4gtzpCp83kPZfTcFir_y2GxO1ZG8o/edit).
 
-https://docs.google.com/document/d/1sQ_swM_F5y89ie4gtzpCp83kPZfTcFir_y2GxO1ZG8o/edit
+See app online at - https://ap-hp-paris-saclay.herokuapp.com/
 
 ## Input
 
@@ -95,7 +92,6 @@ Patients Covid-19+ biologie|glims_patients_covid|INT|Total number of patients fo
 Patients Covid-19+ radiologie|pacs_patients_covid|INT|Total number of patients for that service_covid that are positive according to Pacs.
 Patients Covid-19+ (autres)|other_patients_covid|INT|Number of patients for that service that are Covid-19 due to the fact that the service is dedicated to Covid-19 patients.
 ```
-
 
 ## Run in dev
 
