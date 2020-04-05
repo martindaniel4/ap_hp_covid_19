@@ -12,7 +12,7 @@ Below are more details and specified schema for each file. Each of those should 
 
 - `Orbis`: this is a snapshot of the current patients admitted in the hospital. 
 
-```
+
 Column|Type|Description
 ---|---|---
 Sexe|STRING|Sex of patient
@@ -27,11 +27,11 @@ Date de dÈbut du mouvement|DATE| Datetime when a patient is moved to a room or 
 Date de fin du mouvement|DATE|End date when a patient is moved from a unit, format  DD/MM/YYYY HH:MM.
 Chambre|STRING|Room where the patient is located in (e.g: N515 - CULLERIER CHAMBRE 15 DOUBLE)
 Lit|STRING|Bed where the patient is located in (e.g: N515P - LIT 15 PORTE)
-```
+
 
 - `Glims`: Export of serology tests of patients that indicates whether patients are tested positive to Covid-19. Note that there may be multiple rows for a same patient. Not all rows match an Orbis patient. For instance medical staff may appear in the Glims export. 
 
-```
+
 |Column|Type|Description|
 |---|---|---|
 |DOSSIER|INT|Case number|
@@ -42,46 +42,40 @@ Lit|STRING|Bed where the patient is located in (e.g: N515P - LIT 15 PORTE)
 |last_uma|STRING|Last unit visited by patient.|
 |is_pcr|STRING|Indicates if the patient is tested positive to Covid-19.|
 |dt_fin_visite|DATE|Date of end of visit.|
-```
+
 
 - `Pacs`: Export of lung radiology scans. Indicates whether patients are tested positive to Covid-19.
 
-```
 Column|Type|Description
 ---|---|---
 ipp|INT|Patient id. 
 date|DATE|Date of the test. Format is DD/MM/YYYY.
 radio|STRING|Indicates if the patient is tested positive to Covid-19. 
-```
 
 - `Capacitaire`: Daily snapshot of the bed capacity in a given hospital. 
 
-```
 Column|Type|Description
 ---|---|---
 hopital|STRING|Name of hospital. 
 service_covid|STRING|Name of the Covid service as defined by the hospital. 
 lits|INT|Number of beds available for that service_covid. 
 full_covid|BOOLEAN|whether the service is full covid or not. 
-```
+
 
 - `Correspondance`: Mapping between Orbis sub-unit and the Covid service put together by the hospital. 
 
 hopital,service_covid,U.Soins
 
-```
 Column|Type|Description
 ---|---|---
 hopital|STRING|Name of hospital. 
 service_covid|STRING|Name of the Covid-19 service as defined by the hospital. 
 U.Soins|STRING|Sub-unit name from the hospital. That field matches Orbis corresponding field
-```
 
 ## Output 
 
 The output is a table that gives, for each hospital the following: 
 
-```
 Text displayed|Column|Type|Description
 ---|---|---|---
 Service Covid-19|service_covid|STRING|Name of the Covid-19 service as defined by the hospital. Field from the Correspondance table. 
@@ -91,7 +85,6 @@ Nombre de lits restants|remaining_beds|INT|Remaining number of beds for that ser
 Patients Covid-19+ biologie|glims_patients_covid|INT|Total number of patients for that service_covid that are positive according to Glims.
 Patients Covid-19+ radiologie|pacs_patients_covid|INT|Total number of patients for that service_covid that are positive according to Pacs.
 Patients Covid-19+ (autres)|other_patients_covid|INT|Number of patients for that service that are Covid-19 due to the fact that the service is dedicated to Covid-19 patients.
-```
 
 ## Run in dev
 
