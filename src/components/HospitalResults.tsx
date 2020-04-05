@@ -101,13 +101,6 @@ const SpacedRow = styled.div`
   margin: 20px 0;
 `
 
-const GroupTitle = styled.div`
-  font-size: 30px;
-  color: #888;
-  font-weight: bold;
-  margin-right: 10px;
-`
-
 const HospitalTitle = styled.div`
   font-size: 30px;
   font-weight: bold;
