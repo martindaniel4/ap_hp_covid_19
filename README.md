@@ -32,16 +32,16 @@ Lit|STRING|Bed where the patient is located in (e.g: N515P - LIT 15 PORTE)
 - `Glims`: Export of serology tests of patients that indicates whether patients are tested positive to Covid-19. Note that there may be multiple rows for a same patient. Not all rows match an Orbis patient. For instance medical staff may appear in the Glims export. 
 
 ```
-Column|Type|Description
----|---|---
-DOSSIER|INT|Case number
-dt_deb_visite|DATE|Date of the test. Format is DD/MM/YYYY. 
-ipp|INT|Patient id. 
-RENS_PIH|INT|Id. Unkwown entity. 
-hop|STRING| Name of the hospital where the test was run. 
-last_uma|STRING|Last unit visited by patient.
-is_pcr|STRING|Indicates if the patient is tested positive to Covid-19. 
-dt_fin_visite|DATE|Date of end of visit.
+|Column|Type|Description|
+|---|---|---|
+|DOSSIER|INT|Case number|
+|dt_deb_visite|DATE|Date of the test. Format is DD/MM/YYYY.|
+|ipp|INT|Patient id.|
+|RENS_PIH|INT|Id. Unkwown entity.|
+|hop|STRING| Name of the hospital where the test was run.|
+|last_uma|STRING|Last unit visited by patient.|
+|is_pcr|STRING|Indicates if the patient is tested positive to Covid-19.|
+|dt_fin_visite|DATE|Date of end of visit.|
 ```
 
 - `Pacs`: Export of lung radiology scans. Indicates whether patients are tested positive to Covid-19.
