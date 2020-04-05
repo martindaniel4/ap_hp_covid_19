@@ -2,20 +2,21 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import _ from 'underscore'
 import {
-  XYPlot, 
+  XYPlot,
   XAxis,
   YAxis,
   ChartLabel,
-  VerticalBarSeries, 
-  HorizontalGridLines, 
+  VerticalBarSeries,
+  HorizontalGridLines,
   VerticalGridLines
 } from 'react-vis'
 
 import { HospitalResults } from './HospitalResults'
 import { BigNumber } from './ui/BigNumber'
-import { GROUP_NAME, HOSPITAL_MAP } from '../lib/constants'
+import { HOSPITAL_MAP } from '../lib/constants'
+import { ProcessingResultsType } from '../lib/types'
 
-function Results({ filesData }) {
+function Results({ filesData }: {filesData:  ProcessingResultsType}) {
   const {
     currentCovidPatientsCount,
     lastPatientAdmittedOn,
@@ -24,7 +25,7 @@ function Results({ filesData }) {
   } = filesData
 
   const sortedHospital = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].currentPatientsCount)
-  const [activeHospital, setActiveHospital] = useState(sortedHospital[0])
+  const [activeHospital, setActiveHospital] = useState<string>(sortedHospital[0])
 
   if (!filesData) return null
 
@@ -99,12 +100,6 @@ const Summary = styled.div`
   border-bottom: solid 1px #ccc;
 `
 
-const Title = styled.div`
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 20px;
-`
-
 const FirstRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -131,7 +126,7 @@ const HospitalLabel = styled.div`
     text-decoration: underline;
   }
 
-  ${({ active }) => active && `
+  ${({ active }: { active: boolean }) => active && `
     font-weight: bold;
   `}
 `

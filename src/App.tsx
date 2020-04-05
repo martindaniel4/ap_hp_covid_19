@@ -8,20 +8,21 @@ import './stylesheets/App.css'
 
 import UploadFiles from './components/UploadFiles'
 import Results from './components/Results'
+import { FilesDataType, FileUploadPayloadType } from './lib/types'
 
 function App() {
-  const [files, setFiles] = useState(CSV_CONFIG)
+  const [files, setFiles] = useState<FilesDataType>(CSV_CONFIG)
   const [data, setData] = useState(null)
 
   useEffect(() => {
     areAllFilesValid(files) && process(files)
   }, [])
 
-  const areAllFilesValid = (filesOb) => {
-    return Object.values(filesOb).every(csv => csv.valid)
+  const areAllFilesValid = (filesOb: FilesDataType) => {
+    return Object.values(filesOb).every(csv => csv.data && csv.data.length && csv.valid)
   }
 
-  const onFileComplete = (payload) => {
+  const onFileComplete = (payload: FileUploadPayloadType) => {
     const { id, data, fields } = payload
     const newFiles = {
       ...files,
@@ -36,7 +37,9 @@ function App() {
     areAllFilesValid(newFiles) && process(newFiles)
   }
 
-  const process = (newFiles) => {
+
+
+  const process = (newFiles: FilesDataType) => {
     const data = processFiles(newFiles)
     setData(data)
   }

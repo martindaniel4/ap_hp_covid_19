@@ -1,4 +1,4 @@
-export const CSV_CONFIG_FIXTURE = {
+export const CSV_CONFIG_FIXTURE: any = {
   "orbis": {
       "id": "orbis",
       "name": "Orbis",

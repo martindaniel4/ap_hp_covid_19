@@ -1,22 +1,31 @@
-import React, { useRef } from 'react'
+import React, { useRef, SyntheticEvent } from 'react'
 import styled from 'styled-components'
+// @ts-ignore
 import Papa from 'papaparse'
 import { Button } from '@material-ui/core'
 import { Done, Publish } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
 
-function Upload({ csvConfig, onFileComplete }) {
+import { FileType, PapaParseResult } from '../lib/types'
+
+function Upload({
+  csvConfig,
+  onFileComplete,
+}: {
+  csvConfig: FileType,
+  onFileComplete: Function,
+}) {
   const fileInput = useRef(null)
   const { id, name, description, valid, fields, data } = csvConfig
   
-  const analyzeCSV = (e) => {
-    Papa.parse(e.target.files[0], {
+  const analyzeCSV = (e: SyntheticEvent): void => {
+    Papa.parse((e.target as HTMLFormElement).files[0], {
       complete: updateData,
       header: true
     });
   }
 
-  const updateData = (result) => {
+  const updateData = (result: PapaParseResult): void => {
     const { id } = csvConfig
     const { data, meta: { fields } } = result
 
