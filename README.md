@@ -69,42 +69,8 @@ Hopital|INT|Code of hospital (e.g.: 96).
 Localisation CDG|STRING|Returns the physical location of the room (e.g: BATIMENT COMMANDANT RIVIERE  NIVEAU 2).
 Intitulé Site Crise COVID|STRING|Our "service_covid" field, name of the Covid service as defined by the hospital (e.g.: PSY J. DELAY).
 Code Chambre|STRING|The room code, unique per hospital, to use to match with Orbis.
-type chambre|STRING|Unused so far.
-commentaires|STRING|Unused so far.
-Code Site|INT|Unused so far.
-Libelle Site|STRING|Unused so far.
-Date de création|DATE|Unused so far.
-Date de modification|DATE|Unused so far.
-Date d'effet creation|DATE|Unused so far.
-Date de fin de validité|DATE|Unused so far.
-Date d'effet modification|DATE|Unused so far.
-Code Batiment|INT|Unused so far.
-Libelle Batiment|STRING|Unused so far.
-Date de création|DATE|Unused so far.
-Date de modification|DATE|Unused so far.
-Date d'effet creation|DATE|Unused so far.
-Date de fin de validité|DATE|Unused so far.
-Date d'effet modification|DATE|Unused so far.
-Code Secteur Batiment|INT|Unused so far.
-Libelle Secteur Batiment|STRING|Unused so far.
-Date de création|DATE|Unused so far.
-Date de modification|DATE|Unused so far.
-Date d'effet creation|DATE|Unused so far.
-Date de fin de validité|DATE|Unused so far.
-Date d'effet modification|DATE|Unused so far.
-Code Etage|STRING|Unused so far.
-Libelle Etage|STRING|Unused so far.
-Date de création|DATE|Unused so far.
-Date de modification|DATE|Unused so far.
-Date d'effet creation|DATE|Unused so far.
-Date de fin de validité|DATE|Unused so far.
-Date d'effet modification|DATE|Unused so far.
-Libelle Chambre|STRING|Unused so far.
-Date de création|DATE|Unused so far.
-Date de modification|DATE|Unused so far.
-Date d'effet creation|DATE|Unused so far.
-Date de fin de validité|DATE|Unused so far.
-Date d'effet modification|DATE|Unused so far.
+
+Unused so far: `type chambre, commentaires, Code Site, Libelle Site, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Batiment, Libelle Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Secteur Batiment, Libelle Secteur Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Etage, Libelle Etage, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Libelle Chambre, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification`
 
 ## Output 
 

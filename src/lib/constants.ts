@@ -35,7 +35,15 @@ export const CSV_CONFIG: FilesDataType = {
     fields: [],
     data: [],
     valid: false,
-  }
+  },
+  correspondance: {
+    id: 'correspondance',
+    name: 'Correspondance',
+    description: 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n last_uma, capacity',
+    fields: [],
+    data: [],
+    valid: false,
+  },
 }
 
 export const capacityTableColumns = [

@@ -1,4 +1,4 @@
-export type FilesIdType = 'orbis' | 'glims' | 'capacity' | 'pacs'
+export type FilesIdType = 'orbis' | 'glims' | 'capacity' | 'pacs' | 'correspondance'
 
 export type FileUploadPayloadType = {
   id: FilesIdType,
@@ -13,13 +13,14 @@ export type PapaParseResult = {
   }
 }
 
-export type FileType = OrbisType | GlimsType | PacsType | CapacityType
+export type FileType = OrbisType | GlimsType | PacsType | CapacityType | CorrespondanceType
 
 export type FilesDataType = {
   orbis: OrbisType,
   glims: GlimsType,
   pacs: PacsType,
   capacity: CapacityType,
+  correspondance: CorrespondanceType,
 }
 
 export type OrbisType = {
@@ -51,6 +52,15 @@ export type PacsType = {
 
 export type CapacityType = {
   id: 'capacity',
+  name: string,
+  description: string,
+  valid: boolean,
+  fields: string[],
+  data: CapacityFieldType[],
+}
+
+export type CorrespondanceType = {
+  id: 'correspondance',
   name: string,
   description: string,
   valid: boolean,
