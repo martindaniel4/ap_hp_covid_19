@@ -17,6 +17,7 @@ import { HOSPITAL_MAP } from '../lib/constants'
 import { ProcessingResultsType } from '../lib/types'
 
 function Results({ filesData }: {filesData:  ProcessingResultsType}) {
+  console.log(filesData)
   const {
     currentCovidPatientsCount,
     lastPatientAdmittedOn,

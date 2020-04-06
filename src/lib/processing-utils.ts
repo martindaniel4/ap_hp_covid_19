@@ -9,8 +9,8 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, p => p['ipp'])
 
   const allPatients = extendOrbisWithCovid(orbis, glimsByIPP, pacsByIPP)
-  const allPatientsPCR = allPatients.filter(p => p.isCovid)
-    
+  const allPatientsCovid = allPatients.filter(p => p.isCovid)
+  
   const patientsByHospital = _.groupBy(allPatients, p => getHospitalKey(p['U.ResponsabilitÈ']))
   
   const breakdownPerHospital: any = {}
@@ -18,34 +18,34 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
     .forEach(hospital => {
       const patientsForHospital = patientsByHospital[hospital]
       const patientsByService = _.groupBy(patientsForHospital, p => p['U.Soins'].split(hospital)[1].trim())
-      const patientsPCRForHospital = patientsForHospital.filter(p => p.isCovid)
+      const patientsCovidForHospital = patientsForHospital.filter(p => p.isCovid)
 
       const newPatientsGroupedByService: any[] = []
       Object.keys(patientsByService).forEach(service => {
         const patientsInService = patientsByService[service]
-        const patientsInServicePCR = patientsInService.filter(p => p.isCovid)
-        const pcrRatio = `${Math.floor((patientsInServicePCR.length / patientsInService.length) * 100)}%`
+        const patientsInServiceCovid = patientsInService.filter(p => p.isCovid)
+        const covidRatio = `${Math.floor((patientsInServiceCovid.length / patientsInService.length) * 100)}%`
         
         newPatientsGroupedByService.push({
           service,
           patientsCount: patientsInService.length,
-          patientsCountPCR: patientsInServicePCR.length,
-          pcrRatio: pcrRatio,
+          patientsCountCovid: patientsInServiceCovid.length,
+          covidRatio: covidRatio,
         })
       })
 
       breakdownPerHospital[hospital] = {
-        lastPatientAdmittedOn: getLastAdmitedPatientDate(patientsPCRForHospital),
-        patientsCountPCR: patientsPCRForHospital.length,
-        patientsCountPerDay: getPatientsCountPerDay(patientsPCRForHospital),
+        lastPatientAdmittedOn: getLastAdmitedPatientDate(patientsCovidForHospital),
+        patientsCountCovid: patientsCovidForHospital.length,
+        patientsCountPerDay: getPatientsCountPerDay(patientsCovidForHospital),
         byService: newPatientsGroupedByService,
       }
     })
     
   return {
-    currentCovidPatientsCount: allPatientsPCR.length,
-    lastPatientAdmittedOn: getLastAdmitedPatientDate(allPatientsPCR),
-    patientsCountPerDay: getPatientsCountPerDay(allPatientsPCR),
+    currentCovidPatientsCount: allPatientsCovid.length,
+    lastPatientAdmittedOn: getLastAdmitedPatientDate(allPatientsCovid),
+    patientsCountPerDay: getPatientsCountPerDay(allPatientsCovid),
     breakdownPerHospital
   }
 }
@@ -72,10 +72,12 @@ function extendOrbisWithCovid(orbis: OrbisType, glimsByIPP: GlimsByIppType, pacs
     const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === "Positif"
     const isRadio = !!findPatientInPacs && findPatientInPacs[0]['radio'] === '1'
     const isCovid = isPCR || isRadio
+    const covidSource = isPCR ? 'glims' : isRadio ? 'pacs' : null
     
     return {
       ...patient,
       isCovid,
+      covidSource,
     }
   })
 }

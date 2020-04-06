@@ -49,11 +49,11 @@ export const capacityTableColumns = [
   },
   {
     Header: 'Covid19 Positifs',
-    accessor: 'patientsCountPCR',
+    accessor: 'patientsCountCovid',
   },
   {
     Header: 'Taux de Covid19 Positifs',
-    accessor: 'pcrRatio',
+    accessor: 'covidRatio',
   },
 ]
 
