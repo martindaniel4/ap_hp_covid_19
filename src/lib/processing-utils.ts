@@ -1,36 +1,43 @@
 import _ from 'underscore'
 import moment from 'moment'
-import { FilesDataType, OrbisType, PatientType, GlimsByIppType, PacsType, PacsByIppType, ProcessingResultsType, PatientsCountPerDayType } from './types'
+import { FilesDataType, OrbisType, PatientType, GlimsByIppType, CorrespondanceByCodeChambreType, PacsByIppType, ProcessingResultsType, PatientsCountPerDayType } from './types'
+import { HOSPITAL_CODES_MAP } from './constants'
 
 export const processFiles = (files: FilesDataType): ProcessingResultsType => {
-  const { orbis, glims, pacs} = files
+  const { orbis, glims, pacs, correspondance, capacity } = files
 
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, p => p['ipp'])
   const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, p => p['ipp'])
+  const capacityMap: any = _.groupBy(capacity.data, row => (row['hopital'] + ' - ' + row['service_covid']).trim() )
+  const correspondanceByCodeChambre: CorrespondanceByCodeChambreType = _.groupBy(correspondance.data, c => c['Code Chambre'])
 
-  const allPatients = extendOrbisWithCovid(orbis, glimsByIPP, pacsByIPP)
+  const allPatients = joinOrbisWithOtherFiles(orbis, glimsByIPP, pacsByIPP, correspondanceByCodeChambre)
   const allPatientsCovid = allPatients.filter(p => p.isCovid)
   
-  const patientsByHospital = _.groupBy(allPatients, p => getHospitalKey(p['U.ResponsabilitÈ']))
+  const patientsByHospital = _.groupBy(allPatients, p => p.hospitalXYZ)
+
+  console.log(patientsByHospital)
   
   const breakdownPerHospital: any = {}
   Object.keys(patientsByHospital)
     .forEach(hospital => {
       const patientsForHospital = patientsByHospital[hospital]
-      const patientsByService = _.groupBy(patientsForHospital, p => p['U.Soins'].split(hospital)[1].trim())
+      const patientsByService = _.groupBy(patientsForHospital, p => p.siteCriseCovidFromCorrespondance)
       const patientsCovidForHospital = patientsForHospital.filter(p => p.isCovid)
 
       const newPatientsGroupedByService: any[] = []
       Object.keys(patientsByService).forEach(service => {
         const patientsInService = patientsByService[service]
         const patientsInServiceCovid = patientsInService.filter(p => p.isCovid)
-        const covidRatio = `${Math.floor((patientsInServiceCovid.length / patientsInService.length) * 100)}%`
+
+        const buildCapacityKey = (hospital + ' - ' + service).trim()
+        const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
         
         newPatientsGroupedByService.push({
           service,
-          patientsCount: patientsInService.length,
           patientsCountCovid: patientsInServiceCovid.length,
-          covidRatio: covidRatio,
+          capacityCovid,
+          openBeds: capacityCovid - patientsInServiceCovid.length,
         })
       })
 
@@ -64,7 +71,12 @@ function getLastAdmitedPatientDate(patients: PatientType[]): string {
   return moment(lastDate, 'DD/MM/YYYY hh:mm').format('Do MMMM YYYY à HH:mm')
 }
 
-function extendOrbisWithCovid(orbis: OrbisType, glimsByIPP: GlimsByIppType, pacsByIPP: PacsByIppType) {
+function joinOrbisWithOtherFiles(
+  orbis: OrbisType,
+  glimsByIPP: GlimsByIppType,
+  pacsByIPP: PacsByIppType,
+  correspondanceByCodeChambre: CorrespondanceByCodeChambreType,
+) {
   return orbis.data.map(patient => {
     const findPatientInGlims = glimsByIPP[patient['IPP']]
     const findPatientInPacs = pacsByIPP[patient['IPP']]
@@ -76,12 +88,24 @@ function extendOrbisWithCovid(orbis: OrbisType, glimsByIPP: GlimsByIppType, pacs
 
     const chambre = patient['Chambre']
     const roomCode = chambre === '-' ? null : chambre.split(' ')[0]
+    const correspondanceRowForRoomCode = correspondanceByCodeChambre[roomCode] && correspondanceByCodeChambre[roomCode][0]
+
+    if (!correspondanceRowForRoomCode) {
+      console.log(getHospitalKey(patient['U.ResponsabilitÈ']))
+      console.log(chambre)
+      console.log('-------------------')
+    }
+
+    const hospitalCode = correspondanceRowForRoomCode && correspondanceRowForRoomCode['Hopital']
+    const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : '';
     
     return {
       ...patient,
       isCovid,
       covidSource,
-      roomCode,
+      hospitalXYZ,
+      siteCriseCovidFromCorrespondance: correspondanceRowForRoomCode && correspondanceRowForRoomCode['Intitulé Site Crise COVID'],
+      localisationCDGFromCorrespondance: correspondanceRowForRoomCode && correspondanceRowForRoomCode['Localisation CDG'],
     }
   })
 }

@@ -76,8 +76,13 @@ export type PacsByIppType = {
   [ipp: string]: PacsFieldType[]
 }
 
+export type CorrespondanceByCodeChambreType = {
+  [codeChambre: string]: any,
+}
+
 export type PatientType = {
-  "Date d'entrée du dossier": string
+  "Date d'entrée du dossier": string,
+  hospitalXYZ?: string,
 }
 
 export type OrbisFieldType = {

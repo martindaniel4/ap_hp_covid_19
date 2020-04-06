@@ -48,24 +48,35 @@ export const CSV_CONFIG: FilesDataType = {
 
 export const capacityTableColumns = [
   {
-    Header: 'Unité de Soin',
+    Header: 'Site crise Covid-19',
     accessor: 'service',
   },
   {
-    Header: 'Total Patients',
-    accessor: 'patientsCount',
+    Header: 'Nombre de lits ouverts Covid',
+    accessor: 'capacityCovid',
   },
   {
-    Header: 'Covid19 Positifs',
+    Header: 'Total patients Covid',
     accessor: 'patientsCountCovid',
   },
   {
-    Header: 'Taux de Covid19 Positifs',
-    accessor: 'covidRatio',
+    Header: 'Nombre de lits disponibles',
+    accessor: 'openBeds',
   },
 ]
 
+export const HOSPITAL_CODES_MAP = {
+  '9': 'BCK',
+  '10': 'BCT',
+  '14': 'APR',
+  '28': 'ABC',
+  '68': 'RPC',
+  '79': 'SPR',
+  '96': 'PBR',
+}
+
 export const HOSPITAL_MAP = {
+  'BCK': 'BERCK',
   'BCT': 'BICETRE',
   'PBR': 'PAUL-BROUSSE',
   'ABC': 'ANTOINE BECLERE',
