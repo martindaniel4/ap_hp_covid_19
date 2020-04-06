@@ -20,6 +20,14 @@ export const CSV_CONFIG: FilesDataType = {
     data: [],
     valid: false,
   },
+  pacs: {
+    id: 'pacs',
+    name: 'Pacs',
+    description: 'Uploadez ici un export de la base Pacs au format CSV. Les champs attendus sont: \n ipp, date, radio',
+    fields: [],
+    data: [],
+    valid: false,
+  },
   capacity: {
     id: 'capacity',
     name: 'Capacitaire',
@@ -41,11 +49,11 @@ export const capacityTableColumns = [
   },
   {
     Header: 'Covid19 Positifs',
-    accessor: 'patientsCountPCR',
+    accessor: 'patientsCountCovid',
   },
   {
     Header: 'Taux de Covid19 Positifs',
-    accessor: 'pcrRatio',
+    accessor: 'covidRatio',
   },
 ]
 
