@@ -19,13 +19,13 @@ import { ProcessingResultsType } from '../lib/types'
 function Results({ filesData }: {filesData:  ProcessingResultsType}) {
   console.log(filesData)
   const {
-    currentCovidPatientsCount,
+    patientsCountCovid,
     lastPatientAdmittedOn,
     patientsCountPerDay,
     breakdownPerHospital,
   } = filesData
 
-  const sortedHospital = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].currentPatientsCount)
+  const sortedHospital = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].patientsCountCovid)
   const [activeHospital, setActiveHospital] = useState<string>(sortedHospital[0])
 
   if (!filesData) return null
@@ -36,19 +36,16 @@ function Results({ filesData }: {filesData:  ProcessingResultsType}) {
       
         <FirstRow>
           <div>
-            <BigNumber number={currentCovidPatientsCount} label={'patients Covid'} />
+            <BigNumber number={patientsCountCovid} label={'patients Covid'} />
             <div>{`Dernier admis: ${lastPatientAdmittedOn}`}</div>
 
             <HospitalList>
               {
                 sortedHospital.map(hospital => {
                   return (
-                    <HospitalRow
-                      key={hospital}
-                      onClick={() => setActiveHospital(hospital)}
-                    >
+                    <HospitalRow key={hospital} onClick={() => setActiveHospital(hospital)}>
                       <HospitalLabel active={activeHospital === hospital}>{HOSPITAL_MAP[hospital]}</HospitalLabel>
-                      <div>{`${breakdownPerHospital[hospital].patientsCountPCR} patients`}</div>
+                      <div>{`${breakdownPerHospital[hospital].patientsCountCovid} patients`}</div>
                     </HospitalRow>
                   )
                 })

@@ -31,7 +31,7 @@ export function HospitalResults({ hospitalName, hospitalData }) {
       
       <SpacedRow>
         <div>
-          <BigNumber number={hospitalData.patientsCountPCR} label={'patients Covid'} />
+          <BigNumber number={hospitalData.patientsCountCovid} label={'patients Covid'} />
           <div>{`Dernier admis: ${hospitalData.lastPatientAdmittedOn}`}</div>
         </div>
 

@@ -123,8 +123,20 @@ export type PatientsCountPerDayType = {
 }[]
 
 export type ProcessingResultsType = {
-  currentCovidPatientsCount: number,
+  patientsCountCovid: number,
   lastPatientAdmittedOn: string,
   patientsCountPerDay: PatientsCountPerDayType,
-  breakdownPerHospital: any,
+  breakdownPerHospital: {
+    [hospital: string]: {
+      lastPatientAdmittedOn: string,
+      patientsCountCovid: number,
+      patientsCountPerDay: PatientsCountPerDayType,
+      byService: {
+        service: string,
+        patientsCount: number,
+        patientsCountCovid: number,
+        covidRatio: string,
+      }[],
+    }
+  },
 }

@@ -43,7 +43,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
     })
     
   return {
-    currentCovidPatientsCount: allPatientsCovid.length,
+    patientsCountCovid: allPatientsCovid.length,
     lastPatientAdmittedOn: getLastAdmitedPatientDate(allPatientsCovid),
     patientsCountPerDay: getPatientsCountPerDay(allPatientsCovid),
     breakdownPerHospital
