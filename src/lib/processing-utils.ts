@@ -1,14 +1,16 @@
 import _ from 'underscore'
 import moment from 'moment'
-import { FilesDataType, OrbisType, PatientType, GlimsByIppType, ProcessingResultsType, PatientsCountPerDayType } from './types'
+import { FilesDataType, OrbisType, PatientType, GlimsByIppType, PacsType, PacsByIppType, ProcessingResultsType, PatientsCountPerDayType } from './types'
 
 export const processFiles = (files: FilesDataType): ProcessingResultsType => {
-  const { orbis, glims } = files
+  const { orbis, glims, pacs} = files
 
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, p => p['ipp'])
+  const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, p => p['ipp'])
 
-  const allPatients = extendOrbisWithGlims(orbis, glimsByIPP)
-  const allPatientsPCR = allPatients.filter(p => p.isPCR)
+  const allPatients = extendOrbisWithCovid(orbis, glimsByIPP, pacsByIPP)
+  const allPatientsPCR = allPatients.filter(p => p.isCovid)
+    
   const patientsByHospital = _.groupBy(allPatients, p => getHospitalKey(p['U.ResponsabilitÈ']))
   
   const breakdownPerHospital: any = {}
@@ -16,12 +18,12 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
     .forEach(hospital => {
       const patientsForHospital = patientsByHospital[hospital]
       const patientsByService = _.groupBy(patientsForHospital, p => p['U.Soins'].split(hospital)[1].trim())
-      const patientsPCRForHospital = patientsForHospital.filter(p => p.isPCR)
+      const patientsPCRForHospital = patientsForHospital.filter(p => p.isCovid)
 
       const newPatientsGroupedByService: any[] = []
       Object.keys(patientsByService).forEach(service => {
         const patientsInService = patientsByService[service]
-        const patientsInServicePCR = patientsInService.filter(p => p.isPCR)
+        const patientsInServicePCR = patientsInService.filter(p => p.isCovid)
         const pcrRatio = `${Math.floor((patientsInServicePCR.length / patientsInService.length) * 100)}%`
         
         newPatientsGroupedByService.push({
@@ -62,14 +64,18 @@ function getLastAdmitedPatientDate(patients: PatientType[]): string {
   return moment(lastDate, 'DD/MM/YYYY hh:mm').format('Do MMMM YYYY à HH:mm')
 }
 
-function extendOrbisWithGlims(orbis: OrbisType, glimsByIPP: GlimsByIppType) {
+function extendOrbisWithCovid(orbis: OrbisType, glimsByIPP: GlimsByIppType, pacsByIPP: PacsByIppType) {
   return orbis.data.map(patient => {
     const findPatientInGlims = glimsByIPP[patient['IPP']]
+    const findPatientInPacs = pacsByIPP[patient['IPP']]
+    //todo: add Covid-19 patients from Orbis
     const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === "Positif"
-
+    const isRadio = !!findPatientInPacs && findPatientInPacs[0]['radio'] === '1'
+    const isCovid = isPCR || isRadio
+    
     return {
       ...patient,
-      isPCR,
+      isCovid,
     }
   })
 }
