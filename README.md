@@ -58,19 +58,17 @@ Column|Type|Description
 ---|---|---
 hopital|STRING|Name of hospital. 
 service_covid|STRING|Name of the Covid service as defined by the hospital. 
-lits|INT|Number of beds available for that service_covid. 
-full_covid|BOOLEAN|whether the service is full covid or not. 
+lits_ouverts_covid|INT|Number of beds available for that service_covid. 
 
 
 - `Correspondance`: Mapping between Orbis sub-unit and the Covid service put together by the hospital. 
-
-hopital,service_covid,U.Soins
 
 Column|Type|Description
 ---|---|---
 hopital|STRING|Name of hospital. 
 service_covid|STRING|Name of the Covid-19 service as defined by the hospital. 
-U.Soins|STRING|Sub-unit name from the hospital. That field matches Orbis corresponding field
+code_chambre|STRING|Room code that can be matched with Orbis. Format (e.g: JD18, TV03). Note that the format of the field Chambre in Orbis is code_chambre - room label (e.g: N515 - CULLERIER CHAMBRE 15 DOUBLE,N515P - LIT 15 PORTE).
+localisation_cdg|STRING|returns the physical location of the room (e.g: BATIMENT COMMANDANT RIVIERE  NIVEAU 2).
 
 ## Output 
 
@@ -78,13 +76,14 @@ The output is a table that gives, for each hospital the following:
 
 Text displayed|Column|Type|Description
 ---|---|---|---
-Service Covid-19|service_covid|STRING|Name of the Covid-19 service as defined by the hospital. Field from the Correspondance table. 
-Nombre de lits|lits|INT|Number of beds available for that service_covid (from the file capacitaire.csv).
-Total patients|total_patients|INT|Total number of patients for that service_covid. This field is computed by summing patients in the corresponding Orbis sub-units. 
-Nombre de lits restants|remaining_beds|INT|Remaining number of beds for that service_covid. Equal to lits - total_patients. 
+Site crise Covid-19|service_covid|STRING|Name of the Covid-19 service as defined by the hospital. Field from the Correspondance table. 
+Nombre de lits ouverts Covid|lits_ouverts_covid|INT|Number of beds available for that service_covid and dedicated to Covid patients (from the file capacitaire.csv).
+Total patients Covid|total_patients_covid|INT|Total number of Covid patients for that service_covid. This field is computed by summing Covid patients (glims + pacs + other).
 Patients Covid-19+ biologie|glims_patients_covid|INT|Total number of patients for that service_covid that are positive according to Glims.
 Patients Covid-19+ radiologie|pacs_patients_covid|INT|Total number of patients for that service_covid that are positive according to Pacs.
-Patients Covid-19+ (autres)|other_patients_covid|INT|Number of patients for that service that are Covid-19 due to the fact that the service is dedicated to Covid-19 patients.
+Patients Covid-19+ (autres)|orbis_patients_covid|INT|Number of patients for that service that are Covid-19 from the dedicated field in Orbis.
+Nombre de lits disponibles|remaining_beds|INT|Remaining number of beds for Covid patients for that service_covid. Equal to lits_ouverts_covid - total_patients_covid. 
+
 
 ## Run in dev
 
