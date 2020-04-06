@@ -6,7 +6,7 @@ See app online at - https://ap-hp-paris-saclay.herokuapp.com/
 
 ## Input
 
-The app takes 5 distinct files as input `orbis.csv`, `glims.csv`, `pacs.csv`,  `capacity.csv` and `correspodance.csv`. 
+The app takes 5 distinct files as input `orbis.csv`, `glims.csv`, `pacs.csv`,  `capacity.csv` and `correspondance.csv`. 
 
 Below are more details and specified schema for each file. Each of those should be inputed as UTF-8 csv. You can also find under the `csv` folder, 5 template files 
 
@@ -61,14 +61,50 @@ service_covid|STRING|Name of the Covid service as defined by the hospital.
 lits_ouverts_covid|INT|Number of beds available for that service_covid. 
 
 
-- `Correspondance`: Mapping between Orbis sub-unit and the Covid service put together by the hospital. 
+- `Correspondance`: Sirius extract enabling mapping between Orbis room code and the Covid service put together by the hospital. 
 
 Column|Type|Description
 ---|---|---
-hopital|STRING|Name of hospital. 
-service_covid|STRING|Name of the Covid-19 service as defined by the hospital. 
-code_chambre|STRING|Room code that can be matched with Orbis. Format (e.g: JD18, TV03). Note that the format of the field Chambre in Orbis is code_chambre - room label (e.g: N515 - CULLERIER CHAMBRE 15 DOUBLE,N515P - LIT 15 PORTE).
-localisation_cdg|STRING|returns the physical location of the room (e.g: BATIMENT COMMANDANT RIVIERE  NIVEAU 2).
+Hopital|INT|Code of hospital (e.g.: 96). 
+Localisation CDG|STRING|Returns the physical location of the room (e.g: BATIMENT COMMANDANT RIVIERE  NIVEAU 2).
+Intitulé Site Crise COVID|STRING|Our "service_covid" field, name of the Covid service as defined by the hospital (e.g.: PSY J. DELAY).
+Code Chambre|STRING|The room code, unique per hospital, to use to match with Orbis.
+type chambre|STRING|Unused so far.
+commentaires|STRING|Unused so far.
+Code Site|INT|Unused so far.
+Libelle Site|STRING|Unused so far.
+Date de création|DATE|Unused so far.
+Date de modification|DATE|Unused so far.
+Date d'effet creation|DATE|Unused so far.
+Date de fin de validité|DATE|Unused so far.
+Date d'effet modification|DATE|Unused so far.
+Code Batiment|INT|Unused so far.
+Libelle Batiment|STRING|Unused so far.
+Date de création|DATE|Unused so far.
+Date de modification|DATE|Unused so far.
+Date d'effet creation|DATE|Unused so far.
+Date de fin de validité|DATE|Unused so far.
+Date d'effet modification|DATE|Unused so far.
+Code Secteur Batiment|INT|Unused so far.
+Libelle Secteur Batiment|STRING|Unused so far.
+Date de création|DATE|Unused so far.
+Date de modification|DATE|Unused so far.
+Date d'effet creation|DATE|Unused so far.
+Date de fin de validité|DATE|Unused so far.
+Date d'effet modification|DATE|Unused so far.
+Code Etage|STRING|Unused so far.
+Libelle Etage|STRING|Unused so far.
+Date de création|DATE|Unused so far.
+Date de modification|DATE|Unused so far.
+Date d'effet creation|DATE|Unused so far.
+Date de fin de validité|DATE|Unused so far.
+Date d'effet modification|DATE|Unused so far.
+Libelle Chambre|STRING|Unused so far.
+Date de création|DATE|Unused so far.
+Date de modification|DATE|Unused so far.
+Date d'effet creation|DATE|Unused so far.
+Date de fin de validité|DATE|Unused so far.
+Date d'effet modification|DATE|Unused so far.
 
 ## Output 
 
