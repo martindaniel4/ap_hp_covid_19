@@ -62,6 +62,10 @@ export type GlimsByIppType = {
   [ipp: string]: GlimsFieldType[]
 }
 
+export type PacsByIppType = {
+  [ipp: string]: PacsFieldType[]
+}
+
 export type PatientType = {
   "Date d'entrée du dossier": string
 }
