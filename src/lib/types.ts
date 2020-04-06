@@ -1,4 +1,4 @@
-export type FilesIdType = 'orbis' | 'glims' | 'capacity'
+export type FilesIdType = 'orbis' | 'glims' | 'capacity' | 'pacs'
 
 export type FileUploadPayloadType = {
   id: FilesIdType,
@@ -13,11 +13,12 @@ export type PapaParseResult = {
   }
 }
 
-export type FileType = OrbisType | GlimsType | CapacityType
+export type FileType = OrbisType | GlimsType | PacsType | CapacityType
 
 export type FilesDataType = {
   orbis: OrbisType,
   glims: GlimsType,
+  pacs: PacsType,
   capacity: CapacityType,
 }
 
@@ -37,6 +38,15 @@ export type GlimsType = {
   valid: boolean,
   fields: string[],
   data: GlimsFieldType[],
+}
+
+export type PacsType = {
+  id: 'pacs',
+  name: string,
+  description: string,
+  valid: boolean,
+  fields: string[],
+  data: PacsFieldType[],
 }
 
 export type CapacityType = {
@@ -80,6 +90,12 @@ export type GlimsFieldType = {
   "last_uma": string,
   "is_pcr": string,
   "dt_fin_visite": string,
+}
+
+export type PacsFieldType = {
+  "ipp": string,
+  "date": string,
+  "radio": string,
 }
 
 export type CapacityFieldType = {
