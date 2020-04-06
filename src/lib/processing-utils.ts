@@ -68,16 +68,20 @@ function extendOrbisWithCovid(orbis: OrbisType, glimsByIPP: GlimsByIppType, pacs
   return orbis.data.map(patient => {
     const findPatientInGlims = glimsByIPP[patient['IPP']]
     const findPatientInPacs = pacsByIPP[patient['IPP']]
-    //todo: add Covid-19 patients from Orbis
+
     const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === "Positif"
     const isRadio = !!findPatientInPacs && findPatientInPacs[0]['radio'] === '1'
     const isCovid = isPCR || isRadio
     const covidSource = isPCR ? 'glims' : isRadio ? 'pacs' : null
+
+    const chambre = patient['Chambre']
+    const roomCode = chambre === '-' ? null : chambre.split(' ')[0]
     
     return {
       ...patient,
       isCovid,
       covidSource,
+      roomCode,
     }
   })
 }
