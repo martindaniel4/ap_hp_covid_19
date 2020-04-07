@@ -64,7 +64,6 @@ export function HospitalResults({ hospitalName, hospitalData }) {
       <Tabs>
         <TabList>
           <Tab>{'Capacité'}</Tab>
-          <Tab>{'Sorties'}</Tab>
         </TabList>
 
         <TabPanel>

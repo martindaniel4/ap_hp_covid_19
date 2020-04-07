@@ -11,7 +11,7 @@ import Results from './components/Results'
 import { FilesDataType, FileUploadPayloadType } from './lib/types'
 
 function App() {
-  const [files, setFiles] = useState<FilesDataType>(CSV_CONFIG)
+  const [files, setFiles] = useState<FilesDataType>(CSV_CONFIG_FIXTURE)
   const [data, setData] = useState(null)
 
   useEffect(() => {
@@ -36,8 +36,6 @@ function App() {
     setFiles(newFiles)
     areAllFilesValid(newFiles) && process(newFiles)
   }
-
-
 
   const process = (newFiles: FilesDataType) => {
     const data = processFiles(newFiles)

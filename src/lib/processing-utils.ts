@@ -9,7 +9,8 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, p => p['ipp'])
   const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, p => p['ipp'])
   const capacityMap: any = _.groupBy(capacity.data, row => (row['hopital'] + ' - ' + row['service_covid']).trim() )
-  const correspondanceByCodeChambre: CorrespondanceByCodeChambreType = _.groupBy(correspondance.data, c => c['Code Chambre'])
+  const correspondanceFiltered = correspondance.data.filter(row => row['Retenir ligne O/N'] === "OUI")
+  const correspondanceByCodeChambre: CorrespondanceByCodeChambreType = _.groupBy(correspondanceFiltered, c => c['Code Chambre'])
 
   const allPatients = joinOrbisWithOtherFiles(orbis, glimsByIPP, pacsByIPP, correspondanceByCodeChambre)
   const allPatientsCovid = allPatients.filter(p => p.isCovid)
@@ -29,15 +30,23 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
       Object.keys(patientsByService).forEach(service => {
         const patientsInService = patientsByService[service]
         const patientsInServiceCovid = patientsInService.filter(p => p.isCovid)
+        const patientsInServicePCR = patientsInService.filter(p => p.isPCR)
+        const patientsInServiceRadio = patientsInService.filter(p => p.isRadio)
 
         const buildCapacityKey = (hospital + ' - ' + service).trim()
+        const capacityTotal = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts']
         const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
+        
         
         newPatientsGroupedByService.push({
           service,
+          patientsCount: patientsInService.length,
           patientsCountCovid: patientsInServiceCovid.length,
+          patientsCountPCR: patientsInServicePCR.length,
+          patientsCountRadio: patientsInServiceRadio.length,
+          capacityTotal,
           capacityCovid,
-          openBeds: capacityCovid - patientsInServiceCovid.length,
+          openBeds: capacityTotal - patientsInService.length,
         })
       })
 
@@ -102,6 +111,8 @@ function joinOrbisWithOtherFiles(
     return {
       ...patient,
       isCovid,
+      isPCR,
+      isRadio,
       covidSource,
       hospitalXYZ,
       siteCriseCovidFromCorrespondance: correspondanceRowForRoomCode && correspondanceRowForRoomCode['Intitulé Site Crise COVID'],

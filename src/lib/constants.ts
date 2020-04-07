@@ -6,24 +6,24 @@ export const CHILD_ADULT_CUTOFF_AGE = 16
 export const CSV_CONFIG: FilesDataType = {
   orbis: {
     id: 'orbis',
-    name: 'Orbis',
-    description: 'Uploadez ici un export de la base Orbis au format CSV. Les champs attendus sont: \n Né(e) le, IPP, N° Dossier, U.Responsabilité, U.Soins, Date d\'entrée du dossier, Date de sortie du dossier, Date de début du mouvement, Date de fin du mouvement, Chambre,Lit',
+    name: 'ORBIS',
+    description: 'Uploadez ici un export de la base ORBIS au format CSV. Les champs attendus sont: \n Né(e) le, IPP, N° Dossier, U.Responsabilité, U.Soins, Date d\'entrée du dossier, Date de sortie du dossier, Date de début du mouvement, Date de fin du mouvement, Chambre,Lit',
     fields: [],
     data: [],
     valid: false,
   },
   glims: {
     id: 'glims',
-    name: 'Glims',
-    description: 'Uploadez ici un export de la base Glims au format CSV. Les champs attendus sont: \n ipp, dt_deb_visite, dt_fin_visite, is_pcr, hop, last_uma',
+    name: 'GLIMS',
+    description: 'Uploadez ici un export de la base GLIMS au format CSV. Les champs attendus sont: \n ipp, dt_deb_visite, dt_fin_visite, is_pcr, hop, last_uma',
     fields: [],
     data: [],
     valid: false,
   },
   pacs: {
     id: 'pacs',
-    name: 'Pacs',
-    description: 'Uploadez ici un export de la base Pacs au format CSV. Les champs attendus sont: \n ipp, date, radio',
+    name: 'PACS',
+    description: 'Uploadez ici un export de la base PACS au format CSV. Les champs attendus sont: \n ipp, date, radio',
     fields: [],
     data: [],
     valid: false,
@@ -31,15 +31,15 @@ export const CSV_CONFIG: FilesDataType = {
   capacity: {
     id: 'capacity',
     name: 'Capacitaire',
-    description: 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n last_uma, capacity',
+    description: 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n hopital, service_covid, lits_ouverts, lits_ouverts_covid, dedie_covid',
     fields: [],
     data: [],
     valid: false,
   },
   correspondance: {
     id: 'correspondance',
-    name: 'Correspondance',
-    description: 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n last_uma, capacity',
+    name: 'SIRIUS',
+    description: 'Uploadez ici un export de la base SIRIUS au format CSV. Les champs attendus sont: \n Hopital, Intitulé Site Crise COVID, Localisation CDG, Code Chambre, Retenir ligne O/N',
     fields: [],
     data: [],
     valid: false,
@@ -52,12 +52,28 @@ export const capacityTableColumns = [
     accessor: 'service',
   },
   {
+    Header: 'Nombre de lits ouverts',
+    accessor: 'capacityTotal',
+  },
+  {
     Header: 'Nombre de lits ouverts Covid',
     accessor: 'capacityCovid',
   },
   {
+    Header: 'Total patients',
+    accessor: 'patientsCount',
+  },
+  {
     Header: 'Total patients Covid',
     accessor: 'patientsCountCovid',
+  },
+  {
+    Header: 'Patients Covid-19+ biologie',
+    accessor: 'patientsCountPCR',
+  },
+  {
+    Header: 'Patients Covid-19+ radiologie',
+    accessor: 'patientsCountRadio',
   },
   {
     Header: 'Nombre de lits disponibles',
