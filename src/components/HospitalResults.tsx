@@ -64,7 +64,6 @@ export function HospitalResults({ hospitalName, hospitalData }) {
       <Tabs>
         <TabList>
           <Tab>{'Capacité'}</Tab>
-          <Tab>{'Sorties'}</Tab>
         </TabList>
 
         <TabPanel>
@@ -78,9 +77,6 @@ export function HospitalResults({ hospitalName, hospitalData }) {
             columns={columns}
             defaultSortColumn={'patientsCount'}
           />
-        </TabPanel>
-        <TabPanel>
-          <h2>{'TBD'}</h2>
         </TabPanel>
       </Tabs>
       

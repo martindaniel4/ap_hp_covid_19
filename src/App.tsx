@@ -37,8 +37,6 @@ function App() {
     areAllFilesValid(newFiles) && process(newFiles)
   }
 
-
-
   const process = (newFiles: FilesDataType) => {
     const data = processFiles(newFiles)
     setData(data)
