@@ -1,94 +1,180 @@
-﻿hopital,service_covid,lits_ouverts_covid
-APR,Ortho/Septique/Vasculaire ,24
-APR,Médecine Covid + en ortho,6
-APR,Réa Covid + en ortho,8
-APR,USC/Réa SSPI COVID +,12
-APR,Réa-SC,26
-APR,Chir digestive,24
-APR,Endoc/Nutrition + Pneumo Convid-,23
-APR,Chir digestive/ HGE,24
-APR,Cardio Covid -,16
-APR,Néphro Covid - ,10
-APR,Cardio/USIC Covid +,25
-APR,Covid - (Médecine),23
-APR,Covid - (UGA + Médecine),18
-APR,Médecine Covid + ,22
-APR,PNEUMO COVID +,26
-APR,Covid + UGA/UPOG,27
-APR,Covid + médecine en chir vasc,22
-APR,Dermato,10
-APR,Rhumato,12
-APR,Pédiatrie/Ados,12
-APR,Pédiatrie/ZHTCD/Ados,18
-APR,UHCD,18
-SPR,USPC,18
-SPR,SLD Verdi,33
-SPR,SLD Bizet,33
-SPR,USP Gatineau,10
-SPR,Covid SSR Balme,20
-SPR,SSR Chopin,37
-SPR,SLD Beausoleil mutualisé SSR,35
-SPR,SLD Proust mutualisé SSR,35
-SPR,SSR Musset,35
-SPR,UGA Debussy MCO Covid,29
-SPR,SLD Apollinaire mutualisé SSR,35
-SPR,SLD Molière mutualisé SSR,35
-ABC,REA NEONAT,25
-ABC,MATERNITE,34
-ABC,MATERNITE,34
-ABC,NEONAT ULK,8
-ABC,HDJ CANCEROLOGIE,0
-ABC,Unité Mutualisée Chir dig/Gynéco/ortho,6
-ABC,COVID 30 (ex chir viscéral et digestive),30
-ABC,REANIMATION,15
-ABC,Réanimation ( ex USC),8
-ABC,ORTHO SEPTIQUE,8
-ABC,HDJ GYNECO,0
-ABC,SOINS CRITIQUE EN CHIR GYNECO,?
-ABC,COVID 14,14
-ABC,UGA,33
-ABC,LITS ORTHO TRAUMATO,30
-ABC,Medecine Int. et Immuno dont Mal. Infectieuses et Tropicales,11
-ABC,HGE,27
-ABC,MAP COVID + ET COVID -,25
-ABC,HDJ PEDIATRIE,0
-ABC,PEDIATRIE 4ème AILE A,10
-ABC,NEONAT 4ème AILE B,12
-ABC,UMAT,15
-ABC,UHCD,11
-ABC,UHCD PEDIATRIQUE,6
-ABC,BOX URG.,0
-ABC,REA DANS SALLE DE BLOC,20
-ABC,Réa/USC COVID - DANS SSPI,6
-PBR,SSR BLAISE PASCAL,17
-PBR,REA CHIR,15
-PBR,REA EN SSPI,1
-PBR,CH3,36
-PBR,CH4,36
-PBR,MA1 - ONCO GENER 1ER ETAGE,18
-PBR,SH1 CANCER 2EME,19
-PBR,HEPATO FRED SIGUIER,17
-PBR,ADDICTO,18
-PBR,USD G2 CHAMPAGNE,25
-PBR,USD G2 BOURGOGNE,25
-PBR,SSR POST COVID - USN 2EME PICARDIE,25
-PBR,HMG,3
-PBR,ISP - USN 3EME LANGUEDOC,25
-PBR,ISP - USP DELARUE,15
-PBR,PSY J. DELAY,12
-PBR,PSY HERMITE,16
-PBR,PSY DENIKER,9
-PBR,N. C. HDJ NUIT,2
-PBR,PSY SIGWALD,12
-PBR,SSR ALZHEIMER HUGO,20
-PBR,ISP - USLD 1ER LAFONTAINE,24
-PBR,USLD G3 CLAUDEL,25
-PBR,ISP - USLD G3 PICASSO,26
-PBR,SSR POST COVID - SSR O GERICAULT,25
-PBR,SSR DE VINCI,25
-PBR,USLD 4EME DEBUSSY,25
-PBR,GERIATRIE AIGUE MATISSE,24
-PBR,ISP - SSR MOZART,10
-PBR,ISP - UNITE COGNITI COMPOR,12
-PBR,USP MONTAIGNE,10
-PBR,NUTRITION CLINIQUE,12
+﻿hopital,service_covid,lits_ouverts,lits_ouverts_covid,dedie_covid
+PBR,SSR BLAISE PASCAL,24,0,
+PBR,REA CHIR,17,17,1
+PBR,REA EN SSPI,5,0,
+PBR,CH3,21,21,1
+PBR,CHB 4 HC,26,0,
+PBR,CHB 4 SC,10,0,
+PBR,MA1 - ONCO GENER 1ER ETAGE,18,0,
+PBR,SH1 CANCER 2EME,0,0,
+PBR,HEPATO FRED SIGUIER,17,0,
+PBR,ADDICTO,18,0,
+PBR,USD G2 CHAMPAGNE,12,0,
+PBR,USD G2 BOURGOGNE,25,0,
+PBR,SSR POST COVID - USN 2EME PICARDIE,25,25,1
+PBR,HMG,,,
+PBR,ISP - USN 3EME LANGUEDOC,33,33,1
+PBR,ISP - USP DELARUE,15,0,
+PBR,Psychiatrie,50,0,
+PBR,SSR ALZHEIMER HUGO,40,0,
+PBR,ISP - USLD 1ER LAFONTAINE,34,15,
+PBR,USLD G3 CLAUDEL,35,0,
+PBR,ISP - USLD G3 PICASSO,34,34,1
+PBR,SSR POST COVID - SSR O GERICAULT,28,28,1
+PBR,SSR DE VINCI,25,25,1
+PBR,USLD 4EME DEBUSSY,34,0,
+PBR,GERIATRIE AIGUE MATISSE,34,0,
+PBR,ISP - SSR MOZART,22,17,
+PBR,ISP - UNITE COGNITI COMPOR,,,
+PBR,USP MONTAIGNE,10,5,
+PBR,NUTRITION CLINIQUE,12,0,
+BCT,Endo Diab Péd,0,0,
+BCT,PG Covid-,19,6,
+BCT,Neuro péd,6,0,
+BCT,Rhumato ped,2,0,
+BCT,Méd Ados + PG Covid+,0,0,
+BCT,Hépato Péd,12,0,
+BCT,Hépato Péd HDS,,,
+BCT,Chir péd,0,0,
+BCT,Réa chir + S.C.,28,20,
+BCT,Réa chir + S.C.,17,17,1
+BCT,ZSTCD Adultes,19,19,1
+BCT,Réa chir (dont Neuro chir)en SSPI (salle 17 lits),17,17,1
+BCT,Réa chir (dont Neuro chir)en Salle de bloc (7 salles -14 lits),7,7,1
+BCT,SC Maternité,8,0,
+BCT,Neuro Chirurgie + chir Ortho,0,0,
+BCT,USIP,12,12,1
+BCT,Cardio,14,0,
+BCT,SC méd + Réa en SCM,25,25,1
+BCT,Réa méd,,,1
+BCT,USIC,8,0,
+BCT,Chir dig HC & HDS + HC Urologie,,0,
+BCT,Chir dig HC & HDS + Urologie,,,
+BCT,HGE + Néphrologie,27,,
+BCT,Endocrino adultes,20,0,
+BCT,Pneumo HDS,42,42,1
+BCT,Pneumo HC,,,1
+BCT,Chir Ortho + Méd Interne Isol Spécif,28,28,1
+BCT,Ortho + Méd Interne Isol Spécif,28,28,1
+BCT,Ortho septique + Méd Interne Isol Spécif,,,1
+BCT,UGA,20,20,1
+BCT,Néphro & SI Néphro + méd interne ISP,20,20,1
+BCT,Méd interne,,0,
+BCT,UGA,24,24,1
+BCT,Méd Aigue Polyvalente,29,29,1
+BCT,Médecine interne,30,0,
+BCT,Mal. Infectieuses,26,26,1
+BCT,Rhumato ad,12,0,
+BCT,USR,17,0,
+BCT,Neurologie,9,0,
+BCT,Neurologie + Neuro HDS,12,0,
+BCT,HC Psy Add Périnat,0,0,
+BCT,Neuro Chirurgie,17,0,
+BCT,Neuro HDS ,16,0,
+BCT,Psychiatrie,24,0,
+BCT,Psychiatrie,,,
+BCT,USINV,12,0,
+BCT,Unité post aigu Patients covid+ en ORL,15,15,1
+BCT,SSR Neuro chir,20,0,
+BCT,Psychiatrie,8,0,
+BCT,Neuro Chirurgie + chir Ortho,12,0,
+BCT,SRPR,12,8,
+BCT,Réa + SI néonat,20,0,
+BCT,Réa + SC péd covid+ et covid-,20,16,
+BCT,Réa néonat,12,0,
+BCT,OBST Suite couches,33,6,
+BCT,OBST Suite couches,12,,
+BCT,GYNECO GHR,8,0,
+BCT,GYNECO ch réservée à l'HDJ,,,
+BCT,GYNECO,,,
+BCT,GYNECO HDS,,,
+BCT,UHCD Péd,10,0,
+BCT,ZSTCD,,,
+BCT,Réa chir en SSPI mater (salle 4 lits),8,0,
+ABC,REA NEONAT,25,0,
+ABC,MATERNITE,68,8,
+ABC,MATERNITE,,,
+ABC,NEONAT ULK,8,0,
+ABC,HDJ CANCEROLOGIE,0,0,
+ABC,Unité Mutualisée Chir dig/Gynéco/ortho,6,,
+ABC,COVID 30 (ex chir viscéral et digestive),30,30,1
+ABC,REANIMATION,15,15,1
+ABC,Réanimation ( ex USC),8,8,1
+ABC,ORTHO SEPTIQUE,8,0,
+ABC,HDJ GYNECO,0,0,
+ABC,SOINS CRITIQUE EN CHIR GYNECO,?,,
+ABC,COVID 14,14,14,1
+ABC,UGA,33,33,1
+ABC,LITS ORTHO TRAUMATO,?,,
+ABC,Medecine Int. et Immuno dont Mal. Infectieuses et Tropicales,11,0,
+ABC,HGE,27,0,
+ABC,MAP COVID + ET COVID -,25,25,1
+ABC,HDJ PEDIATRIE,0,0,
+ABC,PEDIATRIE 4ème AILE A,10,10,1
+ABC,NEONAT 4ème AILE B,12,0,
+ABC,UMAT,15,15,1
+ABC,UHCD,11,0,
+ABC,UHCD PEDIATRIQUE,6,0,
+ABC,BOX URG.,0,0,
+ABC,REA DANS SALLE DE BLOC,?,,
+ABC,Réa/USC COVID - DANS SSPI,6,0,
+SPR,USPC,18,0,
+SPR,SLD Verdi,33,0,
+SPR,SLD Bizet,33,0,
+SPR,USP Gatineau,10,0,
+SPR,Covid SSR Balme,27,27,1
+SPR,SSR Chopin,37,0,
+SPR,SLD Beausoleil mutualisé SSR,35,0,
+SPR,SLD Proust mutualisé SSR,35,0,
+SPR,SSR Musset,35,0,
+SPR,UGA Debussy MCO Covid,29,0,
+SPR,SLD Apollinaire mutualisé SSR,35,0,
+SPR,SLD Molière mutualisé SSR,35,0,
+BCK,Réadaptation Neuro Ménard 1,26,0,
+BCK,Réadaption polyvalente,12,0,
+BCK,SSR Covid en Neuro Ménard 2,12,12,1
+BCK,Réadaptation Nutrition Sorrel 1,20,0,
+BCK,Réadaptation Neuro Sorrel 1,20,0,
+BCK,Réadaptation Gériatrique,30,0,
+BCK,Réadapt. Neuro en Nutrition Sorrel RDC,13,0,
+RPC,Brézin 1,15,0,
+RPC,Letulle 1 Covid -,21,0,
+RPC,Letulle 3 S1 - Réa péd,10,0,
+RPC,Letulle 3 S2 - SC Péd,10,0,
+RPC,Letulle 3 S3 - SRPR Péd,10,0,
+RPC,Netter 2 - SSR MPR non Covid,25,0,
+RPC,Netter 3,0,0,
+RPC,Widal 1 S1 Covid +,14,14,1
+RPC,Widal 1 S2 Covid +,13,13,1
+RPC,Widal 1 S3 Covid +,11,11,1
+RPC,Widal 1 S4 Covid +,8,8,1
+RPC,Widal 2 S1 Covid+,12,12,1
+RPC,Widal 2 S2 Covid+,12,12,1
+RPC,Widal 2 S3 Covid+,14,14,1
+RPC,Widal 2 S4 Covid+,0,0,
+RPC, Réa Widal 3 S3 Covid +,10,10,1
+RPC, Réa Widal 3 S4 Covid +,3,3,1
+RPC, Réa Widal 3 S1 et S2 Covid +,18,18,1
+RPC,Netter 1 - SRPR - Secteur non Covid,16,0,
+APR,Ortho/Septique/Vasculaire ,24,0,
+APR,Médecine Covid + en ortho,7,7,1
+APR,Réa Covid + en ortho,8,8,1
+APR,USC/Réa SSPI COVID +,10,10,1
+APR,Réa-SC,22,22,1
+APR,Chir digestive,24,0,
+APR,Endoc/Nutrition + Pneumo Convid-,23,0,
+APR,Chir digestive/ HGE,24,0,
+APR,Cardio Covid -,16,0,
+APR,Néphro Covid - ,10,0,
+APR,Cardio/USIC Covid +,25,21,
+APR,Covid - (Médecine),23,0,
+APR,Covid - (UGA + Médecine),18,0,
+APR,Médecine Covid + ,22,22,1
+APR,PNEUMO COVID +,26,26,1
+APR,Covid + UGA/UPOG,27,27,1
+APR,Covid + médecine en chir vasc,22,22,1
+APR,Dermato,10,0,
+APR,Rhumato,12,0,
+APR,Pédiatrie/Ados,12,4,
+APR,Pédiatrie/ZHTCD/Ados,18,0,
+APR,UHCD,18,0,
