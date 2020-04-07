@@ -78,9 +78,6 @@ export function HospitalResults({ hospitalName, hospitalData }) {
             defaultSortColumn={'patientsCount'}
           />
         </TabPanel>
-        <TabPanel>
-          <h2>{'TBD'}</h2>
-        </TabPanel>
       </Tabs>
       
     </HospitalContainer>
