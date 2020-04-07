@@ -58,7 +58,9 @@ Column|Type|Description
 ---|---|---
 hopital|STRING|Name of hospital. 
 service_covid|STRING|Name of the Covid service as defined by the hospital. 
-lits_ouverts_covid|INT|Number of beds available for that service_covid. 
+lits_ouverts|INT|Number of beds available for that service.
+lits_ouverts_covid|INT|Number of beds available for that service dedicated to Covid patients.
+dedie_covid|INT|1 if dedicated to Covid, else 0.
 
 
 - `Correspondance`: Sirius extract enabling mapping between Orbis room code and the Covid service put together by the hospital. 
@@ -79,12 +81,14 @@ The output is a table that gives, for each hospital the following:
 Text displayed|Column|Type|Description
 ---|---|---|---
 Site crise Covid-19|service_covid|STRING|Name of the Covid-19 service as defined by the hospital. Field from the Correspondance table. 
-Nombre de lits ouverts Covid|lits_ouverts_covid|INT|Number of beds available for that service_covid and dedicated to Covid patients (from the file capacitaire.csv).
+Nombre de lits ouverts|lits_ouverts|INT|Number of beds available for that service_covid (from the file capacitaire.csv).
+Nombre de lits dédiés Covid|lits_ouverts_covid|INT|Number of beds available for that service_covid and dedicated to Covid patients (from the file capacitaire.csv).
+Total patients|total_patients|INT|Total number of for that service_covid. This field is computed from Orbis. 
 Total patients Covid|total_patients_covid|INT|Total number of Covid patients for that service_covid. This field is computed by summing Covid patients (glims + pacs + other).
 Patients Covid-19+ biologie|glims_patients_covid|INT|Total number of patients for that service_covid that are positive according to Glims.
 Patients Covid-19+ radiologie|pacs_patients_covid|INT|Total number of patients for that service_covid that are positive according to Pacs.
 Patients Covid-19+ (autres)|orbis_patients_covid|INT|Number of patients for that service that are Covid-19 from the dedicated field in Orbis.
-Nombre de lits disponibles|remaining_beds|INT|Remaining number of beds for Covid patients for that service_covid. Equal to lits_ouverts_covid - total_patients_covid. 
+Nombre de lits disponibles|remaining_beds|INT|Remaining number of beds for Covid patients for that service_covid. Equal to lits_ouverts - total_patients. 
 
 
 ## Run in dev
