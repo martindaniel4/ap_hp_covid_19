@@ -82,13 +82,13 @@ export const capacityTableColumns = [
 ]
 
 export const HOSPITAL_CODES_MAP = {
-  '09': 'BCK',
-  '010': 'BCT',
-  '014': 'APR',
-  '028': 'ABC',
-  '068': 'RPC',
-  '079': 'SPR',
-  '096': 'PBR',
+  '9': 'BRK',
+  '10': 'BCT',
+  '14': 'APR',
+  '28': 'ABC',
+  '68': 'RPC',
+  '79': 'SPR',
+  '96': 'PBR',
 }
 
 export const HOSPITAL_MAP = {
