@@ -1,17 +1,42 @@
-## Context 
+# AP-HP Covid-19 Bed Capacity Tracker 
+
+## Summary 
+
+- <a href="#context">Context</a>
+- <a href="#input">Input</a>
+- <a href="#output">Output</a>
+- <a href="#app">Application</a>
+- <a href="#data-exploration">Data Exploration</a>
+
+<div id="context">
+
+## Context
 
 This app aims at displaying the remaining bed capacity for Covid-19 patients in the Groupe Hospitalier Paris Saclay of AP-HP. More details are available in [this one-pager](https://docs.google.com/document/d/1sQ_swM_F5y89ie4gtzpCp83kPZfTcFir_y2GxO1ZG8o/edit).
 
 See app online at - https://ap-hp-paris-saclay.herokuapp.com/
 
+<div id="input">
+
 ## Input
 
-The app takes 5 distinct files as input `orbis.csv`, `glims.csv`, `pacs.csv`,  `capacity.csv` and `correspondance.csv`. 
+The app takes 5 distinct files as input `orbis`, `glims`, `pacs`,  `capacity` and `sirius`. 
 
-Below are more details and specified schema for each file. Each of those should be inputed as UTF-8 csv. You can also find under the `csv` folder, 5 template files 
+Each of those files are exported from one of the information system of AP-HP. Files types are specificed below. Most of files are `.xls` in their raw format Below are more details and specified schema for each file. Each of those should be inputed as UTF-8 csv. You can also find under the `csv` folder, 5 template files 
+
+*Input format files*
+
+File|Type|Encoding|Team
+---|---|---|---
+Orbis|csv (sep=;)|cp1252|Finance|-
+Glims|xlsx|-|Finance|-
+Pacs|xlsx|-|Radio|-
+Sirius|xlsx|CDG|-
+Capacitaire|xlsx|Finance|-
+
+*Input files description*
 
 - `Orbis`: this is a snapshot of the current patients admitted in the hospital. 
-
 
 Column|Type|Description
 ---|---|---
@@ -75,6 +100,8 @@ Retenir ligne O/N|STRING|"OUI" if the room should be included in the tablem, "NO
 
 Unused so far: `type chambre, commentaires, Code Site, Libelle Site, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Batiment, Libelle Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Secteur Batiment, Libelle Secteur Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Etage, Libelle Etage, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Libelle Chambre, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification`
 
+<div id="output">
+
 ## Output 
 
 The output is a table that gives, for each hospital the following: 
@@ -91,24 +118,45 @@ Patients Covid-19+ radiologie|pacs_patients_covid|INT|Total number of patients f
 Patients Covid-19+ (autres)|orbis_patients_covid|INT|Number of patients for that service that are Covid-19 from the dedicated field in Orbis.
 Nombre de lits disponibles|remaining_beds|INT|Remaining number of beds for Covid patients for that service_covid. Equal to lits_ouverts - total_patients. 
 
+<div id="app">
 
-## Run in dev
+## React Application
+
+The app is a single webpage. Data processing and display is done using react. To get started: 
 
 ```
 yarn
 yarn start
 ```
 
-## Deploy
-
-- Add heroku origin to the git repo 
+The app is hosted on Heroku. You first need to add heroku branch to master: 
 
 ```
 git remote add heroku https://git.heroku.com/ap-hp-paris-saclay.git
 ```
 
-- Push to Heroku Master
+To update the app: 
 
 ```
 git push heroku master
 ```
+
+<div id="data-exploration">
+
+## Data Exploration 
+
+To quickly investigate data discrepancies, we have put together a Jupyter notebook at `ap_hp_exploration.ipynb`. The file can also be rendered on [Github](https://github.com/martindaniel4/ap_hp_covid_19/blob/master/ap_hp_exploration.ipynb).
+
+To run Jupyter notebook locally, install python dependencies with: 
+
+```
+pip install -r requirements-data.txt
+```
+
+Then at the root of the repo run: 
+
+```
+jupyter notebook
+```
+
+More details on Jupyter at - https://jupyter.org/
