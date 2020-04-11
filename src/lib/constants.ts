@@ -11,6 +11,7 @@ export const CSV_CONFIG: FilesDataType = {
     fields: [],
     data: [],
     valid: false,
+    format: '',
   },
   glims: {
     id: 'glims',
@@ -19,6 +20,7 @@ export const CSV_CONFIG: FilesDataType = {
     fields: [],
     data: [],
     valid: false,
+    format: '',
   },
   pacs: {
     id: 'pacs',
@@ -27,6 +29,7 @@ export const CSV_CONFIG: FilesDataType = {
     fields: [],
     data: [],
     valid: false,
+    format: '',
   },
   capacity: {
     id: 'capacity',
@@ -35,6 +38,7 @@ export const CSV_CONFIG: FilesDataType = {
     fields: [],
     data: [],
     valid: false,
+    format: '',
   },
   correspondance: {
     id: 'correspondance',
@@ -43,6 +47,7 @@ export const CSV_CONFIG: FilesDataType = {
     fields: [],
     data: [],
     valid: false,
+    format: '',
   },
 }
 

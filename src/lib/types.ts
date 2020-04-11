@@ -4,6 +4,7 @@ export type FileUploadPayloadType = {
   id: FilesIdType,
   fields: string[],
   data: any[],
+  format: string,
 }
 
 export type PapaParseResult = {
@@ -30,6 +31,7 @@ export type OrbisType = {
   valid: boolean,
   fields: string[],
   data: OrbisFieldType[],
+  format: string,
 }
 
 export type GlimsType = {
@@ -39,6 +41,7 @@ export type GlimsType = {
   valid: boolean,
   fields: string[],
   data: GlimsFieldType[],
+  format: string,
 }
 
 export type PacsType = {
@@ -48,6 +51,7 @@ export type PacsType = {
   valid: boolean,
   fields: string[],
   data: PacsFieldType[],
+  format: string,
 }
 
 export type CapacityType = {
@@ -57,6 +61,7 @@ export type CapacityType = {
   valid: boolean,
   fields: string[],
   data: CapacityFieldType[],
+  format: string,
 }
 
 export type CorrespondanceType = {
@@ -66,6 +71,7 @@ export type CorrespondanceType = {
   valid: boolean,
   fields: string[],
   data: CapacityFieldType[],
+  format: string,
 }
 
 export type GlimsByIppType = {

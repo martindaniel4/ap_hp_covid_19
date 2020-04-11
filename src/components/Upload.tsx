@@ -2,6 +2,7 @@ import React, { useRef, SyntheticEvent } from 'react'
 import styled from 'styled-components'
 // @ts-ignore
 import Papa from 'papaparse'
+import XLSX from 'xlsx'
 import { Button } from '@material-ui/core'
 import { Done, Publish } from '@material-ui/icons'
 import { withStyles } from '@material-ui/core/styles'
@@ -16,25 +17,59 @@ function Upload({
   onFileComplete: Function,
 }) {
   const fileInput = useRef(null)
-  const { id, name, description, valid, fields, data } = csvConfig
+  const { id, name, description, valid, fields, data, format } = csvConfig
   
   const analyzeCSV = (e: SyntheticEvent): void => {
-    Papa.parse((e.target as HTMLFormElement).files[0], {
-      complete: updateData,
-      header: true
-    });
+    const uploadFile = (e.target as HTMLFormElement).files[0]
+    const isXLSX = uploadFile.type && uploadFile.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    const isCSV = uploadFile.type && uploadFile.type === "text/csv"
+
+    if (isXLSX){
+      const reader = new FileReader()
+      reader.onload = function (e) {
+        const workbook = XLSX.read(e.target.result, {type: 'binary'})
+        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
+        const fileData = XLSX.utils.sheet_to_json(firstWorksheet, {header:0});
+        const fileFields = XLSX.utils.sheet_to_json(firstWorksheet, {header:1})[0];
+        updateDataFromXLSX(fileData, fileFields)
+
+      }
+      reader.readAsBinaryString(uploadFile);
+    }
+
+    if (isCSV){
+      Papa.parse(uploadFile, {
+        complete: updateDataFromCSV,
+        header: true
+      });  
+    }
   }
 
-  const updateData = (result: PapaParseResult): void => {
+  const updateDataFromCSV = (result: PapaParseResult): void => {
     const { id } = csvConfig
     const { data, meta: { fields } } = result
+    const format = "csv"
 
     onFileComplete({
       id,
       fields,
       data,
+      format,
     })
   }
+
+  const updateDataFromXLSX = (data, fields): void => {
+    const { id } = csvConfig
+    const format = "xlsx"
+
+    onFileComplete({
+      id,
+      fields,
+      data,
+      format,
+    })
+  }
+
 
   return (
     <UploadContainer>
@@ -56,7 +91,7 @@ function Upload({
                 <ColorButton variant="contained" color="primary" startIcon={<Done />}>
                   Fichier Valide
                 </ColorButton>
-                <Summary>{`${data.length} rangées, ${fields.length} colonnes.`}</Summary>
+                <Summary>{`Fichier ${format}, ${data.length} rangées, ${fields.length} colonnes.`}</Summary>
               </>
           }
           <Input
@@ -64,7 +99,7 @@ function Upload({
             type="file"
             name={id}
             ref={fileInput}
-            accept=".csv"
+            accept=".xlsx,.csv"
             onChange={analyzeCSV}
           />
         </>
