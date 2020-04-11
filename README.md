@@ -22,7 +22,7 @@ See app online at - https://ap-hp-paris-saclay.herokuapp.com/
 
 The app takes 5 distinct files as input `orbis`, `glims`, `pacs`,  `capacity` and `sirius`. 
 
-Each of those files are exported from one of the information system of AP-HP. Files types are specificed below. Most of files are `.xls` in their raw format Below are more details and specified schema for each file. Each of those should be inputed as UTF-8 csv. You can also find under the `csv` folder, 5 template files 
+Each of those files are exported from one of the information system of AP-HP. Files types are specificed below. You can also find under the `data` folder an up to date sample of each file. 
 
 *Input format files*
 
@@ -31,53 +31,51 @@ File|Type|Encoding|Team
 Orbis|csv (sep=;)|cp1252|Finance|-
 Glims|xlsx|-|Finance|-
 Pacs|xlsx|-|Radio|-
-Sirius|xlsx|CDG|-
-Capacitaire|xlsx|Finance|-
+Sirius|xlsx|-|Accounting
+Capacitaire|xlsx|-|Finance
 
 *Input files description*
 
-- `Orbis`: this is a snapshot of the current patients admitted in the hospital. 
+- [`Orbis`](#orbis): this is a snapshot of the current patients admitted in the hospital. 
 
 Column|Type|Description
 ---|---|---
 Sexe|STRING|Sex of patient
 Né(e) le|DATE|Date of birth, format DD/MM/YYYY
 IPP|INT|Patient id.
-N∞ Dossier|INT|Case number. 
-U.ResponsabilitÈ|STRING| Unit name (e.g: 010250 - BCT SRPR (UF))
+N° Dossier|INT|Case number. 
+U.Responsabilité|STRING| Unit name (e.g: 010250 - BCT SRPR (UF))
 U.Soins|STRING| Sub-unit name (e.g: 010780NE5 - BCT HC SSR NEUROLOGIE - CULLERIER)
 Date d'entrée du dossier|DATE| Entry date of patient, format DD/MM/YYYY HH:MM
 Date de sortie du dossier|DATE| Exit date of patient, format  DD/MM/YYYY HH:MM
-Date de dÈbut du mouvement|DATE| Datetime when a patient is moved to a room or service, format  DD/MM/YYYY HH:MM.
+Date de début du mouvement|DATE| Datetime when a patient is moved to a room or service, format  DD/MM/YYYY HH:MM.
 Date de fin du mouvement|DATE|End date when a patient is moved from a unit, format  DD/MM/YYYY HH:MM.
 Chambre|STRING|Room where the patient is located in (e.g: N515 - CULLERIER CHAMBRE 15 DOUBLE)
 Lit|STRING|Bed where the patient is located in (e.g: N515P - LIT 15 PORTE)
 
 
-- `Glims`: Export of serology tests of patients that indicates whether patients are tested positive to Covid-19. Note that there may be multiple rows for a same patient. Not all rows match an Orbis patient. For instance medical staff may appear in the Glims export. 
+- [`Glims`](#glims): Export of serology tests of patients that indicates whether patients are tested positive to Covid-19. Note that there may be multiple rows for a same patient. Not all rows match an Orbis patient. For instance medical staff may appear in the Glims export. 
 
 
 |Column|Type|Description|
 |---|---|---|
 |DOSSIER|INT|Case number|
-|dt_deb_visite|DATE|Date of the test. Format is DD/MM/YYYY.|
+|PRLVT|DATE|Date of the test. Format is DD/MM/YYYY.|
 |ipp|INT|Patient id.|
-|RENS_PIH|INT|Id. Unkwown entity.|
-|hop|STRING| Name of the hospital where the test was run.|
+|RENS_PIH|STRING| Name of the hospital where the test was conducted.|
 |last_uma|STRING|Last unit visited by patient.|
 |is_pcr|STRING|Indicates if the patient is tested positive to Covid-19.|
-|dt_fin_visite|DATE|Date of end of visit.|
 
 
-- `Pacs`: Export of lung radiology scans. Indicates whether patients are tested positive to Covid-19.
+- [`Pacs`](#pacs): Export of lung radiology scans. Indicates whether patients are tested positive to Covid-19.
 
 Column|Type|Description
 ---|---|---
 ipp|INT|Patient id. 
 date|DATE|Date of the test. Format is DD/MM/YYYY.
-radio|STRING|Indicates if the patient is tested positive to Covid-19. 
+radio|INT| 1 if the patient is Covid-19 positive from radiology.
 
-- `Capacitaire`: Daily snapshot of the bed capacity in a given hospital. 
+- [`Capacitaire`](#capacitaire): Daily snapshot of the bed capacity in a given hospital. 
 
 Column|Type|Description
 ---|---|---
@@ -85,20 +83,20 @@ hopital|STRING|Name of hospital.
 service_covid|STRING|Name of the Covid service as defined by the hospital. 
 lits_ouverts|INT|Number of beds available for that service.
 lits_ouverts_covid|INT|Number of beds available for that service dedicated to Covid patients.
-dedie_covid|INT|1 if dedicated to Covid, else 0.
+Full COVID 1/0|INT|1 if service is dedicated to Covid, else N/A.
 
-
-- `Correspondance`: Sirius extract enabling mapping between Orbis room code and the Covid service put together by the hospital. 
+- [`Sirius`](#sirius): Sirius extract enabling mapping between Orbis room code and the Covid service put together by the hospital. 
 
 Column|Type|Description
 ---|---|---
 Hopital|INT|Code of hospital (e.g.: 96). 
 Localisation CDG|STRING|Returns the physical location of the room (e.g: BATIMENT COMMANDANT RIVIERE  NIVEAU 2).
 Intitulé Site Crise COVID|STRING|Our "service_covid" field, name of the Covid service as defined by the hospital (e.g.: PSY J. DELAY).
-Code Chambre|STRING|The room code, unique per hospital, to use to match with Orbis.
+Code Chambre|STRING|The room code. This code, combined with Libelle Chambre gives a mapping to Orbis.
+Libelle Chambre|STRING|The label of the room. This label, combined with Code Chambre gives a mapping to Orbis.
 Retenir ligne O/N|STRING|"OUI" if the room should be included in the tablem, "NON" otherwise.
 
-Unused so far: `type chambre, commentaires, Code Site, Libelle Site, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Batiment, Libelle Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Secteur Batiment, Libelle Secteur Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Etage, Libelle Etage, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Libelle Chambre, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification`
+Unused so far: `type chambre, commentaires, Code Site, Libelle Site, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Batiment, Libelle Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Secteur Batiment, Libelle Secteur Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Etage, Libelle Etage, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification`
 
 <div id="output">
 
