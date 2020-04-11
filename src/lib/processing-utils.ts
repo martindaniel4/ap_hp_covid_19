@@ -11,6 +11,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const capacityMap: any = _.groupBy(capacity.data, row => (row['hopital'] + ' - ' + row['service_covid']).trim() )
   const correspondanceFiltered = correspondance.data.filter(row => row['Retenir ligne O/N'] === "OUI")
   const correspondanceByCodeChambre: CorrespondanceByCodeChambreType = _.groupBy(correspondanceFiltered, c => c['Code Chambre'])
+  console.log(correspondanceByCodeChambre)
 
   const allPatients = joinOrbisWithOtherFiles(orbis, glimsByIPP, pacsByIPP, correspondanceByCodeChambre)
   const allPatientsCovid = allPatients.filter(p => p.isCovid)
@@ -36,7 +37,6 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         const buildCapacityKey = (hospital + ' - ' + service).trim()
         const capacityTotal = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts']
         const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
-        
         
         newPatientsGroupedByService.push({
           service,
