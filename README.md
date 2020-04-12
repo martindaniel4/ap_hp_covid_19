@@ -98,6 +98,21 @@ Retenir ligne O/N|STRING|"OUI" if the room should be included in the tablem, "NO
 
 Unused so far: `type chambre, commentaires, Code Site, Libelle Site, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Batiment, Libelle Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Secteur Batiment, Libelle Secteur Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Etage, Libelle Etage, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification`
 
+<div id="logic">
+
+## Logic
+
+There are a number of subtelties in how each file is connected to the other and the data manipulation. In this section we list each of the steps we need to encode to make sure we get an accurate picture of bed capacity in AP-HP. 
+
+*Orbis*
+
+- **Patients with no room**: this can happen when a patient had a folder created in Orbis but was not yet assigned to a room when the export was run. This should be explicited in our warning section. 
+- **Newborns**: two hospital (BCT - Bicêtre, ABC - Antoine Beclere) have `Obstetric` services. When a baby is born, he stays with his mum in the same room, meaning he does not occupy a room. We should account for those and remove patients, from those care units, that were born in 2020.
+
+*Sirius*
+
+- **Code room and label**: Code room are not unique per hospital. That means that we need to match rooms between Sirius and Orbis on a concatenate of the `Code Chambre` and `Label Chambre`. Unfortunately, see a data [exploration here](https://github.com/martindaniel4/ap_hp_covid_19/pull/16), not all label and code chambre match between the two systems (case, trailing 0, special characters). In the meantime we should remove spaces and use one case during data cleaning.
+
 <div id="output">
 
 ## Output 
