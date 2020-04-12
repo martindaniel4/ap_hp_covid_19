@@ -3,8 +3,17 @@ import styled from 'styled-components'
 import { Divider } from '@material-ui/core'
 
 import Upload from './Upload'
+import { FilesDataType } from '../lib/types';
 
-export default function UploadFiles({files, onFileComplete}) {
+export default function UploadFiles({
+  files,
+  onUploadSuccess,
+  onUploadError,
+}: {
+  files: FilesDataType,
+  onUploadSuccess: Function,
+  onUploadError: Function
+}) {
   return (
     <UploadContainer>
       {
@@ -12,7 +21,8 @@ export default function UploadFiles({files, onFileComplete}) {
           <div key={csvId}>
             <Upload
               csvConfig={files[csvId]}
-              onFileComplete={onFileComplete}
+              onUploadSuccess={onUploadSuccess}
+              onUploadError={onUploadError}
             />
             <Divider /> 
           </div>

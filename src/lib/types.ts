@@ -28,7 +28,7 @@ export type OrbisType = {
   id: 'orbis',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: OrbisFieldType[],
   format: string,
@@ -38,7 +38,7 @@ export type GlimsType = {
   id: 'glims',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: GlimsFieldType[],
   format: string,
@@ -48,7 +48,7 @@ export type PacsType = {
   id: 'pacs',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: PacsFieldType[],
   format: string,
@@ -58,7 +58,7 @@ export type CapacityType = {
   id: 'capacity',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: CapacityFieldType[],
   format: string,
@@ -68,10 +68,14 @@ export type CorrespondanceType = {
   id: 'correspondance',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: CapacityFieldType[],
   format: string,
+}
+
+export type ErrorType = {
+  message: string
 }
 
 export type GlimsByIppType = {

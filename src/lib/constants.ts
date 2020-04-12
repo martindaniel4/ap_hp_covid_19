@@ -8,9 +8,16 @@ export const CSV_CONFIG: FilesDataType = {
     id: 'orbis',
     name: 'ORBIS',
     description: 'Uploadez ici un export de la base ORBIS au format CSV. Les champs attendus sont: \n Né(e) le, IPP, N° Dossier, U.Responsabilité, U.Soins, Date d\'entrée du dossier, Date de sortie du dossier, Date de début du mouvement, Date de fin du mouvement, Chambre,Lit',
-    fields: [],
+    fields: [
+      "IPP",
+      "U.Responsabilité",
+      "U.Soins",
+      "Date d'entrée du dossier",
+      "Chambre",
+      "Lit"
+    ],
     data: [],
-    valid: false,
+    errors: [],
     format: '',
   },
   glims: {
@@ -19,7 +26,7 @@ export const CSV_CONFIG: FilesDataType = {
     description: 'Uploadez ici un export de la base GLIMS au format CSV. Les champs attendus sont: \n ipp, dt_deb_visite, dt_fin_visite, is_pcr, hop, last_uma',
     fields: [],
     data: [],
-    valid: false,
+    errors: [],
     format: '',
   },
   pacs: {
@@ -28,7 +35,7 @@ export const CSV_CONFIG: FilesDataType = {
     description: 'Uploadez ici un export de la base PACS au format CSV. Les champs attendus sont: \n ipp, date, radio',
     fields: [],
     data: [],
-    valid: false,
+    errors: [],
     format: '',
   },
   capacity: {
@@ -37,7 +44,7 @@ export const CSV_CONFIG: FilesDataType = {
     description: 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n hopital, service_covid, lits_ouverts, lits_ouverts_covid, dedie_covid',
     fields: [],
     data: [],
-    valid: false,
+    errors: [],
     format: '',
   },
   correspondance: {
@@ -46,7 +53,7 @@ export const CSV_CONFIG: FilesDataType = {
     description: 'Uploadez ici un export de la base SIRIUS au format CSV. Les champs attendus sont: \n Hopital, Intitulé Site Crise COVID, Localisation CDG, Code Chambre, Retenir ligne O/N',
     fields: [],
     data: [],
-    valid: false,
+    errors: [],
     format: '',
   },
 }
