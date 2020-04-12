@@ -11,14 +11,11 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const capacityMap: any = _.groupBy(capacity.data, row => (row['hopital'] + ' - ' + row['service_covid']).trim() )
   const correspondanceFiltered = correspondance.data.filter(row => row['Retenir ligne O/N'] === "OUI")
   const correspondanceByCodeChambre: CorrespondanceByCodeChambreType = _.groupBy(correspondanceFiltered, c => c['Code Chambre'])
-  console.log(correspondanceByCodeChambre)
 
   const allPatients = joinOrbisWithOtherFiles(orbis, glimsByIPP, pacsByIPP, correspondanceByCodeChambre)
   const allPatientsCovid = allPatients.filter(p => p.isCovid)
   
   const patientsByHospital = _.groupBy(allPatients, p => p.hospitalXYZ)
-
-  console.log(patientsByHospital)
   
   const breakdownPerHospital: any = {}
   Object.keys(patientsByHospital)
@@ -98,12 +95,6 @@ function joinOrbisWithOtherFiles(
     const chambre = patient['Chambre']
     const roomCode = chambre === '-' ? null : chambre.split(' ')[0]
     const correspondanceRowForRoomCode = correspondanceByCodeChambre[roomCode] && correspondanceByCodeChambre[roomCode][0]
-
-    if (!correspondanceRowForRoomCode) {
-      console.log(getHospitalKey(patient['U.ResponsabilitÈ']))
-      console.log(chambre)
-      console.log('-------------------')
-    }
 
     const hospitalCode = correspondanceRowForRoomCode && correspondanceRowForRoomCode['Hopital']
     const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : '';

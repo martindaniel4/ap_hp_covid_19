@@ -24,7 +24,6 @@ function App() {
 
   const onFileComplete = (payload: FileUploadPayloadType) => {
     const { id, data, fields, format } = payload
-    console.log(JSON.stringify(payload,null,2))
     const newFiles = {
       ...files,
       [id]: {
