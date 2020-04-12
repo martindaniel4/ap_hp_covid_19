@@ -40,6 +40,7 @@ function Upload({
     if (isCSV){
       Papa.parse(uploadFile, {
         complete: updateDataFromCSV,
+        encoding: "CP1252",
         header: true
       });  
     }
