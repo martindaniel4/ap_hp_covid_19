@@ -4,6 +4,7 @@
 
 - <a href="#context">Context</a>
 - <a href="#input">Input</a>
+- <a href="#logic">Logic</a>
 - <a href="#output">Output</a>
 - <a href="#app">Application</a>
 - <a href="#data-exploration">Data Exploration</a>
