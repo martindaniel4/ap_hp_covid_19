@@ -1,7 +1,15 @@
 import { FilesIdType } from './types'
 import { CSV_CONFIG } from './constants'
 
-export function checkFileForErrors(id: FilesIdType, fields: any) {
+export function checkFileForErrors({
+  id,
+  fields,
+  data,
+}: {
+  id: FilesIdType,
+  data: any[],
+  fields: string[],
+}) {
   let errors = []
 
   const headerErrors = checkFileForRequiredFields(id, fields)

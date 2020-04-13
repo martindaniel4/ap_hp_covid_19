@@ -43,7 +43,7 @@ export default function Upload({
         const data: any[] = XLSX.utils.sheet_to_json(firstWorksheet, {header: 0})
         const fields: any = XLSX.utils.sheet_to_json(firstWorksheet, {header: 1})[0]
 
-        const errors = checkFileForErrors(id, fields)
+        const errors = checkFileForErrors({id, data, fields})
         errors.length > 0 && onUploadError({ id, errors })
         errors.length === 0 && onUploadSuccess({ id, data, format: '.xlsx' })
       }
@@ -57,7 +57,7 @@ export default function Upload({
         encoding: 'CP1252',
         complete: (result: PapaParseResult): void => {
           const { data, meta: { fields } } = result
-          const errors = checkFileForErrors(id, fields)
+          const errors = checkFileForErrors({id, data, fields})
           errors.length > 0 && onUploadError({ id, errors })
           errors.length === 0 && onUploadSuccess({ id, data, format: '.csv' })
         },
