@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
+import moment from 'moment'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import { CSVLink } from 'react-csv'
@@ -20,8 +21,13 @@ export function HospitalResults({ hospitalName, hospitalData }) {
     [hospitalData]
   )
 
-  const dataForCSVDownload = [capacityTableColumns.map(c => c['Header'])]
-    .concat(hospitalData.byService.map(s => Object.values(s) ))
+  const headersLabels = capacityTableColumns.map(c => c['Header'])
+  const headersAccessors = capacityTableColumns.map(c => c['accessor'])
+  const dataForCSVDownload = [headersLabels]
+    .concat(hospitalData.byService.map(s => headersAccessors.map(h => s[h]) ))
+  const todayFormatted = moment().format('DD/MM/YYYY'); 
+
+  console.log(dataForCSVDownload)
 
   return (
     <HospitalContainer>
@@ -69,7 +75,12 @@ export function HospitalResults({ hospitalName, hospitalData }) {
         <TabPanel>
           <SpacedRow>
             <TableName>{'Table de patients par unité de soins'}</TableName>
-            <CSVLinkStyled data={dataForCSVDownload}>{'Telecharger un .csv des données'}</CSVLinkStyled>
+            <CSVLinkStyled
+              key={hospitalName}
+              filename={`aphp-${hospitalName}-${todayFormatted}.csv`}
+              data={dataForCSVDownload}>
+              {'Telecharger un .csv des données'}
+            </CSVLinkStyled>
           </SpacedRow>
 
           <StyledTable
