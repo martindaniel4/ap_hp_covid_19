@@ -15,11 +15,13 @@ export function checkFileForErrors({
   let errors = []
 
   const headerErrors = checkRequiredFields(id, fields)
-  const siriusErrors = id === 'sirius' && checkSirius(data)
+  const siriusErrors = id === 'sirius' ? checkSirius(data) : []
 
-  return errors
+  const allErrors = errors
     .concat(headerErrors)
     .concat(siriusErrors)
+
+  return allErrors
 }
 
 export function checkRequiredFields(id: FilesIdType, fields: any) {
