@@ -41,6 +41,7 @@ export default function Upload({
         const workbook = XLSX.read(e.target.result, {type: 'binary'})
         const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
         const data: any[] = XLSX.utils.sheet_to_json(firstWorksheet, {header: 0})
+        console.log(data);
         const fields: any = XLSX.utils.sheet_to_json(firstWorksheet, {header: 1})[0]
 
         const errors = fileHasFieldsErrors(id, fields)

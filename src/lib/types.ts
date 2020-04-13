@@ -85,8 +85,8 @@ export type PacsByIppType = {
   [ipp: string]: PacsFieldType[]
 }
 
-export type SiriusByCodeChambreType = {
-  [codeChambre: string]: any,
+export type SiriusByChambreType = {
+  [Chambre: string]: any,
 }
 
 export type PatientType = {
