@@ -5,7 +5,7 @@ import { Divider } from '@material-ui/core'
 import Upload from './Upload'
 import { FilesDataType } from '../lib/types';
 
-export default function UploadFiles({
+export default function Files({
   files,
   onUploadSuccess,
   onUploadError,

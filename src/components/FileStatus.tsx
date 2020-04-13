@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Done, Error } from '@material-ui/icons'
+import { CheckCircle, Error } from '@material-ui/icons'
 
 import { FileType } from '../lib/types'
 
@@ -21,7 +21,7 @@ function FileStatusSuccess({csvConfig}: {csvConfig: FileType}) {
   return (
     <SuccessContainer>
       <Row>
-        <DoneIcon />
+        <CheckCircleIcon />
         <Summary>{`Fichier ${format} valide - ${data.length} rangées, ${fields.length} colonnes.`}</Summary>
       </Row>
     </SuccessContainer>
@@ -46,7 +46,8 @@ function FileStatusError({csvConfig}: {csvConfig: FileType}) {
 
 const Container = styled.div`
   margin-top: 6px;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: bold;
 `
 
 const SuccessContainer = styled(Container)`
@@ -74,6 +75,6 @@ const ErrorIcon = styled(Error)`
   margin-right: 6px;
 `
 
-const DoneIcon = styled(Done)`
+const CheckCircleIcon = styled(CheckCircle)`
   margin-right: 6px;
 `

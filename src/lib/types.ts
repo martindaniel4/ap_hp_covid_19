@@ -2,7 +2,6 @@ export type FilesIdType = 'orbis' | 'glims' | 'capacity' | 'pacs' | 'sirius'
 
 export type FileUploadPayloadType = {
   id: FilesIdType,
-  fields: string[],
   data: any[],
   format: string,
 }

@@ -23,13 +23,12 @@ export default function App() {
   }
 
   const onUploadSuccess = (payload: FileUploadPayloadType) => {
-    const { id, data, fields, format } = payload
+    const { id, data, format } = payload
     const newFiles = {
       ...files,
       [id]: {
         ...files[id],
         data,
-        fields,
         errors: [],
         format
       },
