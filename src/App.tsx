@@ -2,8 +2,8 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Route,
-  useLocation,
 } from 'react-router-dom'
+import './stylesheets/App.css'
 
 import APHP from './components/APHP'
 

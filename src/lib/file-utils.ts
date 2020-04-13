@@ -1,16 +1,38 @@
-import { FilesIdType } from './types'
-import { CSV_CONFIG } from './constants'
+import _ from 'underscore'
 
-export function fileHasFieldsErrors(id: FilesIdType, fields: any) {
+import { FilesIdType } from './types'
+import { CSV_CONFIG, HOSPITAL_CODES_MAP } from './constants'
+
+export function checkFileForErrors({
+  id,
+  fields,
+  data,
+}: {
+  id: FilesIdType,
+  fields: string[],
+  data: any[],
+}) {
+  let errors = []
+
+  const headerErrors = checkRequiredFields(id, fields)
+  const siriusErrors = id === 'sirius' && checkSirius(data)
+
+  return errors
+    .concat(headerErrors)
+    .concat(siriusErrors)
+}
+
+export function checkRequiredFields(id: FilesIdType, fields: any) {
   const requiredFields = CSV_CONFIG[id]['requiredFields']
   const missingFields = requiredFields.filter(x => !fields.includes(x))
+  
+  return missingFields.map(field => { return { message: `${field} est manquant` } })
+}
 
-  // je garde ca pour le moment afin de debugger plus facilement
-  // console.log(requiredFields)
-  // console.log(fields)
-  // console.log(missingFields)
+export function checkSirius(data) {
+  const expectedCodes = Object.keys(HOSPITAL_CODES_MAP)
+  const siriusCodes = _.chain(data).pluck('Hopital').uniq().value()
+  const notSupportedCodes = siriusCodes.filter(x => !expectedCodes.includes(x))
 
-  return missingFields.map(field => {
-    return { message: `${field} est manquant` }
-  })
+  return notSupportedCodes.map(code => { return { message: `Le code hopital "${code}" n'est pas valide` } })
 }

@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { processFiles } from '../lib/processing-utils'
-import '../stylesheets/App.css'
-
 import Files from './Files'
 import Results from './Results'
 import { FilesDataType, FileUploadPayloadType, ErrorType } from '../lib/types'
+import { processFiles } from '../lib/processing-utils'
 import { buildInitialStateFromFixture } from '../fixtures/fixtures-utils'
 
 export default function APHP() {

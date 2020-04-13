@@ -7,7 +7,7 @@ import { Button } from '@material-ui/core'
 import { Publish } from '@material-ui/icons'
 
 import { FileType, PapaParseResult } from '../lib/types'
-import { fileHasFieldsErrors } from '../lib/file-utils'
+import { checkFileForErrors } from '../lib/file-utils'
 import FileStatus from './FileStatus'
 
 export default function Upload({
@@ -43,7 +43,7 @@ export default function Upload({
         const data: any[] = XLSX.utils.sheet_to_json(firstWorksheet, {header: 0})
         const fields: any = XLSX.utils.sheet_to_json(firstWorksheet, {header: 1})[0]
 
-        const errors = fileHasFieldsErrors(id, fields)
+        const errors = checkFileForErrors({id, data, fields})
         errors.length > 0 && onUploadError({ id, errors })
         errors.length === 0 && onUploadSuccess({ id, data, format: '.xlsx' })
       }
@@ -57,7 +57,7 @@ export default function Upload({
         encoding: 'CP1252',
         complete: (result: PapaParseResult): void => {
           const { data, meta: { fields } } = result
-          const errors = fileHasFieldsErrors(id, fields)
+          const errors = checkFileForErrors({id, data, fields})
           errors.length > 0 && onUploadError({ id, errors })
           errors.length === 0 && onUploadSuccess({ id, data, format: '.csv' })
         },
