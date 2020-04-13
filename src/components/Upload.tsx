@@ -68,15 +68,18 @@ export default function Upload({
   return (
     <UploadContainer>
       <Left>
-        <Label>{name}</Label>
+        <Row>
+          <Label>{name}</Label>
+          <Format>{'(CSV ou XLXS)'}</Format>
+        </Row>
         <FileDescription csvConfig={csvConfig} />
         <FileStatus csvConfig={csvConfig} />
       </Left>
       
-      <Button variant="contained" color="primary" startIcon={<Publish />}>
+      <Button variant="outlined" color="primary" startIcon={<Publish />}>
         <label htmlFor={`file-upload-${id}`}>{`Choisir un fichier`}</label>
       </Button>
-      <Input
+      <input
         id={`file-upload-${id}`}
         type="file"
         name={id}
@@ -90,13 +93,12 @@ export default function Upload({
 }
 
 function FileDescription({csvConfig}: {csvConfig: FileType}) {
-  const { description, requiredFields } = csvConfig
+  const { requiredFields } = csvConfig
 
   return (
-    <DescriptionContainer>
-      <Description>{description}</Description>
+    <SubtitleContainer>
       <div>
-        <span>Les champs requis sont: </span>
+        <span>{'Champs requis: '}</span>
         {requiredFields.map((field, index) => {
           return (
             <span key={index}>
@@ -106,14 +108,15 @@ function FileDescription({csvConfig}: {csvConfig: FileType}) {
           )
         })}
       </div>
-    </DescriptionContainer>
+    </SubtitleContainer>
   )
 }
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: baseline;
+  margin-bottom: 6px;
 `
 
 const UploadContainer = styled.div`
@@ -133,19 +136,18 @@ const Left = styled.div`
 const Label = styled.div`
   font-weight: bold;
   font-size: 20px;
-  margin-bottom: 6px;
+  margin-right: 6px;
+  background-color: #ffffb0;
+  padding: 0px 4px;
 `
 
-const DescriptionContainer = styled.div`
-  font-size: 14px;
+const SubtitleContainer = styled.div`
+  font-size: 13px;
 `
 
-const Description = styled.div`
-  margin-bottom: 4px;
-`
-
-const Input = styled.input`
-  margin-bottom: 10px;
+const Format = styled.div`
+  font-size: 13px;
+  color: #555;
 `
 
 const FieldTag = styled.span`
