@@ -28,7 +28,7 @@ export type OrbisType = {
   name: string,
   description: string,
   errors: ErrorType[],
-  fields: string[],
+  requiredFields: string[],
   data: OrbisFieldType[],
   format: string,
 }
@@ -38,7 +38,7 @@ export type GlimsType = {
   name: string,
   description: string,
   errors: ErrorType[],
-  fields: string[],
+  requiredFields: string[],
   data: GlimsFieldType[],
   format: string,
 }
@@ -48,7 +48,7 @@ export type PacsType = {
   name: string,
   description: string,
   errors: ErrorType[],
-  fields: string[],
+  requiredFields: string[],
   data: PacsFieldType[],
   format: string,
 }
@@ -58,7 +58,7 @@ export type CapacityType = {
   name: string,
   description: string,
   errors: ErrorType[],
-  fields: string[],
+  requiredFields: string[],
   data: CapacityFieldType[],
   format: string,
 }
@@ -68,7 +68,7 @@ export type SiriusType = {
   name: string,
   description: string,
   errors: ErrorType[],
-  fields: string[],
+  requiredFields: string[],
   data: CapacityFieldType[],
   format: string,
 }

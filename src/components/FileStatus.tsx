@@ -16,13 +16,13 @@ export default function FileStatus({csvConfig}: {csvConfig: FileType}) {
 }
 
 function FileStatusSuccess({csvConfig}: {csvConfig: FileType}) {
-  const { fields, data, format } = csvConfig
+  const { data, format } = csvConfig
 
   return (
     <SuccessContainer>
       <Row>
         <CheckCircleIcon />
-        <Summary>{`Fichier ${format} valide - ${data.length} rangées, ${fields.length} colonnes.`}</Summary>
+        <Summary>{`Fichier ${format} valide - ${data.length} rangées`}</Summary>
       </Row>
     </SuccessContainer>
   )

@@ -8,7 +8,7 @@ export const CSV_CONFIG: FilesDataType = {
     id: 'orbis',
     name: 'ORBIS',
     description: 'Uploadez ici un export de la base ORBIS au format CSV ou XLSX.',
-    fields: [
+    requiredFields: [
       "IPP",
       "U.Responsabilité",
       "U.Soins",
@@ -24,7 +24,7 @@ export const CSV_CONFIG: FilesDataType = {
     id: 'glims',
     name: 'GLIMS',
     description: 'Uploadez ici un export de la base GLIMS au format CSV ou XLSX.',
-    fields: [
+    requiredFields: [
       'DOSSIER',
       'PRLVT',
       'ipp',
@@ -39,7 +39,7 @@ export const CSV_CONFIG: FilesDataType = {
     id: 'pacs',
     name: 'PACS',
     description: 'Uploadez ici un export de la base PACS au format CSV ou XLSX.',
-    fields: [
+    requiredFields: [
       "ipp",
       "date",
       "radio",
@@ -52,7 +52,7 @@ export const CSV_CONFIG: FilesDataType = {
     id: 'capacity',
     name: 'Capacitaire',
     description: 'Uploadez ici un mapping du capacitaire au format CSV ou XLSX.',
-    fields: [
+    requiredFields: [
       "hopital",
       "service_covid",
       "lits_ouverts",
@@ -67,7 +67,7 @@ export const CSV_CONFIG: FilesDataType = {
     id: 'sirius',
     name: 'SIRIUS',
     description: 'Uploadez ici un export de la base SIRIUS au format CSV ou XLSX.',
-    fields: [],
+    requiredFields: [],
     data: [],
     errors: [],
     format: '',

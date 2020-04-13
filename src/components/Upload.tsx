@@ -90,18 +90,18 @@ export default function Upload({
 }
 
 function FileDescription({csvConfig}: {csvConfig: FileType}) {
-  const { description, fields } = csvConfig
+  const { description, requiredFields } = csvConfig
 
   return (
     <DescriptionContainer>
       <Description>{description}</Description>
       <div>
         <span>Les champs requis sont: </span>
-        {fields.map((field, index) => {
+        {requiredFields.map((field, index) => {
           return (
             <span key={index}>
               <FieldTag key={field}>{field}</FieldTag>
-              {index !== fields.length - 1 && <span>{', '}</span>}
+              {index !== requiredFields.length - 1 && <span>{', '}</span>}
             </span>
           )
         })}
