@@ -1,5 +1,7 @@
+import _ from 'underscore'
+
 import { FilesIdType } from './types'
-import { CSV_CONFIG } from './constants'
+import { CSV_CONFIG, HOSPITAL_CODES_MAP } from './constants'
 
 export function checkFileForErrors({
   id,
@@ -28,6 +30,11 @@ export function checkRequiredFields(id: FilesIdType, fields: any) {
 }
 
 export function checkSirius(data) {
-  console.log(data)
+  const expectedCodes = Object.keys(HOSPITAL_CODES_MAP)
+  const siriusCodes = _.chain(data).pluck('Hopital').uniq().value()
+  const notSupportedCodes = siriusCodes.filter(x => !expectedCodes.includes(x))
+
+  console.log(notSupportedCodes)
+
   return []
 }
