@@ -82,7 +82,7 @@ export type GlimsByIppType = {
 }
 
 export type PacsByIppType = {
-  [ipp: string]: PacsFieldType[]
+  [ipp: number]: PacsFieldType[]
 }
 
 export type SiriusByChambreType = {
