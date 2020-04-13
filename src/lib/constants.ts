@@ -25,10 +25,7 @@ export const CSV_CONFIG: FilesDataType = {
     name: 'GLIMS',
     description: 'Uploadez ici un export de la base GLIMS au format CSV ou XLSX.',
     requiredFields: [
-      'DOSSIER',
-      'PRLVT',
       'ipp',
-      'RENS_PIH',
       'is_pcr',
     ],
     data: [],
@@ -41,7 +38,6 @@ export const CSV_CONFIG: FilesDataType = {
     description: 'Uploadez ici un export de la base PACS au format CSV ou XLSX.',
     requiredFields: [
       "ipp",
-      "date",
       "radio",
     ],
     data: [],
@@ -67,7 +63,14 @@ export const CSV_CONFIG: FilesDataType = {
     id: 'sirius',
     name: 'SIRIUS',
     description: 'Uploadez ici un export de la base SIRIUS au format CSV ou XLSX.',
-    requiredFields: [],
+    requiredFields: [
+      "Hopital",
+      "Localisation",
+      "Intitulé Site Crise COVID",
+      "Code Chambre",
+      "Libelle Chambre",
+      "Retenir ligne O/N",
+    ],
     data: [],
     errors: [],
     format: '',
@@ -110,13 +113,13 @@ export const capacityTableColumns = [
 ]
 
 export const HOSPITAL_CODES_MAP = {
-  '9': 'BRK',
-  '10': 'BCT',
-  '14': 'APR',
-  '28': 'ABC',
-  '68': 'RPC',
-  '79': 'SPR',
-  '96': 'PBR',
+  '09': 'BRK',
+  '010': 'BCT',
+  '014': 'APR',
+  '028': 'ABC',
+  '068': 'RPC',
+  '079': 'SPR',
+  '096': 'PBR',
 }
 
 export const HOSPITAL_MAP = {
