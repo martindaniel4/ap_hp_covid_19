@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { CSV_CONFIG } from './lib/constants'
-import { CSV_CONFIG_FIXTURE } from './fixtures/csv_fixture'
 import { processFiles } from './lib/processing-utils'
 import './stylesheets/App.css'
 
 import Files from './components/Files'
 import Results from './components/Results'
 import { FilesDataType, FileUploadPayloadType, ErrorType } from './lib/types'
+import { buildInitialStateFromFixture } from './fixtures/fixtures-utils'
+
+const USE_FIXTURE = false
 
 export default function App() {
-  const [files, setFiles] = useState<FilesDataType>(CSV_CONFIG)
+  const initialState = buildInitialStateFromFixture(USE_FIXTURE)
+  const [files, setFiles] = useState<FilesDataType>(initialState)
   const [data, setData] = useState(null)
 
   useEffect(() => {
