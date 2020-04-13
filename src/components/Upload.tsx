@@ -50,14 +50,15 @@ export default function Upload({
 
     if (isCSV) {
       Papa.parse(file, {
+        header: true,
+        encoding: 'ISO-8859-1',
         complete: (result: PapaParseResult): void => {
           const { data, meta: { fields } } = result
           const errors = fileHasFieldsErrors(id, fields)
           errors.length > 0 && onUploadError({ id, errors })
           errors.length === 0 && onUploadSuccess({ id, fields, data, format: '.csv' })
         },
-        header: true
-      })  
+      })
     }
   }
 

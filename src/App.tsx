@@ -11,7 +11,7 @@ import Results from './components/Results'
 import { FilesDataType, FileUploadPayloadType, ErrorType } from './lib/types'
 
 export default function App() {
-  const [files, setFiles] = useState<FilesDataType>(CSV_CONFIG)
+  const [files, setFiles] = useState<FilesDataType>(CSV_CONFIG_FIXTURE)
   const [data, setData] = useState(null)
 
   useEffect(() => {
