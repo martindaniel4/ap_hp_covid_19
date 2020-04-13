@@ -2,14 +2,14 @@ export type FilesIdType = 'orbis' | 'glims' | 'capacity' | 'pacs' | 'sirius'
 
 export type FileUploadPayloadType = {
   id: FilesIdType,
-  data: any[],
+  data: OrbisFieldType[] | GlimsFieldType[] | PacsFieldType[] | CapacityFieldType[] | SiriusFieldType[],
   format: string,
 }
 
 export type PapaParseResult = {
-  data: any[],
+  data: OrbisFieldType[] | GlimsFieldType[] | PacsFieldType[] | CapacityFieldType[] | SiriusFieldType[],
   meta: {
-    fields: any[],
+    fields: string[],
   }
 }
 
@@ -69,7 +69,7 @@ export type SiriusType = {
   description: string,
   errors: ErrorType[],
   requiredFields: string[],
-  data: CapacityFieldType[],
+  data: SiriusFieldType[],
   format: string,
 }
 
@@ -86,12 +86,32 @@ export type PacsByIppType = {
 }
 
 export type SiriusByChambreType = {
-  [Chambre: string]: any,
+  [chambre: string]: SiriusFieldType[],
+}
+
+export type CapacityMapType = {
+  [chambre: string]: CapacityFieldType[],
 }
 
 export type PatientType = {
+  "IPP": string,
   "Date d'entrée du dossier": string,
-  hospitalXYZ?: string,
+  "Date de dÈbut du mouvement": string,
+  "Date de fin du mouvement": string,
+  "Date de sortie du dossier": string,
+  "Chambre": string,
+  "Lit": string,
+  "Né(e) le": string,
+  "N∞ Dossier": string,
+  "Sexe": string,
+  "U.ResponsabilitÈ": string,
+  "U.Soins": string,
+  "isCovid": boolean,
+  "isPCR": boolean,
+  "isRadio": boolean,
+  "hospitalXYZ": string,
+  "localisationCDGFromSirius": string,
+  "siteCriseCovidFromSirius": string,
 }
 
 export type OrbisFieldType = {
@@ -131,6 +151,15 @@ export type CapacityFieldType = {
   "capacity": string,
 }
 
+export type SiriusFieldType = {
+  "Hopital": string,
+  "Localisation": string,
+  "Intitulé Site Crise COVID": string,
+  "Code Chambre": string,
+  "Libelle Chambre": string,
+  "Retenir ligne O/N": string,
+}
+
 export type PatientsCountPerDayType = {
   x: string,
   y: number
@@ -140,17 +169,25 @@ export type ProcessingResultsType = {
   patientsCountCovid: number,
   lastPatientAdmittedOn: string,
   patientsCountPerDay: PatientsCountPerDayType,
-  breakdownPerHospital: {
-    [hospital: string]: {
-      lastPatientAdmittedOn: string,
-      patientsCountCovid: number,
-      patientsCountPerDay: PatientsCountPerDayType,
-      byService: {
-        service: string,
-        patientsCount: number,
-        patientsCountCovid: number,
-        covidRatio: string,
-      }[],
-    }
-  },
+  breakdownPerHospital: BreakdownPerHospitalType,
+}
+
+export type BreakdownPerHospitalType = {
+  [hospital: string]: {
+    lastPatientAdmittedOn: string,
+    patientsCountCovid: number,
+    patientsCountPerDay: PatientsCountPerDayType,
+    byService: ServiceDataType[],
+  }
+}
+
+export type ServiceDataType = {
+  serviceName: string,
+  patientsCount: number,
+  patientsCountCovid: number,
+  patientsCountPCR: number,
+  patientsCountRadio: number,
+  capacityTotal: string,
+  capacityCovid: string,
+  openBeds: number,
 }

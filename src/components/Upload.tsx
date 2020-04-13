@@ -157,5 +157,3 @@ const FieldTag = styled.span`
   font-size: 12px;
   color: #4e4eff;
 `
-
-const Right = styled.div``

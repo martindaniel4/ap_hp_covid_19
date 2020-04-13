@@ -1,47 +1,67 @@
 import _ from 'underscore'
 import moment from 'moment'
-import { FilesDataType, OrbisType, PatientType, GlimsByIppType, SiriusByChambreType, PacsByIppType, ProcessingResultsType, PatientsCountPerDayType } from './types'
-import { HOSPITAL_CODES_MAP } from './constants'
+import {
+  FilesDataType,
+  OrbisType,
+  PatientType,
+  GlimsByIppType,
+  SiriusByChambreType,
+  PacsByIppType,
+  ProcessingResultsType,
+  PatientsCountPerDayType,
+  CapacityMapType,
+  CapacityFieldType,
+  SiriusFieldType,
+  BreakdownPerHospitalType,
+  ServiceDataType,
+} from './types'
+import {
+  HOSPITAL_CODES_MAP,
+  GLIMS_IS_PCR_POSITIVE_VALUE,
+  PACS_RADIO_POSITIVE_VALUE,
+  SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE,
+} from './constants'
 
 export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const { orbis, glims, pacs, sirius, capacity } = files
 
-  const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, p => p['ipp'])
-  const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, p => p['ipp'])
-  const capacityMap: any = _.groupBy(capacity.data, row => (row['hopital'] + ' - ' + row['service_covid']).trim() )
-  const siriusFiltered = sirius.data.filter(row => row['Retenir ligne O/N'] === "OUI")
-  // join on code chambre and libelle chambre in Sirius. Remove spaces and case.
-  const siriusByChambre: SiriusByChambreType = 
-      _.groupBy(siriusFiltered, 
-                c => trimStringUpperCase(c['Code Chambre'] + '-' + c['Libelle Chambre']))
-  
-  const allPatients = joinOrbisWithOtherFiles(orbis, glimsByIPP, pacsByIPP, siriusByChambre)
-  const allPatientsCovid = allPatients.filter(p => p.isCovid)
-  
-  const patientsByHospital = _.groupBy(allPatients, p => p.hospitalXYZ)
 
-  // console.log(patientsByHospital)
+  // CREATE MAPS
+  const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, glimsField => glimsField['ipp'])
+  const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, pacsField => pacsField['ipp'])
+  const capacityMap: CapacityMapType = _.groupBy(capacity.data, capacityField => getCapacityMapKey(capacityField))
+  const siriusByChambre: SiriusByChambreType = _.groupBy(
+    sirius.data.filter(row => row['Retenir ligne O/N'] === SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE),
+    siriusField => getSiriusMapKey(siriusField)
+  )
   
-  const breakdownPerHospital: any = {}
+  // PATIENTS LIST
+  const allPatients: PatientType[] = extendOrbis(orbis, glimsByIPP, pacsByIPP, siriusByChambre)
+  const allPatientsCovid: PatientType[] = allPatients.filter(p => p.isCovid)
+  
+  // BREAKDOWN PER HOSPITAL
+  const patientsByHospital = _.groupBy(allPatients, p => p.hospitalXYZ)
+  const breakdownPerHospital: BreakdownPerHospitalType = {}
+
   Object.keys(patientsByHospital)
     .forEach(hospital => {
       const patientsForHospital = patientsByHospital[hospital]
       const patientsByService = _.groupBy(patientsForHospital, p => p.siteCriseCovidFromSirius)
       const patientsCovidForHospital = patientsForHospital.filter(p => p.isCovid)
 
-      const newPatientsGroupedByService: any[] = []
-      Object.keys(patientsByService).forEach(service => {
-        const patientsInService = patientsByService[service]
+      const serviceData: ServiceDataType[] = []
+      Object.keys(patientsByService).forEach(serviceName => {
+        const patientsInService = patientsByService[serviceName]
         const patientsInServiceCovid = patientsInService.filter(p => p.isCovid)
         const patientsInServicePCR = patientsInService.filter(p => p.isPCR)
         const patientsInServiceRadio = patientsInService.filter(p => p.isRadio)
 
-        const buildCapacityKey = (hospital + ' - ' + service).trim()
+        const buildCapacityKey = (hospital + ' - ' + serviceName).trim()
         const capacityTotal = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts']
         const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
         
-        newPatientsGroupedByService.push({
-          service,
+        serviceData.push({
+          serviceName,
           patientsCount: patientsInService.length,
           patientsCountCovid: patientsInServiceCovid.length,
           patientsCountPCR: patientsInServicePCR.length,
@@ -56,7 +76,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         lastPatientAdmittedOn: getLastAdmitedPatientDate(patientsCovidForHospital),
         patientsCountCovid: patientsCovidForHospital.length,
         patientsCountPerDay: getPatientsCountPerDay(patientsCovidForHospital),
-        byService: newPatientsGroupedByService,
+        byService: serviceData,
       }
     })
     
@@ -76,8 +96,12 @@ function trimStringUpperCase(abc: string): string {
   return abc.toString().replace(/\s/g,'').toUpperCase()
 }
 
-function getHospitalKey(orbisHospitalString: string): string {
-  return orbisHospitalString.split('- ')[1].slice(0,3)
+function getSiriusMapKey(siriusField: SiriusFieldType): string {
+  return trimStringUpperCase(siriusField['Code Chambre'] + '-' + siriusField['Libelle Chambre'])
+}
+
+function getCapacityMapKey(capacityField: CapacityFieldType): string {
+  return (capacityField['hopital'] + ' - ' + capacityField['service_covid']).trim()
 }
 
 function getLastAdmitedPatientDate(patients: PatientType[]): string {
@@ -86,7 +110,7 @@ function getLastAdmitedPatientDate(patients: PatientType[]): string {
   return moment(lastDate, 'DD/MM/YYYY hh:mm').format('Do MMMM YYYY à HH:mm')
 }
 
-function joinOrbisWithOtherFiles(
+function extendOrbis(
   orbis: OrbisType,
   glimsByIPP: GlimsByIppType,
   pacsByIPP: PacsByIppType,
@@ -96,10 +120,9 @@ function joinOrbisWithOtherFiles(
     const findPatientInGlims = glimsByIPP[patient['IPP']]
     const findPatientInPacs = pacsByIPP[patient['IPP']]
 
-    const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === "Positif"
-    const isRadio = !!findPatientInPacs && findPatientInPacs[0]['radio'] === '1'
+    const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === GLIMS_IS_PCR_POSITIVE_VALUE
+    const isRadio = !!findPatientInPacs && findPatientInPacs[0]['radio'] === PACS_RADIO_POSITIVE_VALUE
     const isCovid = isPCR || isRadio
-    const covidSource = isPCR ? 'glims' : isRadio ? 'pacs' : null
 
     const chambre = trimStringUpperCase(patient['Chambre'])
     const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
@@ -118,7 +141,6 @@ function joinOrbisWithOtherFiles(
       isCovid,
       isPCR,
       isRadio,
-      covidSource,
       hospitalXYZ,
       siteCriseCovidFromSirius: siriusRowForRoom && siriusRowForRoom['Intitulé Site Crise COVID'],
       localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation CDG'],
