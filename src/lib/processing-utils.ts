@@ -11,14 +11,14 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const capacityMap: any = _.groupBy(capacity.data, row => (row['hopital'] + ' - ' + row['service_covid']).trim() )
   const siriusFiltered = sirius.data.filter(row => row['Retenir ligne O/N'] === "OUI")
   const siriusByCodeChambre: SiriusByCodeChambreType = _.groupBy(siriusFiltered, c => c['Code Chambre'])
-  console.log(siriusByCodeChambre)
+  // console.log(siriusByCodeChambre)
 
   const allPatients = joinOrbisWithOtherFiles(orbis, glimsByIPP, pacsByIPP, siriusByCodeChambre)
   const allPatientsCovid = allPatients.filter(p => p.isCovid)
   
   const patientsByHospital = _.groupBy(allPatients, p => p.hospitalXYZ)
 
-  console.log(patientsByHospital)
+  // console.log(patientsByHospital)
   
   const breakdownPerHospital: any = {}
   Object.keys(patientsByHospital)

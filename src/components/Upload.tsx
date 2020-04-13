@@ -99,10 +99,10 @@ function FileDescription({csvConfig}: {csvConfig: FileType}) {
         <span>Les champs requis sont: </span>
         {fields.map((field, index) => {
           return (
-            <>
+            <span key={index}>
               <FieldTag key={field}>{field}</FieldTag>
               {index !== fields.length - 1 && <span>{', '}</span>}
-            </>
+            </span>
           )
         })}
       </div>
