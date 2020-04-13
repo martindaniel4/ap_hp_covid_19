@@ -7,19 +7,27 @@ export function checkFileForErrors({
   data,
 }: {
   id: FilesIdType,
-  data: any[],
   fields: string[],
+  data: any[],
 }) {
   let errors = []
 
-  const headerErrors = checkFileForRequiredFields(id, fields)
+  const headerErrors = checkRequiredFields(id, fields)
+  const siriusErrors = id === 'sirius' && checkSirius(data)
 
-  return errors.concat(headerErrors)
+  return errors
+    .concat(headerErrors)
+    .concat(siriusErrors)
 }
 
-export function checkFileForRequiredFields(id: FilesIdType, fields: any) {
+export function checkRequiredFields(id: FilesIdType, fields: any) {
   const requiredFields = CSV_CONFIG[id]['requiredFields']
   const missingFields = requiredFields.filter(x => !fields.includes(x))
   const headerErrors = missingFields.map(field => { return { message: `${field} est manquant` } })
   return headerErrors
+}
+
+export function checkSirius(data) {
+  console.log(data)
+  return []
 }
