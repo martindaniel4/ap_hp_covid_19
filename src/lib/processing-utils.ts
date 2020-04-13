@@ -101,17 +101,16 @@ function joinOrbisWithOtherFiles(
     const isCovid = isPCR || isRadio
     const covidSource = isPCR ? 'glims' : isRadio ? 'pacs' : null
 
-    const chambre = patient['Chambre']
-    const roomCode = chambre === '-' ? null : chambre.split(' ')[0]
-    const siriusRowForRoomCode = siriusByChambre[roomCode] && siriusByChambre[roomCode][0]
+    const chambre = trimStringUpperCase(patient['Chambre'])
+    const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
 
-    if (!siriusRowForRoomCode) {
+    if (!siriusRowForRoom) {
       console.log(patient['U.Responsabilité'])
       console.log(chambre)
       console.log('-------------------')
     }
 
-    const hospitalCode = siriusRowForRoomCode && siriusRowForRoomCode['Hopital']
+    const hospitalCode = siriusRowForRoom && siriusRowForRoom['Hopital']
     const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : '';
     
     return {
@@ -121,8 +120,8 @@ function joinOrbisWithOtherFiles(
       isRadio,
       covidSource,
       hospitalXYZ,
-      siteCriseCovidFromSirius: siriusRowForRoomCode && siriusRowForRoomCode['Intitulé Site Crise COVID'],
-      localisationCDGFromSirius: siriusRowForRoomCode && siriusRowForRoomCode['Localisation CDG'],
+      siteCriseCovidFromSirius: siriusRowForRoom && siriusRowForRoom['Intitulé Site Crise COVID'],
+      localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation CDG'],
     }
   })
 }
