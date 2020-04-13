@@ -25,8 +25,8 @@ export function checkFileForErrors({
 export function checkRequiredFields(id: FilesIdType, fields: any) {
   const requiredFields = CSV_CONFIG[id]['requiredFields']
   const missingFields = requiredFields.filter(x => !fields.includes(x))
-  const headerErrors = missingFields.map(field => { return { message: `${field} est manquant` } })
-  return headerErrors
+  
+  return missingFields.map(field => { return { message: `${field} est manquant` } })
 }
 
 export function checkSirius(data) {
@@ -34,7 +34,5 @@ export function checkSirius(data) {
   const siriusCodes = _.chain(data).pluck('Hopital').uniq().value()
   const notSupportedCodes = siriusCodes.filter(x => !expectedCodes.includes(x))
 
-  console.log(notSupportedCodes)
-
-  return []
+  return notSupportedCodes.map(code => { return { message: `Le code hopital "${code}" n'est pas valide` } })
 }
