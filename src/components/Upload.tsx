@@ -42,8 +42,10 @@ export default function Upload({
         const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
         const data: any[] = XLSX.utils.sheet_to_json(firstWorksheet, {header: 0})
         const fields: any = XLSX.utils.sheet_to_json(firstWorksheet, {header: 1})[0]
+
         const errors = fileHasFieldsErrors(id, fields)
-        onUploadSuccess({ id, fields, data, format: '.xlsx' })
+        errors.length > 0 && onUploadError({ id, errors })
+        errors.length === 0 && onUploadSuccess({ id, fields, data, format: '.xlsx' })
       }
       reader.readAsBinaryString(file)
     }
@@ -51,6 +53,7 @@ export default function Upload({
     if (isCSV) {
       Papa.parse(file, {
         header: true,
+        skipEmptyLines: true,
         encoding: 'ISO-8859-1',
         complete: (result: PapaParseResult): void => {
           const { data, meta: { fields } } = result
@@ -66,7 +69,7 @@ export default function Upload({
     <UploadContainer>
       <Left>
         <Label>{name}</Label>
-        {/* <Description>{description}</Description> */}
+        <Description>{description}</Description>
         <FileStatus csvConfig={csvConfig} />
       </Left>
       
