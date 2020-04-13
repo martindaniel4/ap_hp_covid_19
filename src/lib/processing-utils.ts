@@ -1,6 +1,6 @@
 import _ from 'underscore'
 import moment from 'moment'
-import { FilesDataType, OrbisType, PatientType, GlimsByIppType, CorrespondanceByCodeChambreType, PacsByIppType, ProcessingResultsType, PatientsCountPerDayType } from './types'
+import { FilesDataType, OrbisType, PatientType, GlimsByIppType, CorrespondanceByChambreType, PacsByIppType, ProcessingResultsType, PatientsCountPerDayType } from './types'
 import { HOSPITAL_CODES_MAP } from './constants'
 
 export const processFiles = (files: FilesDataType): ProcessingResultsType => {
@@ -10,9 +10,15 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, p => p['ipp'])
   const capacityMap: any = _.groupBy(capacity.data, row => (row['hopital'] + ' - ' + row['service_covid']).trim() )
   const correspondanceFiltered = correspondance.data.filter(row => row['Retenir ligne O/N'] === "OUI")
-  const correspondanceByCodeChambre: CorrespondanceByCodeChambreType = _.groupBy(correspondanceFiltered, c => c['Code Chambre'])
+  
+  // join on code chambre and libelle chambre in Sirius. Remove spaces and case.
+  const correspondanceByChambre: 
+  CorrespondanceByChambreType = 
+    _.groupBy(correspondanceFiltered, 
+              c => (trimStringUpperCase(c['Code Chambre']) + '-' + 
+                    trimStringUpperCase(c['Libelle Chambre'])))
 
-  const allPatients = joinOrbisWithOtherFiles(orbis, glimsByIPP, pacsByIPP, correspondanceByCodeChambre)
+  const allPatients = joinOrbisWithOtherFiles(orbis, glimsByIPP, pacsByIPP, correspondanceByChambre)
   const allPatientsCovid = allPatients.filter(p => p.isCovid)
   
   const patientsByHospital = _.groupBy(allPatients, p => p.hospitalXYZ)
@@ -71,6 +77,11 @@ function getHospitalKey(orbisHospitalString: string): string {
   return orbisHospitalString.split('- ')[1].slice(0,3)
 }
 
+function trimStringUpperCase(abc: string): string {
+  console.log(abc);
+  return abc.toString().replace(/\s/g,'').toUpperCase()
+}
+
 function getLastAdmitedPatientDate(patients: PatientType[]): string {
   const dateKey = "Date d'entrée du dossier"
   const lastDate = _.max(patients, patient => moment(patient[dateKey], 'DD/MM/YYYY hh:mm').valueOf() )[dateKey]
@@ -81,7 +92,7 @@ function joinOrbisWithOtherFiles(
   orbis: OrbisType,
   glimsByIPP: GlimsByIppType,
   pacsByIPP: PacsByIppType,
-  correspondanceByCodeChambre: CorrespondanceByCodeChambreType,
+  correspondanceByChambre: CorrespondanceByChambreType,
 ) {
   return orbis.data.map(patient => {
     const findPatientInGlims = glimsByIPP[patient['IPP']]
@@ -92,11 +103,11 @@ function joinOrbisWithOtherFiles(
     const isCovid = isPCR || isRadio
     const covidSource = isPCR ? 'glims' : isRadio ? 'pacs' : null
 
-    const chambre = patient['Chambre']
-    const roomCode = chambre === '-' ? null : chambre.split(' ')[0]
-    const correspondanceRowForRoomCode = correspondanceByCodeChambre[roomCode] && correspondanceByCodeChambre[roomCode][0]
+    // join on chambre in Orbis. Remove spaces and case.
+    const chambre = trimStringUpperCase(patient['Chambre'])
+    const correspondanceRowForRoom = correspondanceByChambre[chambre] && correspondanceByChambre[chambre][0]
 
-    const hospitalCode = correspondanceRowForRoomCode && correspondanceRowForRoomCode['Hopital']
+    const hospitalCode = correspondanceRowForRoom && correspondanceRowForRoom['Hopital']
     const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : '';
     
     return {
@@ -106,8 +117,8 @@ function joinOrbisWithOtherFiles(
       isRadio,
       covidSource,
       hospitalXYZ,
-      siteCriseCovidFromCorrespondance: correspondanceRowForRoomCode && correspondanceRowForRoomCode['Intitulé Site Crise COVID'],
-      localisationCDGFromCorrespondance: correspondanceRowForRoomCode && correspondanceRowForRoomCode['Localisation CDG'],
+      siteCriseCovidFromCorrespondance: correspondanceRowForRoom && correspondanceRowForRoom['Intitulé Site Crise COVID'],
+      localisationCDGFromCorrespondance: correspondanceRowForRoom && correspondanceRowForRoom['Localisation CDG'],
     }
   })
 }

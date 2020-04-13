@@ -82,7 +82,7 @@ export type PacsByIppType = {
   [ipp: string]: PacsFieldType[]
 }
 
-export type CorrespondanceByCodeChambreType = {
+export type CorrespondanceByChambreType = {
   [codeChambre: string]: any,
 }
 

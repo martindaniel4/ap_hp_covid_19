@@ -41,6 +41,7 @@ function Upload({
       Papa.parse(uploadFile, {
         complete: updateDataFromCSV,
         encoding: "CP1252",
+        skipEmptyLines: true,
         header: true
       });  
     }
