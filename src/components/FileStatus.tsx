@@ -38,7 +38,7 @@ function FileStatusError({csvConfig}: {csvConfig: FileType}) {
         <span>{`${errors.length} erreur(s):`}</span>
       </Row>
       <ErrorMessages>
-        {errors.map(error => <div key={error.message}>{error.message}</div>)}
+        {errors.map(error => <li key={error.message}>{error.message}</li>)}
       </ErrorMessages>
     </ErrorsContainer>
   )
@@ -66,7 +66,7 @@ const Row = styled.div`
 
 const Summary = styled.div``
 
-const ErrorMessages = styled.div`
+const ErrorMessages = styled.ul`
   margin-top: 6px;
   padding-left: 31px;
 `
