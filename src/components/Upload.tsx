@@ -20,7 +20,7 @@ export default function Upload({
   onUploadError: Function,
 }) {
   const fileInput = useRef(null)
-  const { id, name, description, format } = csvConfig
+  const { id, name } = csvConfig
   
   const onFileChange = (e: SyntheticEvent): void => {
     const file = (e.target as HTMLFormElement).files[0]
@@ -45,7 +45,7 @@ export default function Upload({
 
         const errors = fileHasFieldsErrors(id, fields)
         errors.length > 0 && onUploadError({ id, errors })
-        errors.length === 0 && onUploadSuccess({ id, fields, data, format: '.xlsx' })
+        errors.length === 0 && onUploadSuccess({ id, data, format: '.xlsx' })
       }
       reader.readAsBinaryString(file)
     }
@@ -54,12 +54,12 @@ export default function Upload({
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
-        encoding: 'ISO-8859-1',
+        encoding: 'CP1252',
         complete: (result: PapaParseResult): void => {
           const { data, meta: { fields } } = result
           const errors = fileHasFieldsErrors(id, fields)
           errors.length > 0 && onUploadError({ id, errors })
-          errors.length === 0 && onUploadSuccess({ id, fields, data, format: '.csv' })
+          errors.length === 0 && onUploadSuccess({ id, data, format: '.csv' })
         },
       })
     }
@@ -69,12 +69,12 @@ export default function Upload({
     <UploadContainer>
       <Left>
         <Label>{name}</Label>
-        <Description>{description}</Description>
+        <FileDescription csvConfig={csvConfig} />
         <FileStatus csvConfig={csvConfig} />
       </Left>
       
       <Button variant="contained" color="primary" startIcon={<Publish />}>
-        <label htmlFor={`file-upload-${id}`}>{`Choisir un fichier ${name}`}</label>
+        <label htmlFor={`file-upload-${id}`}>{`Choisir un fichier`}</label>
       </Button>
       <Input
         id={`file-upload-${id}`}
@@ -89,6 +89,33 @@ export default function Upload({
   )
 }
 
+function FileDescription({csvConfig}: {csvConfig: FileType}) {
+  const { description, fields } = csvConfig
+
+  return (
+    <DescriptionContainer>
+      <Description>{description}</Description>
+      <div>
+        <span>Les champs requis sont: </span>
+        {fields.map((field, index) => {
+          return (
+            <>
+              <FieldTag key={field}>{field}</FieldTag>
+              {index !== fields.length - 1 && <span>{', '}</span>}
+            </>
+          )
+        })}
+      </div>
+    </DescriptionContainer>
+  )
+}
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
 const UploadContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -98,7 +125,7 @@ const UploadContainer = styled.div`
 `
 
 const Left = styled.div`
-  flex: 60% 0 0;
+  flex: 74% 0 0;
   display: flex;
   flex-direction: column;
 `
@@ -109,12 +136,24 @@ const Label = styled.div`
   margin-bottom: 6px;
 `
 
+const DescriptionContainer = styled.div`
+  font-size: 14px;
+`
+
 const Description = styled.div`
-  font-size: 16px;
+  margin-bottom: 4px;
 `
 
 const Input = styled.input`
   margin-bottom: 10px;
+`
+
+const FieldTag = styled.span`
+  background-color: #dbdbdb;
+  padding: 1px 5px;
+  font-family: Monaco;
+  font-size: 12px;
+  color: #4e4eff;
 `
 
 const Right = styled.div``

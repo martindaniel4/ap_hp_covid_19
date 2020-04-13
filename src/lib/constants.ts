@@ -7,7 +7,7 @@ export const CSV_CONFIG: FilesDataType = {
   orbis: {
     id: 'orbis',
     name: 'ORBIS',
-    description: 'Uploadez ici un export de la base ORBIS au format CSV. Les champs attendus sont: \n Né(e) le, IPP, N° Dossier, U.Responsabilité, U.Soins, Date d\'entrée du dossier, Date de sortie du dossier, Date de début du mouvement, Date de fin du mouvement, Chambre,Lit',
+    description: 'Uploadez ici un export de la base ORBIS au format CSV ou XLSX.',
     fields: [
       "IPP",
       "U.Responsabilité",
@@ -23,7 +23,7 @@ export const CSV_CONFIG: FilesDataType = {
   glims: {
     id: 'glims',
     name: 'GLIMS',
-    description: 'Uploadez ici un export de la base GLIMS au format CSV. Les champs attendus sont: \n ipp, dt_deb_visite, dt_fin_visite, is_pcr, hop, last_uma',
+    description: 'Uploadez ici un export de la base GLIMS au format CSV ou XLSX.',
     fields: [
       'DOSSIER',
       'PRLVT',
@@ -38,7 +38,7 @@ export const CSV_CONFIG: FilesDataType = {
   pacs: {
     id: 'pacs',
     name: 'PACS',
-    description: 'Uploadez ici un export de la base PACS au format CSV. Les champs attendus sont: \n ipp, date, radio',
+    description: 'Uploadez ici un export de la base PACS au format CSV ou XLSX.',
     fields: [
       "ipp",
       "date",
@@ -51,7 +51,7 @@ export const CSV_CONFIG: FilesDataType = {
   capacity: {
     id: 'capacity',
     name: 'Capacitaire',
-    description: 'Uploadez ici un mapping du capacitaire au format CSV. Les champs attendus sont: \n hopital, service_covid, lits_ouverts, lits_ouverts_covid, dedie_covid',
+    description: 'Uploadez ici un mapping du capacitaire au format CSV ou XLSX.',
     fields: [
       "hopital",
       "service_covid",
@@ -66,7 +66,7 @@ export const CSV_CONFIG: FilesDataType = {
   sirius: {
     id: 'sirius',
     name: 'SIRIUS',
-    description: 'Uploadez ici un export de la base SIRIUS au format CSV. Les champs attendus sont: \n Hopital, Intitulé Site Crise COVID, Localisation CDG, Code Chambre, Retenir ligne O/N',
+    description: 'Uploadez ici un export de la base SIRIUS au format CSV ou XLSX.',
     fields: [],
     data: [],
     errors: [],
