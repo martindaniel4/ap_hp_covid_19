@@ -1,9 +1,10 @@
-export type FilesIdType = 'orbis' | 'glims' | 'capacity' | 'pacs' | 'correspondance'
+export type FilesIdType = 'orbis' | 'glims' | 'capacity' | 'pacs' | 'sirius'
 
 export type FileUploadPayloadType = {
   id: FilesIdType,
   fields: string[],
   data: any[],
+  format: string,
 }
 
 export type PapaParseResult = {
@@ -13,59 +14,68 @@ export type PapaParseResult = {
   }
 }
 
-export type FileType = OrbisType | GlimsType | PacsType | CapacityType | CorrespondanceType
+export type FileType = OrbisType | GlimsType | PacsType | CapacityType | SiriusType
 
 export type FilesDataType = {
   orbis: OrbisType,
   glims: GlimsType,
   pacs: PacsType,
   capacity: CapacityType,
-  correspondance: CorrespondanceType,
+  sirius: SiriusType,
 }
 
 export type OrbisType = {
   id: 'orbis',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: OrbisFieldType[],
+  format: string,
 }
 
 export type GlimsType = {
   id: 'glims',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: GlimsFieldType[],
+  format: string,
 }
 
 export type PacsType = {
   id: 'pacs',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: PacsFieldType[],
+  format: string,
 }
 
 export type CapacityType = {
   id: 'capacity',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: CapacityFieldType[],
+  format: string,
 }
 
-export type CorrespondanceType = {
-  id: 'correspondance',
+export type SiriusType = {
+  id: 'sirius',
   name: string,
   description: string,
-  valid: boolean,
+  errors: ErrorType[],
   fields: string[],
   data: CapacityFieldType[],
+  format: string,
+}
+
+export type ErrorType = {
+  message: string
 }
 
 export type GlimsByIppType = {
@@ -76,7 +86,7 @@ export type PacsByIppType = {
   [ipp: string]: PacsFieldType[]
 }
 
-export type CorrespondanceByCodeChambreType = {
+export type SiriusByCodeChambreType = {
   [codeChambre: string]: any,
 }
 

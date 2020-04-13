@@ -6,11 +6,11 @@ import { CSV_CONFIG_FIXTURE } from './fixtures/csv_fixture'
 import { processFiles } from './lib/processing-utils'
 import './stylesheets/App.css'
 
-import UploadFiles from './components/UploadFiles'
+import Files from './components/Files'
 import Results from './components/Results'
-import { FilesDataType, FileUploadPayloadType } from './lib/types'
+import { FilesDataType, FileUploadPayloadType, ErrorType } from './lib/types'
 
-function App() {
+export default function App() {
   const [files, setFiles] = useState<FilesDataType>(CSV_CONFIG)
   const [data, setData] = useState(null)
 
@@ -19,22 +19,40 @@ function App() {
   }, [])
 
   const areAllFilesValid = (filesOb: FilesDataType) => {
-    return Object.values(filesOb).every(csv => csv.data && csv.data.length && csv.valid)
+    return Object.values(filesOb).every(csv => csv.data && csv.data.length && csv.errors.length === 0)
   }
 
-  const onFileComplete = (payload: FileUploadPayloadType) => {
-    const { id, data, fields } = payload
+  const onUploadSuccess = (payload: FileUploadPayloadType) => {
+    const { id, data, fields, format } = payload
     const newFiles = {
       ...files,
       [id]: {
         ...files[id],
         data,
         fields,
-        valid: true
+        errors: [],
+        format
       },
     }
     setFiles(newFiles)
     areAllFilesValid(newFiles) && process(newFiles)
+  }
+
+  const onUploadError = ({
+    id,
+    errors
+  }: {
+    id: string,
+    errors: ErrorType[]
+  }) => {
+    const newFiles = {
+      ...files,
+      [id]: {
+        ...files[id],
+        errors,
+      },
+    }
+    setFiles(newFiles)
   }
 
   const process = (newFiles: FilesDataType) => {
@@ -46,7 +64,7 @@ function App() {
     <AppContainer>
       <Header>{'Groupe Hospitalier, Paris Saclay'}</Header>
       <Subheader>{'Suivi des patients Covid-19 et de capacité'}</Subheader>
-      <UploadFiles files={files} onFileComplete={onFileComplete} />
+      <Files files={files} onUploadError={onUploadError} onUploadSuccess={onUploadSuccess} />
       {data && <Results filesData={data} />}
     </AppContainer>
   )
@@ -68,5 +86,3 @@ const Subheader = styled.div`
   font-size: 20px;
   margin-bottom: 40px;
 `
-
-export default App;
