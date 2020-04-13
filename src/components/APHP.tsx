@@ -69,7 +69,7 @@ export default function APHP() {
 }
 
 const AppContainer = styled.div`
-  width: 1000px;
+  width: 1200px;
   margin: 40px auto 0;
   padding-bottom: 100px;
 `;
