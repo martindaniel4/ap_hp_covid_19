@@ -23,8 +23,8 @@ export default function Warnings({
       {isExpanded && 
         <WarningContentWrapper>
           {Object.keys(warnings).map(warningKey => {
-            if (warningKey === 'patientsWithNoRoom') return <PatientsWithNoRoomWarning key={warningKey} warningObject={warnings[warningKey]} />
-            if (warningKey === 'patientsWithNoHospital') return <PatientsWithNoHospitalWarning key={warningKey} warningObject={warnings[warningKey]} />
+            if (warningKey === 'orbisWithNoRoom') return <OrbisWithNoRoomWarning key={warningKey} warningObject={warnings[warningKey]} />
+            if (warningKey === 'siriusWithNoRoom') return <SiriusWithNoRoomWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'glimsRowsWithPCRNotValid') return <GlimsNotValidWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'pacsRowsWithRadioNotValid') return <PacsNotValidWarning key={warningKey} warningObject={warnings[warningKey]} />
             return null
@@ -35,17 +35,17 @@ export default function Warnings({
   )
 }
 
-function PatientsWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
+function OrbisWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   if (!warningObject.length) return null
   return (
-    <BulletPoint>{`${warningObject.length} patients sans chambre`}</BulletPoint>
+    <BulletPoint>{`${warningObject.length} patients sans chambre dans Orbis`}</BulletPoint>
   )
 }
 
-function PatientsWithNoHospitalWarning({ warningObject }: { warningObject: object[] }) {
+function SiriusWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   if (!warningObject.length) return null
   return (
-    <BulletPoint>{`${warningObject.length} patients sans hopital associé`}</BulletPoint>
+    <BulletPoint>{`${warningObject.length} patients qui ont une chambre dans Orbis mais pas de correspondance dans Sirius`}</BulletPoint>
   )
 }
 

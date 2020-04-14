@@ -28,8 +28,8 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const { orbis, glims, pacs, sirius, capacity } = files
 
   let warnings = {
-    patientsWithNoRoom: [],
-    patientsWithNoHospital: [],
+    orbisWithNoRoom: [],
+    siriusWithNoRoom: [],
     glimsRowsWithPCRNotValid: [],
     pacsRowsWithRadioNotValid: [],
   }
@@ -138,12 +138,12 @@ function extendOrbis(
     const isCovid = isPCR || isRadio
 
     const chambre = trimStringUpperCase(patient['Chambre'])
+    if (chambre === '') warnings['orbisWithNoRoom'].push(patient)
     const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
-    if (!siriusRowForRoom) warnings['patientsWithNoRoom'].push(patient)
+    if (!siriusRowForRoom) warnings['siriusWithNoRoom'].push(patient)
 
     const hospitalCode = siriusRowForRoom && siriusRowForRoom['Hopital']
     const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : ''
-    if (!hospitalXYZ) warnings['patientsWithNoHospital'].push(patient)
     
     return {
       ...patient,
