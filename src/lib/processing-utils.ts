@@ -138,7 +138,7 @@ function extendOrbis(
     const isCovid = isPCR || isRadio
 
     const chambre = trimStringUpperCase(patient['Chambre'])
-    if (chambre === '') warnings['orbisWithNoRoom'].push(patient)
+    if (chambre === '-') warnings['orbisWithNoRoom'].push(patient)
     const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
     if (!siriusRowForRoom) warnings['siriusWithNoRoom'].push(patient)
 
