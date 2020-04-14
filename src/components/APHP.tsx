@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
-import Files from './Files'
-import Results from './Results'
+import Files from './files/Files'
+import Results from './results/Results'
 import { FilesDataType, FileUploadPayloadType, ErrorType } from '../lib/types'
 import { processFiles } from '../lib/processing-utils'
 import { buildInitialStateFromFixture } from '../fixtures/fixtures-utils'
@@ -59,28 +59,58 @@ export default function APHP() {
   }
 
   return (
-    <AppContainer>
-      <Header>{'Groupe Hospitalier, Paris Saclay'}</Header>
-      <Subheader>{'Suivi des patients Covid-19 et de capacité'}</Subheader>
-      <Files files={files} onUploadError={onUploadError} onUploadSuccess={onUploadSuccess} />
-      {data && <Results filesData={data} />}
-    </AppContainer>
+    <>
+      <HeaderSection>
+        <HeaderContent>
+          <Header>{'Groupe Hospitalier, Paris Saclay'}</Header>
+          <Subheader>{'Suivi des patients Covid-19 et de capacité'}</Subheader>
+        </HeaderContent>
+      </HeaderSection>
+      <AppContainer>
+        <Section>{`1) Uploader les ${Object.keys(files).length} fichiers`}</Section>
+        <Files files={files} onUploadError={onUploadError} onUploadSuccess={onUploadSuccess} />
+        <Section>{`2) Analyser les données`}</Section>
+        {data && <Results filesData={data} />}
+      </AppContainer>
+    </>
   )
 }
 
 const AppContainer = styled.div`
   width: 1200px;
-  margin: 40px auto 0;
-  padding-bottom: 100px;
+  margin: 0 auto;
 `;
+
+const HeaderSection = styled.div`
+  text-align: center;
+  margin-bottom: 40px;
+  background: #0063af;
+  color: white;
+`
+
+const HeaderContent = styled.div`
+  width: 1200px;
+  height: 70px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
 
 const Header = styled.div`
   font-size: 30px;
   font-weight: bold;
-  margin-bottom: 10px;
 `
 
 const Subheader = styled.div`
   font-size: 20px;
+`
+
+const Section = styled.div`
+  font-size: 32px;
   margin-bottom: 40px;
+  font-weight: 800;
+  padding: 12px 0;
+  border-bottom: solid 4px #020202;
 `

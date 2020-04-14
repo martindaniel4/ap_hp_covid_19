@@ -6,11 +6,11 @@ import 'react-tabs/style/react-tabs.css'
 import { CSVLink } from 'react-csv'
 import { XYPlot,  XAxis, YAxis, ChartLabel, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
 
-import { StyledTable } from './ui/Table'
-import { BigNumber } from './ui/BigNumber'
-import { HOSPITAL_MAP, capacityTableColumns } from '../lib/constants'
+import { StyledTable } from '../ui/Table'
+import { BigNumber } from '../ui/BigNumber'
+import { HOSPITAL_MAP, capacityTableColumns } from '../../lib/constants'
 
-export function HospitalResults({ hospitalName, hospitalData }) {
+export default function HospitalResults({ activeHospital, hospitalName, hospitalData }) {
   const columns = useMemo(
     () => capacityTableColumns,
     []
@@ -20,6 +20,8 @@ export function HospitalResults({ hospitalName, hospitalData }) {
     () => hospitalData.byService,
     [hospitalData]
   )
+
+  if (!activeHospital) return null
 
   const headersLabels = capacityTableColumns.map(c => c['Header'])
   const headersAccessors = capacityTableColumns.map(c => c['accessor'])

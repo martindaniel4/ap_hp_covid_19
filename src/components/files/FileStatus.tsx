@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { CheckCircle, Error } from '@material-ui/icons'
 
-import { FileType } from '../lib/types'
+import { FileType } from '../../lib/types'
 
 export default function FileStatus({csvConfig}: {csvConfig: FileType}) {
   const { data, errors } = csvConfig
