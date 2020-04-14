@@ -40,7 +40,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   // CREATE MAPS
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, glimsField => glimsField['ipp'])
   const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, pacsField => pacsField['ipp'])
-  const capacityMap: CapacityMapType = _.groupBy(capacity.data, capacityField => getCapacityMapKey(capacityField))
+  const capacityMap: CapacityMapType = _.groupBy(capacity.data, capacityField => getCapacityMapKey(capacityField['hopital'], capacityField['service_covid']))
   const siriusByChambre: SiriusByChambreType = _.groupBy(
     sirius.data.filter(row => row['Retenir ligne O/N'] === SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE),
     siriusField => getSiriusMapKey(siriusField)
@@ -67,7 +67,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         const patientsInServicePCR = patientsInService.filter(p => p.isPCR)
         const patientsInServiceRadio = patientsInService.filter(p => p.isRadio)
 
-        const buildCapacityKey = (hospital + ' - ' + serviceName).trim()
+        const buildCapacityKey = getCapacityMapKey(hospital, serviceName)
         const capacityTotal = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts']
         const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
         
@@ -112,8 +112,8 @@ function getSiriusMapKey(siriusField: SiriusFieldType): string {
   return trimStringUpperCase(siriusField['Code Chambre'] + '-' + siriusField['Libelle Chambre'])
 }
 
-function getCapacityMapKey(capacityField: CapacityFieldType): string {
-  return (capacityField['hopital'] + ' - ' + capacityField['service_covid']).trim()
+function getCapacityMapKey(hopital: string, service_covid: string): string {
+  return (hopital + ' - ' + service_covid).trim()
 }
 
 function getLastAdmitedPatientDate(patients: PatientType[]): string {
