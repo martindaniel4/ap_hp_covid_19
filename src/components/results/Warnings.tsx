@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import _ from 'underscore'
+
 import { WarningsType } from '../../lib/types'
 
 export default function Warnings({
@@ -9,7 +11,8 @@ export default function Warnings({
 }) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
-  console.log(warnings)
+  const hasWarnings = _.values(warnings).some(w => w.length > 0)
+  if (!hasWarnings) return null
 
   return (
     <WarningsContainer>
