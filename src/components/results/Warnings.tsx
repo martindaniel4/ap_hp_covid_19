@@ -36,24 +36,28 @@ export default function Warnings({
 }
 
 function PatientsWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
+  if (!warningObject.length) return null
   return (
     <BulletPoint>{`${warningObject.length} patients sans chambre`}</BulletPoint>
   )
 }
 
 function PatientsWithNoHospitalWarning({ warningObject }: { warningObject: object[] }) {
+  if (!warningObject.length) return null
   return (
     <BulletPoint>{`${warningObject.length} patients sans hopital associé`}</BulletPoint>
   )
 }
 
 function GlimsNotValidWarning({ warningObject }: { warningObject: object[] }) {
+  if (!warningObject.length) return null
   return (
     <BulletPoint>{`${warningObject.length} rangée(s) Glims où "is_pcr" n'est pas égal à "Positif"`}</BulletPoint>
   )
 }
 
 function PacsNotValidWarning({ warningObject }: { warningObject: object[] }) {
+  if (!warningObject.length) return null
   return (
     <BulletPoint>{`${warningObject.length} rangée(s) Pacs où "radio" n'est pas égal à "1"`}</BulletPoint>
   )
