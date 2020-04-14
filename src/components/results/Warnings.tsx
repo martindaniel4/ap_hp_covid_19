@@ -11,13 +11,13 @@ export default function Warnings({
 }) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
-  const hasWarnings = _.values(warnings).some(w => w.length > 0)
-  if (!hasWarnings) return null
+  const warningsCount = _.values(warnings).filter(w => w.length > 0).length
+  if (!warningsCount) return null
 
   return (
     <WarningsContainer>
       <Row>
-        <WarningsContainerTitle>{'Alertes'}</WarningsContainerTitle>
+        <WarningsContainerTitle>{`${warningsCount} Alertes`}</WarningsContainerTitle>
         <WarningToggle onClick={() => setIsExpanded(!isExpanded)}>{isExpanded ? '(Cacher les alertes)' : '(Montrer les alertes)'}</WarningToggle>
       </Row>
       {isExpanded && 
