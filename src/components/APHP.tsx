@@ -78,7 +78,7 @@ export default function APHP() {
 
 const AppContainer = styled.div`
   width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 100px;
 `;
 
 const HeaderSection = styled.div`
