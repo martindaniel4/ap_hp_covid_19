@@ -21,6 +21,7 @@ export default function Warnings({
         <WarningContentWrapper>
           {Object.keys(warnings).map(warningKey => {
             if (warningKey === 'patientsWithNoRoom') return <PatientsWithNoRoomWarning key={warningKey} warningObject={warnings[warningKey]} />
+            if (warningKey === 'patientsWithNoHospital') return <PatientsWithNoHospitalWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'glimsRowsWithPCRNotValid') return <GlimsNotValidWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'pacsRowsWithRadioNotValid') return <PacsNotValidWarning key={warningKey} warningObject={warnings[warningKey]} />
             return null
@@ -33,19 +34,25 @@ export default function Warnings({
 
 function PatientsWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   return (
-    <BulletPoint>{`${warningObject.length} patients qui n'ont pas de chambre assignée dans Sirius`}</BulletPoint>
+    <BulletPoint>{`${warningObject.length} patients sans chambre`}</BulletPoint>
+  )
+}
+
+function PatientsWithNoHospitalWarning({ warningObject }: { warningObject: object[] }) {
+  return (
+    <BulletPoint>{`${warningObject.length} patients sans hopital associé`}</BulletPoint>
   )
 }
 
 function GlimsNotValidWarning({ warningObject }: { warningObject: object[] }) {
   return (
-    <BulletPoint>{`${warningObject.length} rangée(s) Glims où "is_pcr" n'est pas egal à "Positif"`}</BulletPoint>
+    <BulletPoint>{`${warningObject.length} rangée(s) Glims où "is_pcr" n'est pas égal à "Positif"`}</BulletPoint>
   )
 }
 
 function PacsNotValidWarning({ warningObject }: { warningObject: object[] }) {
   return (
-    <BulletPoint>{`${warningObject.length} rangée(s) Pacs où "radio" n'est pas egal à "1"`}</BulletPoint>
+    <BulletPoint>{`${warningObject.length} rangée(s) Pacs où "radio" n'est pas égal à "1"`}</BulletPoint>
   )
 }
 

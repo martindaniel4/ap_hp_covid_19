@@ -10,7 +10,6 @@ import {
   ProcessingResultsType,
   PatientsCountPerDayType,
   CapacityMapType,
-  CapacityFieldType,
   SiriusFieldType,
   BreakdownPerHospitalType,
   ServiceDataType,
@@ -30,6 +29,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
 
   let warnings = {
     patientsWithNoRoom: [],
+    patientsWithNoHospital: [],
     glimsRowsWithPCRNotValid: [],
     pacsRowsWithRadioNotValid: [],
   }
@@ -139,11 +139,11 @@ function extendOrbis(
 
     const chambre = trimStringUpperCase(patient['Chambre'])
     const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
-
     if (!siriusRowForRoom) warnings['patientsWithNoRoom'].push(patient)
 
     const hospitalCode = siriusRowForRoom && siriusRowForRoom['Hopital']
-    const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : '';
+    const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : ''
+    if (!hospitalXYZ) warnings['patientsWithNoHospital'].push(patient)
     
     return {
       ...patient,

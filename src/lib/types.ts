@@ -79,6 +79,7 @@ export type ErrorType = {
 
 export type WarningsType = {
   patientsWithNoRoom: object[],
+  patientsWithNoHospital: object[],
   glimsRowsWithPCRNotValid: object[],
   pacsRowsWithRadioNotValid: object[],
 }
