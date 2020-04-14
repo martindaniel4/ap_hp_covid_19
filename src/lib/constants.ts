@@ -1,6 +1,7 @@
 import { FilesDataType } from "./types"
 
 export const GROUP_NAME = 'Groupe Hospitalier, Paris Saclay'
+export const ORBIS_NO_ROOM_CHAR = "-"
 export const GLIMS_IS_PCR_POSITIVE_VALUE = "Positif"
 export const PACS_RADIO_POSITIVE_VALUE = "1"
 export const SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE = "OUI"

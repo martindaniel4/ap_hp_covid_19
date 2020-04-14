@@ -19,6 +19,7 @@ import {
 } from './types'
 import {
   HOSPITAL_CODES_MAP,
+  ORBIS_NO_ROOM_CHAR,
   GLIMS_IS_PCR_POSITIVE_VALUE,
   PACS_RADIO_POSITIVE_VALUE,
   SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE,
@@ -138,7 +139,7 @@ function extendOrbis(
     const isCovid = isPCR || isRadio
 
     const chambre = trimStringUpperCase(patient['Chambre'])
-    if (chambre === '-') warnings['orbisWithNoRoom'].push(patient)
+    if (chambre === ORBIS_NO_ROOM_CHAR) warnings['orbisWithNoRoom'].push(patient)
     const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
     if (!siriusRowForRoom) warnings['siriusWithNoRoom'].push(patient)
 
