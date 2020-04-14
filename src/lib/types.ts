@@ -150,7 +150,7 @@ export type GlimsFieldType = {
 export type PacsFieldType = {
   "ipp": string,
   "date": string,
-  "radio": string,
+  "radio": number | string,
 }
 
 export type CapacityFieldType = {

@@ -135,7 +135,7 @@ function extendOrbis(
     const findPatientInPacs = pacsByIPP[patient['IPP']]
 
     const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === GLIMS_IS_PCR_POSITIVE_VALUE
-    const isRadio = !!findPatientInPacs && findPatientInPacs[0]['radio'] === PACS_RADIO_POSITIVE_VALUE
+    const isRadio = !!findPatientInPacs && isPacsRadioFieldOne(findPatientInPacs[0]['radio'])
     const isCovid = isPCR || isRadio
 
     const chambre = trimStringUpperCase(patient['Chambre'])
@@ -164,8 +164,12 @@ function getWarningsFromGlims(glims: GlimsType, warnings: WarningsType): void {
 }
 
 function getWarningsFromPacs(pacs: PacsType, warnings: WarningsType): void {
-  const pacsRowsWithRadioNotValid = pacs.data.filter(row => row['radio'] !== PACS_RADIO_POSITIVE_VALUE)
+  const pacsRowsWithRadioNotValid = pacs.data.filter(row => !isPacsRadioFieldOne(row['radio']))
   warnings['pacsRowsWithRadioNotValid'] = warnings['pacsRowsWithRadioNotValid'].concat(pacsRowsWithRadioNotValid)
+}
+
+function isPacsRadioFieldOne(field: number | string) {
+  return (field === PACS_RADIO_POSITIVE_VALUE) || (field === PACS_RADIO_POSITIVE_VALUE.toString())
 }
 
 function getPatientsCountPerDay(patients: PatientType[]): PatientsCountPerDayType {
