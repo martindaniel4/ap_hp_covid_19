@@ -54,7 +54,7 @@ export default function Results({
         </div>
 
         <div>
-          <XYPlot height={300} width={400} xType="ordinal">
+          <XYPlot height={300} width={500} xType="ordinal">
             <HorizontalGridLines />
             <VerticalGridLines />
             <XAxis tickLabelAngle={-45} tickTotal={5} />
@@ -74,7 +74,7 @@ export default function Results({
                 textAnchor: 'end'
               }}
               />
-            <VerticalBarSeries data={patientsCountPerDay} />
+            <VerticalBarSeries color="#0063af" data={patientsCountPerDay} />
           </XYPlot>
         </div>
       </FirstRow>
@@ -106,7 +106,7 @@ const HospitalRow = styled.div`
 `
 
 const HospitalLabel = styled.div`
-  color: blue;
+  color: #0063af;
   cursor: pointer;
   margin-right: 10px;
 

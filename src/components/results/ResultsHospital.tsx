@@ -44,7 +44,7 @@ export default function HospitalResults({ activeHospital, hospitalName, hospital
         </div>
 
         <div>
-          <XYPlot height={300} width={400} xType="ordinal">
+          <XYPlot height={200} width={500} xType="ordinal">
             <HorizontalGridLines />
             <VerticalGridLines />
             <XAxis tickLabelAngle={-45} tickTotal={5} />
@@ -64,26 +64,25 @@ export default function HospitalResults({ activeHospital, hospitalName, hospital
                 textAnchor: 'end'
               }}
               />
-            <VerticalBarSeries data={hospitalData.patientsCountPerDay} />
+            <VerticalBarSeries color="#0063af" data={hospitalData.patientsCountPerDay} />
           </XYPlot>
         </div>
       </SpacedRow>
 
       <Tabs>
         <TabList>
-          <Tab>{'Capacité'}</Tab>
+          <Tab>{'Table de patients par unité de soins'}</Tab>
         </TabList>
 
         <TabPanel>
-          <SpacedRow>
-            <TableName>{'Table de patients par unité de soins'}</TableName>
+          <EndRow>
             <CSVLinkStyled
               key={hospitalName}
               filename={`aphp-${hospitalName}-${todayFormatted}.csv`}
               data={dataForCSVDownload}>
               {'Telecharger un .csv des données'}
             </CSVLinkStyled>
-          </SpacedRow>
+          </EndRow>
 
           <StyledTable
             data={data}
@@ -103,16 +102,24 @@ const HospitalTitleContainer = styled.div`
   margin-bottom: 20px;
 `
 
-const SpacedRow = styled.div`
+const Row = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   margin: 20px 0;
 `
 
+const SpacedRow = styled(Row)`
+  justify-content: space-between;
+`
+
+const EndRow = styled(Row)`
+  justify-content: end;
+`
+
 const HospitalTitle = styled.div`
-  font-size: 30px;
-  font-weight: bold;
+  font-size: 34px;
+  font-weight: 800;
+  color: #0063af;
 `
 
 const TableName = styled.div`
@@ -121,7 +128,7 @@ const TableName = styled.div`
 `
 
 const CSVLinkStyled = styled(CSVLink)`
-  color: #3e4bfffa;
+  color: #0063af;
   font-weight: bold;
 `
 

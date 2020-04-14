@@ -155,5 +155,5 @@ const FieldTag = styled.span`
   padding: 1px 5px;
   font-family: Monaco;
   font-size: 12px;
-  color: #0063af;
+  color: #003157;
 `
