@@ -67,9 +67,7 @@ export default function APHP() {
         </HeaderContent>
       </HeaderSection>
       <AppContainer>
-        <Section>{`1) Uploader les ${Object.keys(files).length} fichiers`}</Section>
         <Files files={files} onUploadError={onUploadError} onUploadSuccess={onUploadSuccess} />
-        <Section>{`2) Analyser les données`}</Section>
         {data && <Results filesData={data} />}
       </AppContainer>
     </>
