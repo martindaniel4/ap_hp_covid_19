@@ -6,7 +6,7 @@ export default [
     "RENS_PIH": "28362",
     "hop": "HOPITAL ANTOINE BECLERE",
     "last_uma": "ACCUEIL URG MEDECINE",
-    "is_pcr": "Positif",
+    "is_pcr": "Positi",
     "dt_fin_visite": ""
   },
   {

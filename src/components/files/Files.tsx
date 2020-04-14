@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Divider } from '@material-ui/core'
 
 import Upload from './Upload'
-import { FilesDataType } from '../lib/types';
+import { FilesDataType } from '../../lib/types';
 
 export default function Files({
   files,
@@ -33,5 +33,5 @@ export default function Files({
 }
 
 const UploadContainer = styled.div`
-  margin-bottom: 100px;
+  margin-bottom: 65px;
 `

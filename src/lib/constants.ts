@@ -1,7 +1,10 @@
 import { FilesDataType } from "./types"
 
 export const GROUP_NAME = 'Groupe Hospitalier, Paris Saclay'
-export const CHILD_ADULT_CUTOFF_AGE = 16
+export const ORBIS_NO_ROOM_CHAR = "-"
+export const GLIMS_IS_PCR_POSITIVE_VALUE = "Positif"
+export const PACS_RADIO_POSITIVE_VALUE = 1
+export const SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE = "OUI"
 
 export const CSV_CONFIG: FilesDataType = {
   orbis: {
@@ -80,7 +83,7 @@ export const CSV_CONFIG: FilesDataType = {
 export const capacityTableColumns = [
   {
     Header: 'Site crise Covid-19',
-    accessor: 'service',
+    accessor: 'serviceName',
   },
   {
     Header: 'Nombre de lits ouverts',

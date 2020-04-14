@@ -6,8 +6,8 @@ import XLSX from 'xlsx'
 import { Button } from '@material-ui/core'
 import { Publish } from '@material-ui/icons'
 
-import { FileType, PapaParseResult } from '../lib/types'
-import { checkFileForErrors } from '../lib/file-utils'
+import { FileType, PapaParseResult } from '../../lib/types'
+import { checkFileForErrors } from '../../lib/file-utils'
 import FileStatus from './FileStatus'
 
 export default function Upload({
@@ -124,7 +124,7 @@ const UploadContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 10px 0;
+  margin: 15px 0;
 `
 
 const Left = styled.div`
@@ -155,7 +155,5 @@ const FieldTag = styled.span`
   padding: 1px 5px;
   font-family: Monaco;
   font-size: 12px;
-  color: #4e4eff;
+  color: #003157;
 `
-
-const Right = styled.div``
