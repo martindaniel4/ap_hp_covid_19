@@ -11,6 +11,7 @@ import {
 } from 'react-vis'
 
 import { BigNumber } from '../ui/BigNumber'
+import Warnings from './Warnings'
 import { HOSPITAL_MAP } from '../../lib/constants'
 import { ProcessingResultsType } from '../../lib/types'
 
@@ -23,17 +24,20 @@ export default function Results({
   activeHospital: any,
   setActiveHospital: Function,
   sortedHospitals: string[],
-  filesData: ProcessingResultsType
+  filesData: ProcessingResultsType,
 }) {
   const {
     patientsCountCovid,
     lastPatientAdmittedOn,
     patientsCountPerDay,
     breakdownPerHospital,
+    warnings,
   } = filesData
 
   return (
     <Summary>
+      <Warnings warnings={warnings} />
+
       <FirstRow>
         <div>
           <BigNumber number={patientsCountCovid} label={'patients Covid'} />

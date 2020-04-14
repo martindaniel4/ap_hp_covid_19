@@ -14,6 +14,9 @@ import {
   SiriusFieldType,
   BreakdownPerHospitalType,
   ServiceDataType,
+  WarningsType,
+  GlimsType,
+  PacsType,
 } from './types'
 import {
   HOSPITAL_CODES_MAP,
@@ -25,6 +28,14 @@ import {
 export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const { orbis, glims, pacs, sirius, capacity } = files
 
+  let warnings = {
+    patientsWithNoRoom: [],
+    glimsRowsWithPCRNotValid: [],
+    pacsRowsWithRadioNotValid: [],
+  }
+
+  getWarningsFromGlims(glims, warnings)
+  getWarningsFromPacs(pacs, warnings)
 
   // CREATE MAPS
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, glimsField => glimsField['ipp'])
@@ -36,7 +47,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   )
   
   // PATIENTS LIST
-  const allPatients: PatientType[] = extendOrbis(orbis, glimsByIPP, pacsByIPP, siriusByChambre)
+  const allPatients: PatientType[] = extendOrbis(orbis, glimsByIPP, pacsByIPP, siriusByChambre, warnings)
   const allPatientsCovid: PatientType[] = allPatients.filter(p => p.isCovid)
   
   // BREAKDOWN PER HOSPITAL
@@ -84,7 +95,8 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
     patientsCountCovid: allPatientsCovid.length,
     lastPatientAdmittedOn: getLastAdmitedPatientDate(allPatientsCovid),
     patientsCountPerDay: getPatientsCountPerDay(allPatientsCovid),
-    breakdownPerHospital
+    breakdownPerHospital,
+    warnings,
   }
 }
 
@@ -115,6 +127,7 @@ function extendOrbis(
   glimsByIPP: GlimsByIppType,
   pacsByIPP: PacsByIppType,
   siriusByChambre: SiriusByChambreType,
+  warnings: WarningsType,
 ) {
   return orbis.data.map(patient => {
     const findPatientInGlims = glimsByIPP[patient['IPP']]
@@ -127,11 +140,7 @@ function extendOrbis(
     const chambre = trimStringUpperCase(patient['Chambre'])
     const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
 
-    if (!siriusRowForRoom) {
-      console.log(patient['U.Responsabilité'])
-      console.log(chambre)
-      console.log('-------------------')
-    }
+    if (!siriusRowForRoom) warnings['patientsWithNoRoom'].push(patient)
 
     const hospitalCode = siriusRowForRoom && siriusRowForRoom['Hopital']
     const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : '';
@@ -146,6 +155,16 @@ function extendOrbis(
       localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation CDG'],
     }
   })
+}
+
+function getWarningsFromGlims(glims: GlimsType, warnings: WarningsType): void {
+  const glimsRowsWithPCRNotValid = glims.data.filter(row => row['is_pcr'] !== GLIMS_IS_PCR_POSITIVE_VALUE)
+  warnings['glimsRowsWithPCRNotValid'] = warnings['glimsRowsWithPCRNotValid'].concat(glimsRowsWithPCRNotValid)
+}
+
+function getWarningsFromPacs(pacs: PacsType, warnings: WarningsType): void {
+  const pacsRowsWithRadioNotValid = pacs.data.filter(row => row['radio'] !== PACS_RADIO_POSITIVE_VALUE)
+  warnings['pacsRowsWithRadioNotValid'] = warnings['pacsRowsWithRadioNotValid'].concat(pacsRowsWithRadioNotValid)
 }
 
 function getPatientsCountPerDay(patients: PatientType[]): PatientsCountPerDayType {

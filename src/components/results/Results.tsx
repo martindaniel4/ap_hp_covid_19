@@ -6,7 +6,11 @@ import ResultsHospital from './ResultsHospital'
 import ResultsAll from './ResultsAll'
 import { ProcessingResultsType } from '../../lib/types'
 
-function Results({ filesData }: {filesData:  ProcessingResultsType}) {
+function Results({
+  filesData
+}: {
+  filesData: ProcessingResultsType
+}) {
   const { breakdownPerHospital } = filesData
 
   const sortedHospitals: string[] = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].patientsCountCovid)
@@ -32,9 +36,6 @@ function Results({ filesData }: {filesData:  ProcessingResultsType}) {
   )
 }
 
-
-
-const ResultsContainer = styled.div`
-`
+const ResultsContainer = styled.div``
 
 export default Results

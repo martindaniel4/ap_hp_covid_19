@@ -77,6 +77,12 @@ export type ErrorType = {
   message: string
 }
 
+export type WarningsType = {
+  patientsWithNoRoom: object[],
+  glimsRowsWithPCRNotValid: object[],
+  pacsRowsWithRadioNotValid: object[],
+}
+
 export type GlimsByIppType = {
   [ipp: string]: GlimsFieldType[]
 }
@@ -170,6 +176,7 @@ export type ProcessingResultsType = {
   lastPatientAdmittedOn: string,
   patientsCountPerDay: PatientsCountPerDayType,
   breakdownPerHospital: BreakdownPerHospitalType,
+  warnings: WarningsType,
 }
 
 export type BreakdownPerHospitalType = {
