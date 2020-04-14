@@ -7,7 +7,8 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const { orbis, glims, pacs, sirius, capacity } = files
 
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, p => p['ipp'])
-  const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, p => p['ipp'])
+  const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, p => p['ipp']) 
+
   const capacityMap: any = _.groupBy(capacity.data, row => (row['hopital'] + ' - ' + row['service_covid']).trim() )
   const siriusFiltered = sirius.data.filter(row => row['Retenir ligne O/N'] === "OUI")
   // join on code chambre and libelle chambre in Sirius. Remove spaces and case.
@@ -97,7 +98,7 @@ function joinOrbisWithOtherFiles(
     const findPatientInPacs = pacsByIPP[patient['IPP']]
 
     const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === "Positif"
-    const isRadio = !!findPatientInPacs && findPatientInPacs[0]['radio'] === '1'
+    const isRadio = !!findPatientInPacs && findPatientInPacs[0]['radio'] === 1
     const isCovid = isPCR || isRadio
     const covidSource = isPCR ? 'glims' : isRadio ? 'pacs' : null
 
