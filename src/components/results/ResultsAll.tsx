@@ -21,7 +21,7 @@ export default function Results({
   sortedHospitalsXYZ,
   filesData,
 }: {
-  activeHospitalCode: any,
+  activeHospitalCode: string,
   setActiveHospitalCode: Function,
   sortedHospitalsXYZ: string[],
   filesData: ProcessingResultsType,
