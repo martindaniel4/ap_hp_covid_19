@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.6",
     "@types/styled-components": "^5.0.1",
     "@types/underscore": "^1.9.4",
+    "excel-date-to-js": "^1.0.2",
     "moment": "^2.24.0",
     "papaparse": "^5.1.1",
     "query-string": "^6.12.1",

@@ -8,9 +8,19 @@ import { XYPlot,  XAxis, YAxis, ChartLabel, VerticalBarSeries, HorizontalGridLin
 
 import { StyledTable } from '../ui/Table'
 import { BigNumber } from '../ui/BigNumber'
-import { HOSPITAL_MAP, capacityTableColumns } from '../../lib/constants'
+import { HOSPITAL_MAP } from '../../lib/constants'
+import { capacityTableColumns } from './table-config'
+import { HospitalData } from '../../lib/types'
 
-export default function HospitalResults({ activeHospital, hospitalName, hospitalData }) {
+export default function HospitalResults({
+  activeHospitalCode,
+  hospitalName,
+  hospitalData
+}: {
+  activeHospitalCode: string,
+  hospitalName: string,
+  hospitalData: HospitalData,
+}) {
   const columns = useMemo(
     () => capacityTableColumns,
     []
@@ -21,7 +31,7 @@ export default function HospitalResults({ activeHospital, hospitalName, hospital
     [hospitalData]
   )
 
-  if (!activeHospital) return null
+  if (!activeHospitalCode) return null
 
   const headersLabels = capacityTableColumns.map(c => c['Header'])
   const headersAccessors = capacityTableColumns.map(c => c['accessor'])

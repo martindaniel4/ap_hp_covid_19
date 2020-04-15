@@ -1,6 +1,6 @@
 import queryString from 'query-string'
 
-import { CSV_CONFIG } from '../lib/constants'
+import { CSV_CONFIG } from '../lib/files-config'
 import orbisFixture from './orbis_fixture'
 import glimsFixture from './glims_fixture'
 import pacsFixture from './pacs_fixture'

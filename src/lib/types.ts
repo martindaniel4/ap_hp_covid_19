@@ -101,34 +101,23 @@ export type CapacityMapType = {
 }
 
 export type PatientType = {
-  "IPP": string,
-  //"Date d'entrée du dossier": string,
-  "Date de dÈbut du mouvement": string,
-  "Date de fin du mouvement": string,
-  "Date de sortie du dossier": string,
-  "Chambre": string,
-  "Lit": string,
-  "Né(e) le": string,
-  "N∞ Dossier": string,
-  "Sexe": string,
-  "U.ResponsabilitÈ": string,
-  "U.Soins": string,
-  "isCovid": boolean,
-  "isPCR": boolean,
-  "isRadio": boolean,
-  "hospitalXYZ": string,
-  "localisationCDGFromSirius": string,
-  "siteCriseCovidFromSirius": string,
+  entryDate: string,
+  isCovid: boolean,
+  isPCR: boolean,
+  isRadio: boolean,
+  hospitalXYZ: string,
+  localisationCDGFromSirius: string,
+  siteCriseCovidFromSirius: string,
 }
 
-export type OrbisFieldType = {
+export interface OrbisFieldType {
   "Sexe": string,
   "Né(e) le": string,
   "IPP": string,
   "N∞ Dossier": string,
   "U.ResponsabilitÈ": string,
   "U.Soins": string,
-  //"Date d'entrée du dossier": string,
+  "Date d'entrée du dossier": number | string,
   "Date de sortie du dossier": string,
   "Date de dÈbut du mouvement": string,
   "Date de fin du mouvement": string,
@@ -181,12 +170,14 @@ export type ProcessingResultsType = {
 }
 
 export type BreakdownPerHospitalType = {
-  [hospital: string]: {
-    lastPatientAdmittedOn: string,
-    patientsCountCovid: number,
-    patientsCountPerDay: PatientsCountPerDayType,
-    byService: ServiceDataType[],
-  }
+  [hospitalXYZ: string]: HospitalData
+}
+
+export type HospitalData = {
+  lastPatientAdmittedOn: string,
+  patientsCountCovid: number,
+  patientsCountPerDay: PatientsCountPerDayType,
+  byService: ServiceDataType[],
 }
 
 export type ServiceDataType = {
