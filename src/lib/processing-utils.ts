@@ -44,7 +44,6 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
       patient["Date d'entrée du dossier"]=excelDateToJSDate(patient["Date d'entrée du dossier"])
     })
   }
-  console.log(orbis)
 
   // CREATE MAPS
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, glimsField => glimsField['ipp'])
@@ -120,7 +119,7 @@ function trimStringUpperCase(abc: string): string {
 //Note that this seems to work only for Excel spreadsheets made on PC.
 //Dates are stored as numbers in Excel and count the number of days since January 0, 1900
 //(1900 standard, for mac it is 1904, which means January 0, 1904 is the start date).
-function excelDateToJSDate(serial) {
+function excelDateToJSDate(serial: number): Object {
    var utc_days  = Math.floor(serial - 25569)
    var utc_value = utc_days * 86400
    var date_info = new Date(utc_value * 1000)
