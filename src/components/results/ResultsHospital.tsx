@@ -29,8 +29,6 @@ export default function HospitalResults({ activeHospital, hospitalName, hospital
     .concat(hospitalData.byService.map(s => headersAccessors.map(h => s[h]) ))
   const todayFormatted = moment().format('DD/MM/YYYY'); 
 
-  console.log(dataForCSVDownload)
-
   return (
     <HospitalContainer>
       <HospitalTitleContainer>
