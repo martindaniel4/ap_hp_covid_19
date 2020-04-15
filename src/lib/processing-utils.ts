@@ -164,7 +164,7 @@ function extendOrbis(
     const chambre = trimStringUpperCase(patient['Chambre'])
     if (chambre === ORBIS_NO_ROOM_CHAR) warnings['orbisWithNoRoom'].push(patient)
     const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
-    if (!siriusRowForRoom) warnings['siriusWithNoRoom'].push(patient)
+    if ((!siriusRowForRoom) && (chambre != ORBIS_NO_ROOM_CHAR)) warnings['siriusWithNoRoom'].push(patient)
 
     const hospitalCode = siriusRowForRoom && siriusRowForRoom['Hopital']
     const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : ''
