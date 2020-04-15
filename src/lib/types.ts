@@ -102,7 +102,7 @@ export type CapacityMapType = {
 
 export type PatientType = {
   "IPP": string,
-  "Date d'entrée du dossier": string,
+  //"Date d'entrée du dossier": string,
   "Date de dÈbut du mouvement": string,
   "Date de fin du mouvement": string,
   "Date de sortie du dossier": string,
@@ -128,7 +128,7 @@ export type OrbisFieldType = {
   "N∞ Dossier": string,
   "U.ResponsabilitÈ": string,
   "U.Soins": string,
-  "Date d'entrée du dossier": string,
+  //"Date d'entrée du dossier": string,
   "Date de sortie du dossier": string,
   "Date de dÈbut du mouvement": string,
   "Date de fin du mouvement": string,

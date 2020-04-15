@@ -38,6 +38,14 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   getWarningsFromGlims(glims, warnings)
   getWarningsFromPacs(pacs, warnings)
 
+  // REFORMAT ORBIS DATE IF IN EXCEL FORMAT
+  if (typeof(orbis.data[0]["Date d'entrée du dossier"]) === "number") {
+    orbis.data.forEach(patient => {
+      patient["Date d'entrée du dossier"]=excelDateToJSDate(patient["Date d'entrée du dossier"])
+    })
+  }
+  console.log(orbis)
+
   // CREATE MAPS
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, glimsField => glimsField['ipp'])
   const pacsByIPP: PacsByIppType = _.groupBy(pacs.data, pacsField => pacsField['ipp'])
@@ -109,6 +117,22 @@ function trimStringUpperCase(abc: string): string {
   return abc.toString().replace(/\s/g,'').toUpperCase()
 }
 
+//Note that this seems to work only for Excel spreadsheets made on PC.
+//Dates are stored as numbers in Excel and count the number of days since January 0, 1900
+//(1900 standard, for mac it is 1904, which means January 0, 1904 is the start date).
+function excelDateToJSDate(serial) {
+   var utc_days  = Math.floor(serial - 25569)
+   var utc_value = utc_days * 86400
+   var date_info = new Date(utc_value * 1000)
+   var fractional_day = serial - Math.floor(serial) + 0.0000001
+   var total_seconds = Math.floor(86400 * fractional_day)
+   var seconds = total_seconds % 60
+   total_seconds -= seconds
+   var hours = Math.floor(total_seconds / (60 * 60))
+   var minutes = Math.floor(total_seconds / 60) % 60
+   return new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds)
+}
+
 function getSiriusMapKey(siriusField: SiriusFieldType): string {
   return trimStringUpperCase(siriusField['Code Chambre'] + '-' + siriusField['Libelle Chambre'])
 }
@@ -120,7 +144,7 @@ function getCapacityMapKey(hopital: string, service_covid: string): string {
 function getLastAdmitedPatientDate(patients: PatientType[]): string {
   const dateKey = "Date d'entrée du dossier"
   const lastDate = _.max(patients, patient => moment(patient[dateKey], 'DD/MM/YYYY hh:mm').valueOf() )[dateKey]
-  return moment(lastDate, 'DD/MM/YYYY hh:mm').format('Do MMMM YYYY à HH:mm')
+  return moment(lastDate, 'DD/MM/YYYY hh:mm').format('LLL')
 }
 
 function extendOrbis(
