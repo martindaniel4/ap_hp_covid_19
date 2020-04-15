@@ -115,10 +115,8 @@ function extendOrbis(
   siriusByChambre: SiriusByChambreType,
   warnings: WarningsType,
 ): PatientType[] {
-  const areOrbisDatesNumbers = typeof(orbis.data[0]["Date d'entrée du dossier"]) === "number"
-
   return orbis.data.map(orbisRow => {
-    const entryDate = formatOrbisEntryDate(areOrbisDatesNumbers, orbisRow["Date d'entrée du dossier"])
+    const entryDate = formatOrbisEntryDate(orbisRow["Date d'entrée du dossier"])
     const findPatientInGlims = glimsByIPP[orbisRow['IPP']]
     const findPatientInPacs = pacsByIPP[orbisRow['IPP']]
 
@@ -178,8 +176,8 @@ function isPacsRadioFieldOne(field: number | string) {
 }
 
 function getPatientsCountPerDay(patients: PatientType[]): PatientsCountPerDayType {
-  const patientsCountPerDay = _.countBy(patients, patient => moment(patient.entryDate, 'DD/MM/YYYY').format('DD/MM/YYYY') )
-  const sortedDays = _.sortBy(Object.keys(patientsCountPerDay), date => moment(date, 'DD/MM/YYYY').format('X'))
+  const patientsCountPerDay = _.countBy(patients, patient => moment(patient.entryDate, 'DD/MM/YYYY hh:mm').format('DD/MM/YYYY') )
+  const sortedDays = _.sortBy(Object.keys(patientsCountPerDay), date => moment(date, 'DD/MM/YYYY').valueOf())
 
   return sortedDays.reduce((acc: PatientsCountPerDayType, date: string) => {
     acc.push({
