@@ -115,10 +115,8 @@ function extendOrbis(
   siriusByChambre: SiriusByChambreType,
   warnings: WarningsType,
 ): PatientType[] {
-  const areOrbisDatesNumbers = typeof(orbis.data[0]["Date d'entrée du dossier"]) === "number"
-
   return orbis.data.map(orbisRow => {
-    const entryDate = formatOrbisEntryDate(areOrbisDatesNumbers, orbisRow["Date d'entrée du dossier"])
+    const entryDate = formatOrbisEntryDate(orbisRow["Date d'entrée du dossier"])
     const findPatientInGlims = glimsByIPP[orbisRow['IPP']]
     const findPatientInPacs = pacsByIPP[orbisRow['IPP']]
 
