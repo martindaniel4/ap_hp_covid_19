@@ -157,7 +157,7 @@ function getCapacityMapKey(hopital: string, service_covid: string): string {
 }
 
 function getLastAdmitedPatientDate(patients: PatientType[]): string {
-  const lastDate = _.max(patients, patient => moment(patient.entryDate, 'DD/MM/YYYY hh:mm').valueOf() ).entryDate
+  const lastDate = _.max(patients, patient => patient.entryDate).entryDate
   return moment(lastDate, 'DD/MM/YYYY hh:mm').format('LLL')
 }
 
@@ -176,7 +176,7 @@ function isPacsRadioFieldOne(field: number | string) {
 }
 
 function getPatientsCountPerDay(patients: PatientType[]): PatientsCountPerDayType {
-  const patientsCountPerDay = _.countBy(patients, patient => moment(patient.entryDate, 'DD/MM/YYYY').format('DD/MM/YYYY') )
+  const patientsCountPerDay = _.countBy(patients, patient => patient.entryDate)
   const sortedDays = _.sortBy(Object.keys(patientsCountPerDay), date => moment(date, 'DD/MM/YYYY').format('X'))
 
   return sortedDays.reduce((acc: PatientsCountPerDayType, date: string) => {
