@@ -1,6 +1,7 @@
 import queryString from 'query-string'
+import { RouteProps } from "react-router"
 
-import { CSV_CONFIG } from '../lib/constants'
+import { CSV_CONFIG } from '../lib/files-config'
 import orbisFixture from './orbis_fixture'
 import glimsFixture from './glims_fixture'
 import pacsFixture from './pacs_fixture'
@@ -16,7 +17,7 @@ const FIXTURES_DATA = {
   sirius: siriusFixture,
 }
 
-export function buildInitialStateFromFixture(location: any): FilesDataType {
+export function buildInitialStateFromFixture(location: RouteProps['location']): FilesDataType {
   const queryStrings = queryString.parse(location.search)
   const useFixture = queryStrings['fixture'] === 'on'
 

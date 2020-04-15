@@ -1,0 +1,75 @@
+import { FilesDataType } from "./types"
+
+export const CSV_CONFIG: FilesDataType = {
+  orbis: {
+    id: 'orbis',
+    name: 'ORBIS',
+    description: 'Uploadez ici un export de la base ORBIS au format CSV ou XLSX.',
+    requiredFields: [
+      "IPP",
+      "U.Responsabilité",
+      "U.Soins",
+      "Date d'entrée du dossier",
+      "Chambre",
+      "Lit",
+    ],
+    data: [],
+    errors: [],
+    format: '',
+  },
+  glims: {
+    id: 'glims',
+    name: 'GLIMS',
+    description: 'Uploadez ici un export de la base GLIMS au format CSV ou XLSX.',
+    requiredFields: [
+      'ipp',
+      'is_pcr',
+    ],
+    data: [],
+    errors: [],
+    format: '',
+  },
+  pacs: {
+    id: 'pacs',
+    name: 'PACS',
+    description: 'Uploadez ici un export de la base PACS au format CSV ou XLSX.',
+    requiredFields: [
+      "ipp",
+      "radio",
+    ],
+    data: [],
+    errors: [],
+    format: '',
+  },
+  capacity: {
+    id: 'capacity',
+    name: 'Capacitaire',
+    description: 'Uploadez ici un mapping du capacitaire au format CSV ou XLSX.',
+    requiredFields: [
+      "hopital",
+      "service_covid",
+      "lits_ouverts",
+      "lits_ouverts_covid",
+      "Full COVID 1/0",
+    ],
+    data: [],
+    errors: [],
+    format: '',
+  },
+  sirius: {
+    id: 'sirius',
+    name: 'SIRIUS',
+    description: 'Uploadez ici un export de la base SIRIUS au format CSV ou XLSX.',
+    requiredFields: [
+      "Hopital",
+      "Localisation",
+      "Intitulé Site Crise COVID",
+      "Code Chambre",
+      "Libelle Chambre",
+      "Retenir ligne O/N",
+    ],
+    data: [],
+    errors: [],
+    format: '',
+  },
+}

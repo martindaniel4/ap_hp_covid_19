@@ -16,14 +16,17 @@ import {
   WarningsType,
   GlimsType,
   PacsType,
-} from './types'
+} from '../lib/types'
 import {
   HOSPITAL_CODES_MAP,
   ORBIS_NO_ROOM_CHAR,
   GLIMS_IS_PCR_POSITIVE_VALUE,
   PACS_RADIO_POSITIVE_VALUE,
   SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE,
-} from './constants'
+} from '../lib/constants'
+import {
+  formatOrbisEntryDate
+} from '../utils/date-utils'
 
 export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const { orbis, glims, pacs, sirius, capacity } = files
@@ -37,13 +40,6 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
 
   getWarningsFromGlims(glims, warnings)
   getWarningsFromPacs(pacs, warnings)
-
-  // REFORMAT ORBIS DATE IF IN EXCEL FORMAT
-  if (typeof(orbis.data[0]["Date d'entrée du dossier"]) === "number") {
-    orbis.data.forEach(patient => {
-      patient["Date d'entrée du dossier"]=excelDateToJSDate(patient["Date d'entrée du dossier"])
-    })
-  }
 
   // CREATE MAPS
   const glimsByIPP: GlimsByIppType = _.groupBy(glims.data, glimsField => glimsField['ipp'])
@@ -63,8 +59,8 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   const breakdownPerHospital: BreakdownPerHospitalType = {}
 
   Object.keys(patientsByHospital)
-    .forEach(hospital => {
-      const patientsForHospital = patientsByHospital[hospital]
+    .forEach(hospitalXYZ => {
+      const patientsForHospital = patientsByHospital[hospitalXYZ]
       const patientsByService = _.groupBy(patientsForHospital, p => p.siteCriseCovidFromSirius)
       const patientsCovidForHospital = patientsForHospital.filter(p => p.isCovid)
 
@@ -75,7 +71,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         const patientsInServicePCR = patientsInService.filter(p => p.isPCR)
         const patientsInServiceRadio = patientsInService.filter(p => p.isRadio)
 
-        const buildCapacityKey = getCapacityMapKey(hospital, serviceName)
+        const buildCapacityKey = getCapacityMapKey(hospitalXYZ, serviceName)
         const capacityTotal = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts']
         const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
         
@@ -91,7 +87,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         })
       })
 
-      breakdownPerHospital[hospital] = {
+      breakdownPerHospital[hospitalXYZ] = {
         lastPatientAdmittedOn: getLastAdmitedPatientDate(patientsCovidForHospital),
         patientsCountCovid: patientsCovidForHospital.length,
         patientsCountPerDay: getPatientsCountPerDay(patientsCovidForHospital),
@@ -112,24 +108,46 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
 // "PRIVATE" UTILS
 // =============================================
 
-function trimStringUpperCase(abc: string): string {
-  return abc.toString().replace(/\s/g,'').toUpperCase()
+function extendOrbis(
+  orbis: OrbisType,
+  glimsByIPP: GlimsByIppType,
+  pacsByIPP: PacsByIppType,
+  siriusByChambre: SiriusByChambreType,
+  warnings: WarningsType,
+): PatientType[] {
+  const areOrbisDatesNumbers = typeof(orbis.data[0]["Date d'entrée du dossier"]) === "number"
+
+  return orbis.data.map(orbisRow => {
+    const entryDate = formatOrbisEntryDate(areOrbisDatesNumbers, orbisRow["Date d'entrée du dossier"])
+    const findPatientInGlims = glimsByIPP[orbisRow['IPP']]
+    const findPatientInPacs = pacsByIPP[orbisRow['IPP']]
+
+    const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === GLIMS_IS_PCR_POSITIVE_VALUE
+    const isRadio = !!findPatientInPacs && isPacsRadioFieldOne(findPatientInPacs[0]['radio'])
+    const isCovid = isPCR || isRadio
+
+    const chambre = trimStringUpperCase(orbisRow['Chambre'])
+    if (chambre === ORBIS_NO_ROOM_CHAR) warnings['orbisWithNoRoom'].push(orbisRow)
+    const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
+    if ((!siriusRowForRoom) && (chambre != ORBIS_NO_ROOM_CHAR)) warnings['siriusWithNoRoom'].push(orbisRow)
+
+    const hospitalCodeFromSirius = siriusRowForRoom && siriusRowForRoom['Hopital']
+    const hospitalXYZ = hospitalCodeFromSirius ? HOSPITAL_CODES_MAP[hospitalCodeFromSirius] : ''
+    
+    return {
+      entryDate,
+      isCovid,
+      isPCR,
+      isRadio,
+      hospitalXYZ,
+      siteCriseCovidFromSirius: siriusRowForRoom && siriusRowForRoom['Intitulé Site Crise COVID'],
+      localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation CDG'],
+    }
+  })
 }
 
-//Note that this seems to work only for Excel spreadsheets made on PC.
-//Dates are stored as numbers in Excel and count the number of days since January 0, 1900
-//(1900 standard, for mac it is 1904, which means January 0, 1904 is the start date).
-function excelDateToJSDate(serial: number): Object {
-   var utc_days  = Math.floor(serial - 25569)
-   var utc_value = utc_days * 86400
-   var date_info = new Date(utc_value * 1000)
-   var fractional_day = serial - Math.floor(serial) + 0.0000001
-   var total_seconds = Math.floor(86400 * fractional_day)
-   var seconds = total_seconds % 60
-   total_seconds -= seconds
-   var hours = Math.floor(total_seconds / (60 * 60))
-   var minutes = Math.floor(total_seconds / 60) % 60
-   return new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds)
+function trimStringUpperCase(abc: string): string {
+  return abc.toString().replace(/\s/g,'').toUpperCase()
 }
 
 function getSiriusMapKey(siriusField: SiriusFieldType): string {
@@ -141,44 +159,8 @@ function getCapacityMapKey(hopital: string, service_covid: string): string {
 }
 
 function getLastAdmitedPatientDate(patients: PatientType[]): string {
-  const dateKey = "Date d'entrée du dossier"
-  const lastDate = _.max(patients, patient => moment(patient[dateKey], 'DD/MM/YYYY hh:mm').valueOf() )[dateKey]
+  const lastDate = _.max(patients, patient => moment(patient.entryDate, 'DD/MM/YYYY hh:mm').valueOf() ).entryDate
   return moment(lastDate, 'DD/MM/YYYY hh:mm').format('LLL')
-}
-
-function extendOrbis(
-  orbis: OrbisType,
-  glimsByIPP: GlimsByIppType,
-  pacsByIPP: PacsByIppType,
-  siriusByChambre: SiriusByChambreType,
-  warnings: WarningsType,
-) {
-  return orbis.data.map(patient => {
-    const findPatientInGlims = glimsByIPP[patient['IPP']]
-    const findPatientInPacs = pacsByIPP[patient['IPP']]
-
-    const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === GLIMS_IS_PCR_POSITIVE_VALUE
-    const isRadio = !!findPatientInPacs && isPacsRadioFieldOne(findPatientInPacs[0]['radio'])
-    const isCovid = isPCR || isRadio
-
-    const chambre = trimStringUpperCase(patient['Chambre'])
-    if (chambre === ORBIS_NO_ROOM_CHAR) warnings['orbisWithNoRoom'].push(patient)
-    const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
-    if ((!siriusRowForRoom) && (chambre != ORBIS_NO_ROOM_CHAR)) warnings['siriusWithNoRoom'].push(patient)
-
-    const hospitalCode = siriusRowForRoom && siriusRowForRoom['Hopital']
-    const hospitalXYZ = hospitalCode ? HOSPITAL_CODES_MAP[hospitalCode] : ''
-    
-    return {
-      ...patient,
-      isCovid,
-      isPCR,
-      isRadio,
-      hospitalXYZ,
-      siteCriseCovidFromSirius: siriusRowForRoom && siriusRowForRoom['Intitulé Site Crise COVID'],
-      localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation CDG'],
-    }
-  })
 }
 
 function getWarningsFromGlims(glims: GlimsType, warnings: WarningsType): void {
@@ -196,7 +178,7 @@ function isPacsRadioFieldOne(field: number | string) {
 }
 
 function getPatientsCountPerDay(patients: PatientType[]): PatientsCountPerDayType {
-  const patientsCountPerDay = _.countBy(patients, patient => moment(patient["Date d'entrée du dossier"], 'DD/MM/YYYY').format('DD/MM/YYYY') )
+  const patientsCountPerDay = _.countBy(patients, patient => moment(patient.entryDate, 'DD/MM/YYYY').format('DD/MM/YYYY') )
   const sortedDays = _.sortBy(Object.keys(patientsCountPerDay), date => moment(date, 'DD/MM/YYYY').format('X'))
 
   return sortedDays.reduce((acc: PatientsCountPerDayType, date: string) => {

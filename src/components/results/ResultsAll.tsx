@@ -16,14 +16,14 @@ import { HOSPITAL_MAP } from '../../lib/constants'
 import { ProcessingResultsType } from '../../lib/types'
 
 export default function Results({
-  activeHospital,
-  setActiveHospital,
-  sortedHospitals,
+  activeHospitalCode,
+  setActiveHospitalCode,
+  sortedHospitalsXYZ,
   filesData,
 }: {
-  activeHospital: any,
-  setActiveHospital: Function,
-  sortedHospitals: string[],
+  activeHospitalCode: string,
+  setActiveHospitalCode: Function,
+  sortedHospitalsXYZ: string[],
   filesData: ProcessingResultsType,
 }) {
   const {
@@ -45,11 +45,11 @@ export default function Results({
 
           <HospitalList>
             {
-              sortedHospitals.map(hospital => {
+              sortedHospitalsXYZ.map(hospitalXYZ => {
                 return (
-                  <HospitalRow key={hospital} onClick={() => setActiveHospital(hospital)}>
-                    <HospitalLabel active={activeHospital === hospital}>{HOSPITAL_MAP[hospital]}</HospitalLabel>
-                    <div>{`${breakdownPerHospital[hospital].patientsCountCovid} patients`}</div>
+                  <HospitalRow key={hospitalXYZ} onClick={() => setActiveHospitalCode(hospitalXYZ)}>
+                    <HospitalLabel active={activeHospitalCode === hospitalXYZ}>{HOSPITAL_MAP[hospitalXYZ]}</HospitalLabel>
+                    <div>{`${breakdownPerHospital[hospitalXYZ].patientsCountCovid} patients`}</div>
                   </HospitalRow>
                 )
               })

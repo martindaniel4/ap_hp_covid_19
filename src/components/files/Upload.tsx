@@ -7,7 +7,7 @@ import { Button } from '@material-ui/core'
 import { Publish } from '@material-ui/icons'
 
 import { FileType, PapaParseResult } from '../../lib/types'
-import { checkFileForErrors } from '../../lib/file-utils'
+import { checkFileForErrors } from '../../utils/file-utils'
 import FileStatus from './FileStatus'
 
 export default function Upload({

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Files from './files/Files'
 import Results from './results/Results'
 import { FilesDataType, FileUploadPayloadType, ErrorType } from '../lib/types'
-import { processFiles } from '../lib/processing-utils'
+import { processFiles } from '../utils/processing-utils'
 import { buildInitialStateFromFixture } from '../fixtures/fixtures-utils'
 
 export default function APHP() {

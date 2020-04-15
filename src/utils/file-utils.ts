@@ -1,7 +1,8 @@
 import _ from 'underscore'
 
-import { FilesIdType } from './types'
-import { CSV_CONFIG, HOSPITAL_CODES_MAP } from './constants'
+import { FilesIdType } from '../lib/types'
+import { HOSPITAL_CODES_MAP } from '../lib/constants'
+import { CSV_CONFIG } from '../lib/files-config'
 
 export function checkFileForErrors({
   id,

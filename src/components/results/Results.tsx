@@ -13,23 +13,23 @@ function Results({
 }) {
   const { breakdownPerHospital } = filesData
 
-  const sortedHospitals: string[] = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].patientsCountCovid)
-  const [activeHospital, setActiveHospital] = useState<string>(sortedHospitals[0])
+  const sortedHospitalsXYZ: string[] = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].patientsCountCovid)
+  const [activeHospitalCode, setActiveHospitalCode] = useState<string>(sortedHospitalsXYZ[0])
 
   if (!filesData) return null
 
   return (
     <ResultsContainer>
       <ResultsAll
-        activeHospital={activeHospital}
-        setActiveHospital={setActiveHospital}
-        sortedHospitals={sortedHospitals}
+        activeHospitalCode={activeHospitalCode}
+        setActiveHospitalCode={setActiveHospitalCode}
+        sortedHospitalsXYZ={sortedHospitalsXYZ}
         filesData={filesData} />
 
       <ResultsHospital
-        activeHospital={activeHospital}
-        hospitalName={activeHospital}
-        hospitalData={breakdownPerHospital[activeHospital]}
+        activeHospitalCode={activeHospitalCode}
+        hospitalName={activeHospitalCode}
+        hospitalData={breakdownPerHospital[activeHospitalCode]}
       />
 
     </ResultsContainer>
