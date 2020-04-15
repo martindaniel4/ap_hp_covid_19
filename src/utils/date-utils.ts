@@ -3,7 +3,7 @@ import moment from 'moment'
 
 export function formatOrbisEntryDate(date: number | string): string {
   const isDateANumber = typeof date === "number"
-  return isDateANumber ? excelDateToJSDate(date) : moment(date).format('DD/MM/YYYY hh:mm')
+  return isDateANumber ? excelDateToJSDate(date) : moment(date, 'DD/MM/YYYY hh:mm').format('DD/MM/YYYY hh:mm')
 }
 
 // Note that this seems to work only for Excel spreadsheets made on PC.
