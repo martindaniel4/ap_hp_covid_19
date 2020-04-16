@@ -22,16 +22,15 @@ orbis['hospital_name'] =\
 # format date
 orbis['Date d\'entrée du dossier'] =\
     orbis['Date d\'entrée du dossier'].dt.strftime('%d/%m%/%Y')
-
-# rename column ipp
-orbis.rename(columns={'IPP': 'ipp'}, inplace=True)
+orbis['Né(e) le'] =\
+    orbis['Né(e) le'].dt.strftime('%d/%m%/%Y')
 
 # only filter hospital ABC
 orbis = orbis.query("hospital_name == 'ABC'")
 
 # select relevant columns
-orbis_cols = ['ipp', 'U.Responsabilité', 'U.Soins', 
-              'Date d\'entrée du dossier', 'Chambre', 'Lit']
+orbis_cols = ['IPP', 'U.Responsabilité', 'U.Soins', 
+              'Date d\'entrée du dossier', 'Chambre', 'Lit', 'Né(e) le']
 orbis = orbis[orbis_cols]
 
 print('new orbis shape {}'.format(orbis.shape))
@@ -40,6 +39,9 @@ print('new orbis shape {}'.format(orbis.shape))
 # characters in the dates
 with open('orbis_fixture.json', 'w', encoding='utf-8') as f:
      f.write(orbis.to_json(orient='records', force_ascii=False))
+
+# rename column ipp for future merge
+orbis.rename(columns={'IPP': 'ipp'}, inplace=True)
 
 # Glims - only export pcr from ABC hospital
 

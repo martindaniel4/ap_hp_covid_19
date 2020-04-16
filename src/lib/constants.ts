@@ -23,3 +23,8 @@ export const HOSPITAL_MAP = {
   'APR': 'AMBROISE PARE',
   'RPC': 'RAYMOND POINCARE',
 }
+
+export const OBSTETRIC_SERVICES = [
+  '028081 - ABC OBSTETRIQUE (UF)', 
+  '010550 - BCT OBSTETRIQUE (UF)'
+]

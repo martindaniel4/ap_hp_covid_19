@@ -23,6 +23,7 @@ import {
   GLIMS_IS_PCR_POSITIVE_VALUE,
   PACS_RADIO_POSITIVE_VALUE,
   SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE,
+  OBSTETRIC_SERVICES,
 } from '../lib/constants'
 import {
   formatOrbisEntryDate
@@ -33,6 +34,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
 
   let warnings = {
     orbisWithNoRoom: [],
+    orbisIsNewBorn: [],
     siriusWithNoRoom: [],
     glimsRowsWithPCRNotValid: [],
     pacsRowsWithRadioNotValid: [],
@@ -51,7 +53,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
   )
   
   // PATIENTS LIST
-  const allPatients: PatientType[] = extendOrbis(orbis, glimsByIPP, pacsByIPP, siriusByChambre, warnings)
+  const allPatients: PatientType[] = extendOrbis(orbis, glimsByIPP, pacsByIPP, siriusByChambre, warnings).filter(p => p.isNewBorn === false)
   const allPatientsCovid: PatientType[] = allPatients.filter(p => p.isCovid)
   
   // BREAKDOWN PER HOSPITAL
@@ -117,13 +119,17 @@ function extendOrbis(
 ): PatientType[] {
   return orbis.data.map(orbisRow => {
     const entryDate = formatOrbisEntryDate(orbisRow["Date d'entrée du dossier"])
+    const birthDate = formatOrbisEntryDate(orbisRow["Né(e) le"])
     const findPatientInGlims = glimsByIPP[orbisRow['IPP']]
     const findPatientInPacs = pacsByIPP[orbisRow['IPP']]
 
     const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === GLIMS_IS_PCR_POSITIVE_VALUE
     const isRadio = !!findPatientInPacs && isPacsRadioFieldOne(findPatientInPacs[0]['radio'])
     const isCovid = isPCR || isRadio
-
+    const isObstetricService = _.contains(OBSTETRIC_SERVICES, orbisRow['U.Responsabilité'])
+    const isNewBorn = (moment(birthDate, "DD/MM/YYYY").year() === moment().year()) && isObstetricService
+    if (isNewBorn) warnings['orbisIsNewBorn'].push(orbisRow)
+    
     const chambre = trimStringUpperCase(orbisRow['Chambre'])
     if (chambre === ORBIS_NO_ROOM_CHAR) warnings['orbisWithNoRoom'].push(orbisRow)
     const siriusRowForRoom = siriusByChambre[chambre] && siriusByChambre[chambre][0]
@@ -137,6 +143,7 @@ function extendOrbis(
       isCovid,
       isPCR,
       isRadio,
+      isNewBorn,
       hospitalXYZ,
       siteCriseCovidFromSirius: siriusRowForRoom && siriusRowForRoom['Intitulé Site Crise COVID'],
       localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation CDG'],

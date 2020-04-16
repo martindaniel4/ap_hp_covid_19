@@ -24,6 +24,7 @@ export default function Warnings({
         <WarningContentWrapper>
           {Object.keys(warnings).map(warningKey => {
             if (warningKey === 'orbisWithNoRoom') return <OrbisWithNoRoomWarning key={warningKey} warningObject={warnings[warningKey]} />
+            if (warningKey === 'orbisIsNewBorn') return <OrbisIsNewBornWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'siriusWithNoRoom') return <SiriusWithNoRoomWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'glimsRowsWithPCRNotValid') return <GlimsNotValidWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'pacsRowsWithRadioNotValid') return <PacsNotValidWarning key={warningKey} warningObject={warnings[warningKey]} />
@@ -39,6 +40,13 @@ function OrbisWithNoRoomWarning({ warningObject }: { warningObject: object[] }) 
   if (!warningObject.length) return null
   return (
     <BulletPoint>{`${warningObject.length} patients sans chambre dans Orbis`}</BulletPoint>
+  )
+}
+
+function OrbisIsNewBornWarning({ warningObject }: { warningObject: object[] }) {
+  if (!warningObject.length) return null
+  return (
+    <BulletPoint>{`${warningObject.length} nouveaux nés ont été décomptés des chambres occupées`}</BulletPoint>
   )
 }
 
