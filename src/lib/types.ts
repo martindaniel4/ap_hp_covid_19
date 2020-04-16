@@ -79,6 +79,7 @@ export type ErrorType = {
 
 export type WarningsType = {
   orbisWithNoRoom: object[],
+  orbisIsNewBorn: object[],
   siriusWithNoRoom: object[],
   glimsRowsWithPCRNotValid: object[],
   pacsRowsWithRadioNotValid: object[],
@@ -105,6 +106,7 @@ export type PatientType = {
   isCovid: boolean,
   isPCR: boolean,
   isRadio: boolean,
+  isNewBorn: boolean,
   hospitalXYZ: string,
   localisationCDGFromSirius: string,
   siteCriseCovidFromSirius: string,
