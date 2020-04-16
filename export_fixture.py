@@ -22,6 +22,8 @@ orbis['hospital_name'] =\
 # format date
 orbis['Date d\'entrée du dossier'] =\
     orbis['Date d\'entrée du dossier'].dt.strftime('%d/%m%/%Y')
+orbis['Né(e) le'] =\
+    orbis['Né(e) le'].dt.strftime('%d/%m%/%Y')
 
 # only filter hospital ABC
 orbis = orbis.query("hospital_name == 'ABC'")
