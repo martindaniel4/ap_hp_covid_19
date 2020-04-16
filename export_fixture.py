@@ -31,7 +31,7 @@ orbis = orbis.query("hospital_name == 'ABC'")
 
 # select relevant columns
 orbis_cols = ['ipp', 'U.Responsabilité', 'U.Soins', 
-              'Date d\'entrée du dossier', 'Chambre', 'Lit']
+              'Date d\'entrée du dossier', 'Chambre', 'Lit', 'Né(e) le']
 orbis = orbis[orbis_cols]
 
 print('new orbis shape {}'.format(orbis.shape))
