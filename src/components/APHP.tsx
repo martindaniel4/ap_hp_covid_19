@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import Files from './files/Files'
 import Results from './results/Results'
+import Section from './ui/Section'
 import { FilesDataType, FileUploadPayloadType, ErrorType } from '../lib/types'
 import { processFiles } from '../utils/processing-utils'
 import { buildInitialStateFromFixture } from '../fixtures/fixtures-utils'
@@ -60,33 +61,29 @@ export default function APHP() {
 
   return (
     <>
-      <HeaderSection>
-        <HeaderContent>
-          <Header>{'Groupe Hospitalier, Paris Saclay'}</Header>
-          <Subheader>{'Suivi des patients Covid-19 et de capacité'}</Subheader>
-        </HeaderContent>
-      </HeaderSection>
-      <AppContainer>
+      <NavSection>
+        <NavContent>
+          <Nav>{'Groupe Hospitalier, Paris Saclay'}</Nav>
+          <SubNav>{'Suivi des patients Covid-19 et de capacité'}</SubNav>
+        </NavContent>
+      </NavSection>
+
+      <Section outerBgColor={'#ffffff'}>
         <Files files={files} onUploadError={onUploadError} onUploadSuccess={onUploadSuccess} />
-        {data && <Results filesData={data} />}
-      </AppContainer>
+      </Section>
+      
+      {data && <Results filesData={data} />}
     </>
   )
 }
 
-const AppContainer = styled.div`
-  width: 1200px;
-  margin: 0 auto 100px;
-`;
-
-const HeaderSection = styled.div`
+const NavSection = styled.div`
   text-align: center;
-  margin-bottom: 40px;
   background: #0063af;
   color: white;
 `
 
-const HeaderContent = styled.div`
+const NavContent = styled.div`
   width: 1200px;
   height: 70px;
   margin: 0 auto;
@@ -96,19 +93,11 @@ const HeaderContent = styled.div`
   align-items: center;
 `
 
-const Header = styled.div`
+const Nav = styled.div`
   font-size: 30px;
   font-weight: bold;
 `
 
-const Subheader = styled.div`
+const SubNav = styled.div`
   font-size: 20px;
-`
-
-const Section = styled.div`
-  font-size: 32px;
-  margin-bottom: 40px;
-  font-weight: 800;
-  padding: 12px 0;
-  border-bottom: solid 4px #020202;
 `
