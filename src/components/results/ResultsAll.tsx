@@ -1,28 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
-import {
-  XYPlot,
-  XAxis,
-  YAxis,
-  ChartLabel,
-  VerticalBarSeries,
-  HorizontalGridLines,
-  VerticalGridLines
-} from 'react-vis'
+import moment from 'moment'
+import { XYPlot, XAxis, YAxis, ChartLabel, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
+import { Button } from '@material-ui/core'
+import { GetApp } from '@material-ui/icons'
+import { CSVLink } from 'react-csv'
 
 import { BigNumber } from '../ui/BigNumber'
 import Warnings from './Warnings'
 import { HOSPITAL_MAP } from '../../lib/constants'
 import { ProcessingResultsType } from '../../lib/types'
+import { columnsForHospitalTable } from './table-config'
+import { getCSVDataForDownload } from '../../utils/csv-utils'
 
 export default function Results({
-  activeHospitalCode,
-  setActiveHospitalCode,
+  activeHospitalXYZ,
+  setActiveHospitalXYZ,
   sortedHospitalsXYZ,
   filesData,
 }: {
-  activeHospitalCode: string,
-  setActiveHospitalCode: Function,
+  activeHospitalXYZ: string,
+  setActiveHospitalXYZ: Function,
   sortedHospitalsXYZ: string[],
   filesData: ProcessingResultsType,
 }) {
@@ -34,21 +32,37 @@ export default function Results({
     warnings,
   } = filesData
 
+  let tableDataForAllHospitals = Object.keys(breakdownPerHospital).reduce((acc: any, hospitalXYZ: string) => {
+    return acc.concat(breakdownPerHospital[hospitalXYZ].byService)
+  }, [])
+  console.log(tableDataForAllHospitals)
+  const dataForCSVDownload = getCSVDataForDownload(columnsForHospitalTable, tableDataForAllHospitals)
+  const todayFormatted = moment().format('DD/MM/YYYY')
+
   return (
-    <Summary>
+    <>
       <Warnings warnings={warnings} />
 
-      <FirstRow>
+      <Row>
         <div>
           <BigNumber number={patientsCountCovid} label={'patients Covid'} />
-          <div>{`Dernier admis: ${lastPatientAdmittedOn}`}</div>
+          <LastAdmitted>{`Dernier admis: ${lastPatientAdmittedOn}`}</LastAdmitted>
+
+          <Button variant="contained" color="primary" startIcon={<GetApp />}>
+            <CSVLinkStyled
+              key={'all-hospitals'}
+              filename={`aphp-saclay-${todayFormatted}.csv`}
+              data={dataForCSVDownload}>
+              {`Telecharger les données de tous les hopitaux`}
+            </CSVLinkStyled>
+          </Button>
 
           <HospitalList>
             {
               sortedHospitalsXYZ.map(hospitalXYZ => {
                 return (
-                  <HospitalRow key={hospitalXYZ} onClick={() => setActiveHospitalCode(hospitalXYZ)}>
-                    <HospitalLabel active={activeHospitalCode === hospitalXYZ}>{HOSPITAL_MAP[hospitalXYZ]}</HospitalLabel>
+                  <HospitalRow key={hospitalXYZ} onClick={() => setActiveHospitalXYZ(hospitalXYZ)}>
+                    <HospitalLabel active={activeHospitalXYZ === hospitalXYZ}>{HOSPITAL_MAP[hospitalXYZ]}</HospitalLabel>
                     <div>{`${breakdownPerHospital[hospitalXYZ].patientsCountCovid} patients`}</div>
                   </HospitalRow>
                 )
@@ -81,18 +95,12 @@ export default function Results({
             <VerticalBarSeries color="#0063af" data={patientsCountPerDay} />
           </XYPlot>
         </div>
-      </FirstRow>
-    </Summary>
+      </Row>
+    </>
   )
 }
 
-const Summary = styled.div`
-  margin-bottom: 50px;
-  padding-bottom: 50px;
-  border-bottom: solid 1px #ccc;
-`
-
-const FirstRow = styled.div`
+const Row = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -100,6 +108,10 @@ const FirstRow = styled.div`
 
 const HospitalList = styled.div`
   margin: 40px 0 0 0;
+`
+
+const LastAdmitted = styled.div`
+  margin-bottom: 20px;
 `
 
 const HospitalRow = styled.div`
@@ -121,4 +133,10 @@ const HospitalLabel = styled.div`
   ${({ active }: { active: boolean }) => active && `
     font-weight: bold;
   `}
+`
+
+const CSVLinkStyled = styled(CSVLink)`
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
 `

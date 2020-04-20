@@ -1,4 +1,8 @@
-export const capacityTableColumns = [
+export const columnsForHospitalTable = [
+  {
+    Header: 'Site',
+    accessor: 'hospitalXYZ',
+  },
   {
     Header: 'Site crise Covid-19',
     accessor: 'serviceName',

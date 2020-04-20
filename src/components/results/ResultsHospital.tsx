@@ -1,28 +1,32 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import { CSVLink } from 'react-csv'
 import { XYPlot,  XAxis, YAxis, ChartLabel, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
+import { Button } from '@material-ui/core'
+import { GetApp } from '@material-ui/icons'
 
 import { StyledTable } from '../ui/Table'
 import { BigNumber } from '../ui/BigNumber'
 import { HOSPITAL_MAP } from '../../lib/constants'
-import { capacityTableColumns } from './table-config'
+import { columnsForHospitalTable } from './table-config'
 import { HospitalData } from '../../lib/types'
+import { getCSVDataForDownload } from '../../utils/csv-utils'
 
 export default function HospitalResults({
-  activeHospitalCode,
+  activeHospitalXYZ,
   hospitalName,
+  hospitalXYZ,
   hospitalData
 }: {
-  activeHospitalCode: string,
+  activeHospitalXYZ: string,
   hospitalName: string,
+  hospitalXYZ: string,
   hospitalData: HospitalData,
 }) {
   const columns = useMemo(
-    () => capacityTableColumns,
+    () => columnsForHospitalTable,
     []
   )
 
@@ -31,74 +35,61 @@ export default function HospitalResults({
     [hospitalData]
   )
 
-  if (!activeHospitalCode) return null
+  if (!activeHospitalXYZ) return null
 
-  const headersLabels = capacityTableColumns.map(c => c['Header'])
-  const headersAccessors = capacityTableColumns.map(c => c['accessor'])
-  const dataForCSVDownload = [headersLabels]
-    .concat(hospitalData.byService.map(s => headersAccessors.map(h => s[h]) ))
-  const todayFormatted = moment().format('DD/MM/YYYY'); 
+  const dataForCSVDownload = getCSVDataForDownload(columnsForHospitalTable, hospitalData.byService)
+  const todayFormatted = moment().format('DD/MM/YYYY')
 
   return (
     <HospitalContainer>
-      <HospitalTitleContainer>
-        <HospitalTitle>{HOSPITAL_MAP[hospitalName]}</HospitalTitle>
-      </HospitalTitleContainer>
       
       <SpacedRow>
         <div>
+          <HospitalTitleContainer>
+            <HospitalTitle>{HOSPITAL_MAP[hospitalName]}</HospitalTitle>
+          </HospitalTitleContainer>
           <BigNumber number={hospitalData.patientsCountCovid} label={'patients Covid'} />
-          <div>{`Dernier admis: ${hospitalData.lastPatientAdmittedOn}`}</div>
-        </div>
+          <LastAdmitted>{`Dernier admis: ${hospitalData.lastPatientAdmittedOn}`}</LastAdmitted>
 
-        <div>
-          <XYPlot height={200} width={500} xType="ordinal">
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            <XAxis tickLabelAngle={-45} tickTotal={5} />
-            <YAxis />
-            <ChartLabel 
-              className="alt-x-label"
-              includeMargin={false}
-              xPercent={0.025}
-              yPercent={1.01}
-              />
-            <ChartLabel 
-              text="Nombre de patients Covid+"
-              className="alt-y-label"
-              includeMargin={false}
-              style={{
-                transform: 'rotate(-90)',
-                textAnchor: 'end'
-              }}
-              />
-            <VerticalBarSeries color="#0063af" data={hospitalData.patientsCountPerDay} />
-          </XYPlot>
-        </div>
-      </SpacedRow>
-
-      <Tabs>
-        <TabList>
-          <Tab>{'Table de patients par unité de soins'}</Tab>
-        </TabList>
-
-        <TabPanel>
-          <EndRow>
+          <Button variant="contained" color="primary" startIcon={<GetApp />}>
             <CSVLinkStyled
               key={hospitalName}
               filename={`aphp-${hospitalName}-${todayFormatted}.csv`}
               data={dataForCSVDownload}>
-              {'Telecharger un .csv des données'}
+              {`Telecharger les données de ${hospitalXYZ}`}
             </CSVLinkStyled>
-          </EndRow>
+          </Button>
+        </div>
 
-          <StyledTable
-            data={data}
-            columns={columns}
-            defaultSortColumn={'patientsCount'}
-          />
-        </TabPanel>
-      </Tabs>
+        <XYPlot height={200} width={500} xType="ordinal">
+          <HorizontalGridLines />
+          <VerticalGridLines />
+          <XAxis tickLabelAngle={-45} tickTotal={5} />
+          <YAxis />
+          <ChartLabel 
+            className="alt-x-label"
+            includeMargin={false}
+            xPercent={0.025}
+            yPercent={1.01}
+            />
+          <ChartLabel 
+            text="Nombre de patients Covid+"
+            className="alt-y-label"
+            includeMargin={false}
+            style={{
+              transform: 'rotate(-90)',
+              textAnchor: 'end'
+            }}
+            />
+          <VerticalBarSeries color="#0063af" data={hospitalData.patientsCountPerDay} />
+        </XYPlot>
+      </SpacedRow>
+
+      <StyledTable
+        data={data}
+        columns={columns}
+        defaultSortColumn={'capacityTotal'}
+      />
       
     </HospitalContainer>
   )
@@ -107,6 +98,10 @@ export default function HospitalResults({
 const HospitalTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 20px;
+`
+
+const LastAdmitted = styled.div`
   margin-bottom: 20px;
 `
 
@@ -120,24 +115,16 @@ const SpacedRow = styled(Row)`
   justify-content: space-between;
 `
 
-const EndRow = styled(Row)`
-  justify-content: end;
-`
-
 const HospitalTitle = styled.div`
   font-size: 34px;
   font-weight: 800;
   color: #0063af;
 `
 
-const TableName = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-`
-
 const CSVLinkStyled = styled(CSVLink)`
-  color: #0063af;
+  color: white;
   font-weight: bold;
+  text-decoration: none;
 `
 
 const HospitalContainer = styled.div``

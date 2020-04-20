@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import _ from 'underscore'
 
+import Section from '../ui/Section'
 import ResultsHospital from './ResultsHospital'
 import ResultsAll from './ResultsAll'
 import { ProcessingResultsType } from '../../lib/types'
@@ -14,23 +15,28 @@ function Results({
   const { breakdownPerHospital } = filesData
 
   const sortedHospitalsXYZ: string[] = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].patientsCountCovid)
-  const [activeHospitalCode, setActiveHospitalCode] = useState<string>(sortedHospitalsXYZ[0])
+  const [activeHospitalXYZ, setActiveHospitalXYZ] = useState<string>(sortedHospitalsXYZ[0])
 
   if (!filesData) return null
 
   return (
     <ResultsContainer>
-      <ResultsAll
-        activeHospitalCode={activeHospitalCode}
-        setActiveHospitalCode={setActiveHospitalCode}
-        sortedHospitalsXYZ={sortedHospitalsXYZ}
-        filesData={filesData} />
+      <Section outerBgColor={'#ececec'}>
+        <ResultsAll
+          activeHospitalXYZ={activeHospitalXYZ}
+          setActiveHospitalXYZ={setActiveHospitalXYZ}
+          sortedHospitalsXYZ={sortedHospitalsXYZ}
+          filesData={filesData} />
+      </Section>
 
-      <ResultsHospital
-        activeHospitalCode={activeHospitalCode}
-        hospitalName={activeHospitalCode}
-        hospitalData={breakdownPerHospital[activeHospitalCode]}
-      />
+      <Section outerBgColor={'#f9f9f9'}>
+        <ResultsHospital
+          activeHospitalXYZ={activeHospitalXYZ}
+          hospitalName={activeHospitalXYZ}
+          hospitalXYZ={activeHospitalXYZ}
+          hospitalData={breakdownPerHospital[activeHospitalXYZ]}
+        />
+      </Section>
 
     </ResultsContainer>
   )

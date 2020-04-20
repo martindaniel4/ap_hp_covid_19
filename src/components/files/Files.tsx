@@ -15,7 +15,7 @@ export default function Files({
   onUploadError: Function
 }) {
   return (
-    <UploadContainer>
+    <>
       {
         Object.keys(files).map(csvId =>
           <div key={csvId}>
@@ -28,10 +28,6 @@ export default function Files({
           </div>
         )
       }
-    </UploadContainer>
+    </>
   )
 }
-
-const UploadContainer = styled.div`
-  margin-bottom: 65px;
-`

@@ -78,6 +78,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
         
         serviceData.push({
+          hospitalXYZ,
           serviceName,
           patientsCount: patientsInService.length,
           patientsCountCovid: patientsInServiceCovid.length,
