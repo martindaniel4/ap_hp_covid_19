@@ -157,6 +157,43 @@ git push heroku master
 
 <div id="data-exploration">
 
+## Generate fixture files
+ 
+In order to test the app in development without uploading each time XLS files, you can pass parameter the following parameter: 
+
+```
+http://localhost:3000/?fixture=on
+```
+
+That parameter will call json fixture files defined in `/src/fixture`. The logic to generate those files is defined in `export_fixture.py`. Steps are:
+
+- Filter data only for 2 hospitals 
+- Remove unecessary columns to limit file sizes
+- Encrypt personal data like IPP 
+
+To generate those files use the following steps: 
+
+- Make sure you have the python libraries installed with: 
+
+```
+pip install -r requirements-data.txt
+```
+
+- Then run from a terminal
+
+```
+python export_fixture.py
+```
+
+- The command above will generate 3 json files. Since Python escapes `/` you need to replace `\/` by `/`. You can achieve this by running from a terminal: 
+
+```
+cat orbis_fixture.json | sed 's/\\\//\//g' >> orbis_fixture.json
+cat sirius_fixture.json | sed 's/\\\//\//g' >> sirius_fixture.json
+```
+
+- You now have 3 json files. You can copy paste the content of those in the `src/fixtures` folder. 
+
 ## Data Exploration 
 
 To quickly investigate data discrepancies, we have put together a Jupyter notebook at `ap_hp_exploration.ipynb`. The file can also be rendered on [Github](https://github.com/martindaniel4/ap_hp_covid_19/blob/master/ap_hp_exploration.ipynb).

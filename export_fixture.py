@@ -26,7 +26,10 @@ orbis['Né(e) le'] =\
     orbis['Né(e) le'].dt.strftime('%d/%m%/%Y')
 
 # only filter hospital ABC
-orbis = orbis.query("hospital_name == 'ABC'")
+orbis = orbis.query("hospital_name in ('ABC', 'PBR')")
+
+# hash IPP column to avoid PII info being committed
+orbis['IPP'] = orbis['IPP'].apply(hash).astype(str)
 
 # select relevant columns
 orbis_cols = ['IPP', 'U.Responsabilité', 'U.Soins', 
@@ -49,6 +52,9 @@ glims = pd.read_excel('data/valide/glims.xlsx',
                       converters={'ipp': str, 'Code Chambre': str})
 
 print('initial glims shape {}'.format(glims.shape))
+
+# hash IPP column to avoid PII info being committed
+glims['ipp'] = glims['ipp'].apply(hash).astype(str)
 
 glims_cols = ['ipp', 'is_pcr']
 glims = pd.merge(glims, orbis)[glims_cols]
@@ -83,7 +89,7 @@ sirius = pd.merge(orbis,
 
 # Export only relevant columns
 
-sirius_cols = ['Hopital', 'Intitulé Site Crise COVID', 
+sirius_cols = ['Hopital', 'Localisation', 'Intitulé Site Crise COVID', 
                'Code Chambre', 'Libelle Chambre', 'Retenir ligne O/N']
 
 sirius = sirius[sirius_cols]
