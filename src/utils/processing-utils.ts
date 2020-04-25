@@ -26,7 +26,7 @@ import {
   OBSTETRIC_SERVICES,
 } from '../lib/constants'
 import {
-  formatOrbisEntryDate
+  formatOrbisDate
 } from '../utils/date-utils'
 
 export const processFiles = (files: FilesDataType): ProcessingResultsType => {
@@ -119,8 +119,8 @@ function extendOrbis(
   warnings: WarningsType,
 ): PatientType[] {
   return orbis.data.map(orbisRow => {
-    const entryDate = formatOrbisEntryDate(orbisRow["Date d'entrée du dossier"])
-    const birthDate = formatOrbisEntryDate(orbisRow["Né(e) le"])
+    const entryDate = formatOrbisDate(orbisRow["Date d'entrée du dossier"])
+    const birthDate = formatOrbisDate(orbisRow["Né(e) le"])
     const findPatientInGlims = glimsByIPP[orbisRow['IPP']]
     const findPatientInPacs = pacsByIPP[orbisRow['IPP']]
 
@@ -128,7 +128,7 @@ function extendOrbis(
     const isRadio = !!findPatientInPacs && isPacsRadioFieldOne(findPatientInPacs[0]['radio'])
     const isCovid = isPCR || isRadio
     const isObstetricService = _.contains(OBSTETRIC_SERVICES, orbisRow['U.Responsabilité'])
-    const isNewBorn = (moment(birthDate, "DD/MM/YYYY").year() === moment().year()) && isObstetricService
+    const isNewBorn = isObstetricService && (moment(birthDate, "DD/MM/YYYY").year() === moment().year())
     if (isNewBorn) warnings['orbisIsNewBorn'].push(orbisRow)
     
     const chambre = trimStringUpperCase(orbisRow['Chambre'])

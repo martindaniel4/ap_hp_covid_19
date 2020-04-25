@@ -1,7 +1,7 @@
 import { getJsDateFromExcel } from "excel-date-to-js"
 import moment from 'moment'
 
-export function formatOrbisEntryDate(date: number | string): string {
+export function formatOrbisDate(date: number | string): string {
   const isDateANumber = typeof date === "number"
   return isDateANumber ? excelDateToJSDate(date) : moment(date, 'DD/MM/YYYY hh:mm').format('DD/MM/YYYY hh:mm')
 }
