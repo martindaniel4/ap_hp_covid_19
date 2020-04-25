@@ -89,7 +89,7 @@ sirius = pd.merge(orbis,
 
 # Export only relevant columns
 
-sirius_cols = ['Hopital', 'Intitulé Site Crise COVID', 
+sirius_cols = ['Hopital', 'Localisation', 'Intitulé Site Crise COVID', 
                'Code Chambre', 'Libelle Chambre', 'Retenir ligne O/N']
 
 sirius = sirius[sirius_cols]
