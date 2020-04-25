@@ -8,6 +8,10 @@ export const columnsForHospitalTable = [
     accessor: 'serviceName',
   },
   {
+    Header: 'Localisation',
+    accessor: 'localisation',
+  },
+  {
     Header: 'Nombre de lits ouverts',
     accessor: 'capacityTotal',
   },
