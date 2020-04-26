@@ -65,14 +65,14 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
       const patientsForHospital = patientsByHospital[hospitalXYZ]
       const patientsByService = _.groupBy(patientsForHospital, p => p.siteCriseCovidFromSirius)
       const patientsCovidForHospital = patientsForHospital.filter(p => p.isCovid)
-      
+
       const serviceData: ServiceDataType[] = []
       Object.keys(patientsByService).forEach(serviceName => {
         const patientsInService = patientsByService[serviceName]
         const patientsInServiceCovid = patientsInService.filter(p => p.isCovid)
         const patientsInServicePCR = patientsInService.filter(p => p.isPCR)
         const patientsInServiceRadio = patientsInService.filter(p => p.isRadio)
-        
+
         const buildCapacityKey = getCapacityMapKey(hospitalXYZ, serviceName)
         const capacityTotal = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts']
         const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
@@ -81,7 +81,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         serviceData.push({
           hospitalXYZ,
           serviceName,
-          localisation: localisation,
+          localisation,
           patientsCount: patientsInService.length,
           patientsCountCovid: patientsInServiceCovid.length,
           patientsCountPCR: patientsInServicePCR.length,
@@ -140,7 +140,7 @@ function extendOrbis(
 
     const hospitalCodeFromSirius = siriusRowForRoom && siriusRowForRoom['Hopital']
     const hospitalXYZ = hospitalCodeFromSirius ? HOSPITAL_CODES_MAP[hospitalCodeFromSirius] : ''
-        
+
     return {
       entryDate,
       isCovid,
