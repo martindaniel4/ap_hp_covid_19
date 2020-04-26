@@ -76,10 +76,12 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         const buildCapacityKey = getCapacityMapKey(hospitalXYZ, serviceName)
         const capacityTotal = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts']
         const capacityCovid = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts_covid']
-        
+        const localisation = patientsInService[0]['localisationCDGFromSirius']
+      
         serviceData.push({
           hospitalXYZ,
           serviceName,
+          localisation,
           patientsCount: patientsInService.length,
           patientsCountCovid: patientsInServiceCovid.length,
           patientsCountPCR: patientsInServicePCR.length,
@@ -138,7 +140,7 @@ function extendOrbis(
 
     const hospitalCodeFromSirius = siriusRowForRoom && siriusRowForRoom['Hopital']
     const hospitalXYZ = hospitalCodeFromSirius ? HOSPITAL_CODES_MAP[hospitalCodeFromSirius] : ''
-    
+
     return {
       entryDate,
       isCovid,
@@ -147,7 +149,7 @@ function extendOrbis(
       isNewBorn,
       hospitalXYZ,
       siteCriseCovidFromSirius: siriusRowForRoom && siriusRowForRoom['Intitulé Site Crise COVID'],
-      localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation CDG'],
+      localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation'],
     }
   })
 }

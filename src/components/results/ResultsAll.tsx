@@ -35,7 +35,6 @@ export default function Results({
   let tableDataForAllHospitals = Object.keys(breakdownPerHospital).reduce((acc: any, hospitalXYZ: string) => {
     return acc.concat(breakdownPerHospital[hospitalXYZ].byService)
   }, [])
-  console.log(tableDataForAllHospitals)
   const dataForCSVDownload = getCSVDataForDownload(columnsForHospitalTable, tableDataForAllHospitals)
   const todayFormatted = moment().format('DD/MM/YYYY')
 

@@ -185,6 +185,7 @@ export type HospitalData = {
 export type ServiceDataType = {
   hospitalXYZ: string,
   serviceName: string,
+  localisation: string,
   patientsCount: number,
   patientsCountCovid: number,
   patientsCountPCR: number,
