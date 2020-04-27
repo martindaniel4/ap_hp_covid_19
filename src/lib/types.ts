@@ -159,7 +159,8 @@ export type SiriusFieldType = {
 }
 
 export type PatientsCountPerDayType = {
-  x: string,
+  x0: Date,
+  x: Date,
   y: number
 }[]
 
