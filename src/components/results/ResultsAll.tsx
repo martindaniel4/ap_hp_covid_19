@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
-import { XYPlot, XAxis, YAxis, ChartLabel, VerticalBarSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
+import { XYPlot, XAxis, YAxis, ChartLabel, VerticalRectSeries, HorizontalGridLines, VerticalGridLines} from 'react-vis'
 import { Button } from '@material-ui/core'
 import { GetApp } from '@material-ui/icons'
 import { CSVLink } from 'react-csv'
@@ -37,6 +37,8 @@ export default function Results({
   }, [])
   const dataForCSVDownload = getCSVDataForDownload(columnsForHospitalTable, tableDataForAllHospitals)
   const todayFormatted = moment().format('DD/MM/YYYY')
+  const xDomain = [moment('2020-01-01', 'YYYY-MM-DD').toDate(), 
+                   moment().toDate()]
 
   return (
     <>
@@ -71,27 +73,26 @@ export default function Results({
         </div>
 
         <div>
-          <XYPlot height={300} width={500} xType="ordinal">
+          <XYPlot 
+            height={300} 
+            width={500} 
+            xType="time"
+            xDomain={xDomain}>
             <HorizontalGridLines />
-            <VerticalGridLines />
-            <XAxis tickLabelAngle={-45} tickTotal={5} />
-            <YAxis />
-            <ChartLabel 
-              className="alt-x-label"
-              includeMargin={false}
-              xPercent={0.025}
-              yPercent={1.01}
-              />
+            <XAxis tickLabelAngle={-45}/>
+            <YAxis position='start'/>
             <ChartLabel 
               text="Nombre de patients Covid+"
               className="alt-y-label"
               includeMargin={false}
+              xPercent={-0.001}
+              yPercent={0.06}
               style={{
-                transform: 'rotate(-90)',
-                textAnchor: 'end'
+                textAnchor: 'end',
+                transform: 'rotate(-90)'
               }}
               />
-            <VerticalBarSeries color="#0063af" data={patientsCountPerDay} />
+            <VerticalRectSeries color="#0063af" data={patientsCountPerDay} />
           </XYPlot>
         </div>
       </Row>
