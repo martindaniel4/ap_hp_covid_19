@@ -191,7 +191,8 @@ function getPatientsCountPerDay(patients: PatientType[]): PatientsCountPerDayTyp
 
   return sortedDays.reduce((acc: PatientsCountPerDayType, date: string) => {
     acc.push({
-      x: date,
+      x0: moment(date, 'DD/MM/YYYY').toDate(),
+      x: moment(date, 'DD/MM/YYYY').add(12,'hours').toDate(),
       y: patientsCountPerDay[date]
     })
     return acc
