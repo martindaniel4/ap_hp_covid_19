@@ -38,6 +38,8 @@ export default function Warnings({
 
 function OrbisWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   if (!warningObject.length) return null
+  const warning_data = _.countBy(warningObject, d => d['U.Responsabilité'])
+  console.log(warning_data);
   return (
     <BulletPoint>{`${warningObject.length} patients sans chambre dans Orbis`}</BulletPoint>
   )
