@@ -38,8 +38,27 @@ export default function Warnings({
 
 function OrbisWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   if (!warningObject.length) return null
+  
+  const noRoomsUnitsList = _.chain(warningObject)
+    .countBy(d => d['U.Responsabilité'].split(' - ')[1])
+    .pairs()
+    .value()
+                      
   return (
-    <BulletPoint>{`${warningObject.length} patients sans chambre dans Orbis`}</BulletPoint>
+    <BulletPoint>
+      {`${warningObject.length} patients n'ont pas de chambre dans Orbis au sein des unités suivantes: `}
+      <ServiceNames>
+        {noRoomsUnitsList.map(service => {
+          return (
+            <ServiceName>
+              {service[0]}
+              {' - '}
+              <span style={{ fontWeight: 600 }}>{`${service[1]} patient(s)`}</span>
+            </ServiceName>
+          )
+        })}
+      </ServiceNames>
+    </BulletPoint>
   )
 }
 
@@ -53,7 +72,7 @@ function OrbisIsNewBornWarning({ warningObject }: { warningObject: object[] }) {
 function SiriusWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   if (!warningObject.length) return null
   return (
-    <BulletPoint>{`${warningObject.length} patients qui ont une chambre dans Orbis mais pas de correspondance dans Sirius`}</BulletPoint>
+    <BulletPoint>{`Les chambres suivantes n'ont pas de correspondance dans Sirius: ${_.pluck(warningObject, 'Chambre')}. ${warningObject.length} patients sont couchés dans ces chambres.`}</BulletPoint>
   )
 }
 
@@ -105,4 +124,17 @@ const WarningContentWrapper = styled.div`
 
 const BulletPoint = styled.li`
   margin-botton: 4px;
+`
+
+const ServiceNames = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`
+
+const ServiceName = styled.div`
+  background-color: white;
+  padding: 2px 4px;
+  margin: 0 5px 5px 0;
+  font-style: italic;
 `
