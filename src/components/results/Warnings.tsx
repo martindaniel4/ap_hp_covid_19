@@ -38,10 +38,15 @@ export default function Warnings({
 
 function OrbisWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   if (!warningObject.length) return null
-  const warning_data = _.countBy(warningObject, d => d['U.Responsabilité'])
-  console.log(warning_data);
+  
+  const noRoomsUnits = _.chain(warningObject)
+                        .countBy(d => d['U.Responsabilité'].split(' - ')[1])
+                        .pairs()
+                        .value()
+                        .join(' - ')
+                      
   return (
-    <BulletPoint>{`${warningObject.length} patients sans chambre dans Orbis`}</BulletPoint>
+    <BulletPoint>{`${warningObject.length} patients n'ont pas de chambre dans Orbis au sein des unités suivantes: ${noRoomsUnits}`}</BulletPoint>
   )
 }
 
@@ -55,7 +60,7 @@ function OrbisIsNewBornWarning({ warningObject }: { warningObject: object[] }) {
 function SiriusWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   if (!warningObject.length) return null
   return (
-    <BulletPoint>{`${warningObject.length} patients qui ont une chambre dans Orbis mais pas de correspondance dans Sirius`}</BulletPoint>
+    <BulletPoint>{`Les chambres suivantes n'ont pas de correspondance dans Sirius: ${_.pluck(warningObject, 'Chambre')}. ${warningObject.length} patients sont couchés dans ces chambres.`}</BulletPoint>
   )
 }
 
