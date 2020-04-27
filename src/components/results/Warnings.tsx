@@ -39,14 +39,26 @@ export default function Warnings({
 function OrbisWithNoRoomWarning({ warningObject }: { warningObject: object[] }) {
   if (!warningObject.length) return null
   
-  const noRoomsUnits = _.chain(warningObject)
-                        .countBy(d => d['U.Responsabilité'].split(' - ')[1])
-                        .pairs()
-                        .value()
-                        .join(' - ')
+  const noRoomsUnitsList = _.chain(warningObject)
+    .countBy(d => d['U.Responsabilité'].split(' - ')[1])
+    .pairs()
+    .value()
                       
   return (
-    <BulletPoint>{`${warningObject.length} patients n'ont pas de chambre dans Orbis au sein des unités suivantes: ${noRoomsUnits}`}</BulletPoint>
+    <BulletPoint>
+      {`${warningObject.length} patients n'ont pas de chambre dans Orbis au sein des unités suivantes: `}
+      <ServiceNames>
+        {noRoomsUnitsList.map(service => {
+          return (
+            <ServiceName>
+              {service[0]}
+              {' - '}
+              <span style={{ fontWeight: 600 }}>{`${service[1]} patient(s)`}</span>
+            </ServiceName>
+          )
+        })}
+      </ServiceNames>
+    </BulletPoint>
   )
 }
 
@@ -112,4 +124,17 @@ const WarningContentWrapper = styled.div`
 
 const BulletPoint = styled.li`
   margin-botton: 4px;
+`
+
+const ServiceNames = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`
+
+const ServiceName = styled.div`
+  background-color: white;
+  padding: 2px 4px;
+  margin: 0 5px 5px 0;
+  font-style: italic;
 `
