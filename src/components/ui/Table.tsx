@@ -65,8 +65,6 @@ function Table({ columns, data, defaultSortColumn, mapOfServicesDedicatedToCovid
               {row
                 .cells
                 .map(cell => {
-                  const isServiceDedicatedToCovid = mapOfServicesDedicatedToCovid[cell.value]
-
                   return <td
                     {...cell.getCellProps()}
                     style={{backgroundColor: rowBelongsToACovidDedicatedService ? '#ffffbe': 'transparent'}}>
