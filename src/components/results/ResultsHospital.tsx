@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import moment from 'moment'
 import 'react-tabs/style/react-tabs.css'
 import { CSVLink } from 'react-csv'
-import { XYPlot,  XAxis, YAxis, ChartLabel, VerticalRectSeries, HorizontalGridLines, VerticalGridLines } from 'react-vis'
+import { XYPlot,  XAxis, YAxis, ChartLabel, VerticalRectSeries, HorizontalGridLines } from 'react-vis'
 import { Button } from '@material-ui/core'
 import { GetApp } from '@material-ui/icons'
 
