@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
-import { XYPlot, XAxis, YAxis, ChartLabel, VerticalRectSeries, HorizontalGridLines, VerticalGridLines} from 'react-vis'
+import { XYPlot, XAxis, YAxis, ChartLabel, VerticalRectSeries, HorizontalGridLines} from 'react-vis'
 import { Button } from '@material-ui/core'
 import { GetApp } from '@material-ui/icons'
 import { CSVLink } from 'react-csv'

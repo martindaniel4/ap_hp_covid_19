@@ -1,6 +1,14 @@
-export function getCSVDataForDownload(capacityTableColumns, hospitalDataByService) {
+import _ from 'underscore'
+
+export function getCSVDataForDownload(
+  capacityTableColumns,
+  hospitalDataByService
+) {
   const headersLabels = capacityTableColumns.map(c => c['Header'])
   const headersAccessors = capacityTableColumns.map(c => c['accessor'])
-  
-  return [headersLabels].concat(hospitalDataByService.map(s => headersAccessors.map(h => s[h]) ))
+
+  // we're sorting by hospital first and then by service name
+  const sortedData = _.sortBy(hospitalDataByService, row => `${row['hospitalXYZ']} - ${row['serviceName']}`)
+
+  return [headersLabels].concat(sortedData.map(s => headersAccessors.map(h => s[h]) ))
 }
