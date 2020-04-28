@@ -16,6 +16,9 @@ import {
   WarningsType,
   GlimsType,
   PacsType,
+  CapacityType,
+  ServicesDedicatedToCovidMapType,
+  CapacityFieldType,
 } from '../lib/types'
 import {
   HOSPITAL_CODES_MAP,
@@ -106,6 +109,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
     patientsCountPerDay: getPatientsCountPerDay(allPatientsCovid),
     breakdownPerHospital,
     warnings,
+    mapOfServicesDedicatedToCovid: buildServicesDedicatedToCovidMap(capacity),
   }
 }
 
@@ -197,4 +201,11 @@ function getPatientsCountPerDay(patients: PatientType[]): PatientsCountPerDayTyp
     })
     return acc
   }, [])
+}
+
+function buildServicesDedicatedToCovidMap(capacity: CapacityType): ServicesDedicatedToCovidMapType {
+  return capacity.data.reduce((acc: ServicesDedicatedToCovidMapType, row: CapacityFieldType) => {
+    acc[row['service_covid']] = row['dedie_covid'] === '1'
+    return acc
+  }, {})
 }

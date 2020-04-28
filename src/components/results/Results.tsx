@@ -12,7 +12,7 @@ function Results({
 }: {
   filesData: ProcessingResultsType
 }) {
-  const { breakdownPerHospital } = filesData
+  const { breakdownPerHospital, mapOfServicesDedicatedToCovid } = filesData
 
   const sortedHospitalsXYZ: string[] = _.sortBy(Object.keys(breakdownPerHospital), h => -breakdownPerHospital[h].patientsCountCovid)
   const [activeHospitalXYZ, setActiveHospitalXYZ] = useState<string>(sortedHospitalsXYZ[0])
@@ -35,6 +35,7 @@ function Results({
           hospitalName={activeHospitalXYZ}
           hospitalXYZ={activeHospitalXYZ}
           hospitalData={breakdownPerHospital[activeHospitalXYZ]}
+          mapOfServicesDedicatedToCovid={mapOfServicesDedicatedToCovid}
         />
       </Section>
 
