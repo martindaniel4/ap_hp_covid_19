@@ -170,6 +170,7 @@ export type ProcessingResultsType = {
   patientsCountPerDay: PatientsCountPerDayType,
   breakdownPerHospital: BreakdownPerHospitalType,
   warnings: WarningsType,
+  mapOfServicesDedicatedToCovid: ServicesDedicatedToCovidMapType,
 }
 
 export type BreakdownPerHospitalType = {
@@ -195,3 +196,7 @@ export type ServiceDataType = {
   capacityCovid: string,
   openBeds: number,
 }
+
+export type ServicesDedicatedToCovidMapType = {
+  [serviceName: string]: boolean
+} | {}

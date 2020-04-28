@@ -11,19 +11,21 @@ import { StyledTable } from '../ui/Table'
 import { BigNumber } from '../ui/BigNumber'
 import { HOSPITAL_MAP } from '../../lib/constants'
 import { columnsForHospitalTable } from './table-config'
-import { HospitalData } from '../../lib/types'
+import { HospitalData, ServicesDedicatedToCovidMapType } from '../../lib/types'
 import { getCSVDataForDownload } from '../../utils/csv-utils'
 
 export default function HospitalResults({
   activeHospitalXYZ,
   hospitalName,
   hospitalXYZ,
-  hospitalData
+  hospitalData,
+  mapOfServicesDedicatedToCovid,
 }: {
   activeHospitalXYZ: string,
   hospitalName: string,
   hospitalXYZ: string,
   hospitalData: HospitalData,
+  mapOfServicesDedicatedToCovid: ServicesDedicatedToCovidMapType,
 }) {
   const columns = useMemo(
     () => columnsForHospitalTable,
@@ -86,10 +88,16 @@ export default function HospitalResults({
         </XYPlot>
       </SpacedRow>
 
+      
+      <NoticeForCovidDedicated>
+        {'Les rangées sur fond jaune indiquent les services dédiés au Covid'}
+      </NoticeForCovidDedicated>
+
       <StyledTable
         data={data}
         columns={columns}
         defaultSortColumn={'capacityTotal'}
+        mapOfServicesDedicatedToCovid={mapOfServicesDedicatedToCovid}
       />
       
     </HospitalContainer>
@@ -129,3 +137,10 @@ const CSVLinkStyled = styled(CSVLink)`
 `
 
 const HospitalContainer = styled.div``
+
+const NoticeForCovidDedicated = styled.div`
+  display: inline-flex;
+  background-color: #ffffbe;
+  padding: 2px 4px;
+  margin-bottom: 20px;
+`
