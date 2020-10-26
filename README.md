@@ -21,7 +21,7 @@ See app online at - https://ap-hp-paris-saclay.herokuapp.com/
 
 ## Input
 
-The app takes 5 distinct files as input `orbis`, `glims`, `pacs`,  `capacity` and `sirius`. 
+The app takes 6 distinct files as input `orbis`, `glims`, `pacs`,  `capacity`, `sirius` and `sivic`. 
 
 Each of those files are exported from one of the information system of AP-HP. Files types are specificed below. You can also find under the `data` folder an up to date sample of each file. 
 
@@ -34,6 +34,7 @@ Glims|xlsx|-|Finance|-
 Pacs|xlsx|-|Radio|-
 Sirius|xlsx|-|Accounting
 Capacitaire|xlsx|-|Finance
+Sivic|xlsx|-|Qualite
 
 *Input files description*
 
@@ -98,6 +99,15 @@ Libelle Chambre|STRING|The label of the room. This label, combined with Code Cha
 Retenir ligne O/N|STRING|"OUI" if the room should be included in the tablem, "NON" otherwise.
 
 Unused so far: `type chambre, commentaires, Code Site, Libelle Site, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Batiment, Libelle Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Secteur Batiment, Libelle Secteur Batiment, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Code Etage, Libelle Etage, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification, Date de création, Date de modification, Date d'effet creation, Date de fin de validité, Date d'effet modification`
+
+- [`Sivic`](#sivic): Cross-check highlighting discrepancies between Sivic database and Glims/Pacs.
+
+Column|Type|Description
+---|---|---
+Cas de figure|STRING|Type of discrepancy between Sivic and Glims/Pacs. Expected useful values are "Absent CDGPrésent QLT" and "Présent CDGAbsent QLT".
+IPP|INT|Patient id.
+Commentaires normalisés|STRING|Validation of the discrepancy by Qualite team. Expected values are "RAS", "AJOUT" or "RETRAIT".
+commentaires libre|STRING|Free text field for any additional comment by Qualite team.
 
 <div id="logic">
 
