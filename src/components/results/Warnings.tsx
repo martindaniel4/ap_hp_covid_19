@@ -9,7 +9,7 @@ export default function Warnings({
 }: {
   warnings: WarningsType
 }) {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [isExpanded, setIsExpanded] = useState<boolean>(true)
 
   const warningsCount = _.values(warnings).filter(w => w.length > 0).length
   if (!warningsCount) return null
@@ -28,6 +28,7 @@ export default function Warnings({
             if (warningKey === 'siriusWithNoRoom') return <SiriusWithNoRoomWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'glimsRowsWithPCRNotValid') return <GlimsNotValidWarning key={warningKey} warningObject={warnings[warningKey]} />
             if (warningKey === 'pacsRowsWithRadioNotValid') return <PacsNotValidWarning key={warningKey} warningObject={warnings[warningKey]} />
+            if (warningKey === 'isSivicRetrait') return <SivicRetraitWarning key={warningKey} warningObject={warnings[warningKey]} />
             return null
           })}
         </WarningContentWrapper>
@@ -50,7 +51,7 @@ function OrbisWithNoRoomWarning({ warningObject }: { warningObject: object[] }) 
       <ServiceNames>
         {noRoomsUnitsList.map(service => {
           return (
-            <ServiceName>
+            <ServiceName key={service[0]}>
               {service[0]}
               {' - '}
               <span style={{ fontWeight: 600 }}>{`${service[1]} patient(s)`}</span>
@@ -90,6 +91,24 @@ function PacsNotValidWarning({ warningObject }: { warningObject: object[] }) {
   )
 }
 
+function SivicRetraitWarning({ warningObject }: { warningObject: object[] }) {
+  if (!warningObject.length) return null
+  return (
+    <BulletPoint>
+      {`${warningObject.length} ont été exclus des rapports Glims et Pacs suite à vérification par l'équipe qualité`}
+      <ServiceNames>
+        {warningObject.map(row => {
+          return (
+            <ServiceName key={row[0]}>
+              {row["IPP"]}
+            </ServiceName>
+          )
+        })}
+      </ServiceNames>
+    </BulletPoint>
+  )
+}
+
 const Row = styled.div`
   display: flex;
   flex-direction: row;
@@ -123,13 +142,14 @@ const WarningContentWrapper = styled.div`
 `
 
 const BulletPoint = styled.li`
-  margin-botton: 4px;
+  margin-bottom: 6px;
 `
 
 const ServiceNames = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding: 8px 0 0 20px;
 `
 
 const ServiceName = styled.div`

@@ -7,11 +7,13 @@ import glimsFixture from './glims_fixture'
 import pacsFixture from './pacs_fixture'
 import capacityFixture from './capacity_fixture'
 import siriusFixture from './sirius_fixture'
+import sivicFixture from './sivic_fixture'
 import { FilesDataType, FilesIdType } from '../lib/types'
 
 const FIXTURES_DATA = {
   orbis: orbisFixture,
   glims: glimsFixture,
+  sivic: sivicFixture,
   pacs: pacsFixture,
   capacity: capacityFixture,
   sirius: siriusFixture,

@@ -99,3 +99,12 @@ print('new sirius shape {}'.format(sirius.shape))
 # export to json
 with open('sirius_fixture.json', 'w', encoding='utf-8') as f:
      f.write(sirius.to_json(orient='records', force_ascii=False))
+
+sivic = pd.read_excel('data/valide/sivic.xlsx',
+                       converters={'ipp': str, 'commentaires': str})
+
+print('initial sirius shape {}'.format(sivic.shape))
+
+# export to json
+with open('sivic_fixture.json', 'w', encoding='utf-8') as f:
+     f.write(sivic.to_json(orient='records', force_ascii=False))

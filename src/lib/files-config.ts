@@ -29,6 +29,18 @@ export const CSV_CONFIG: FilesDataType = {
     errors: [],
     format: '',
   },
+  sivic: {
+    id: 'sivic',
+    name: 'SIVIC',
+    description: 'Uploadez ici un export de la base SIVIC au format CSV ou XLSX.',
+    requiredFields: [
+      'ipp',
+      'commentaires',
+    ],
+    data: [],
+    errors: [],
+    format: '',
+  },
   pacs: {
     id: 'pacs',
     name: 'PACS',

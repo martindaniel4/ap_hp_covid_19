@@ -21,6 +21,7 @@ export type FilesDataType = {
   pacs: PacsType,
   capacity: CapacityType,
   sirius: SiriusType,
+  sivic: SivicType,
 }
 
 export type OrbisType = {
@@ -73,6 +74,16 @@ export type SiriusType = {
   format: string,
 }
 
+export type SivicType = {
+  id: 'sivic',
+  name: string,
+  description: string,
+  errors: ErrorType[],
+  requiredFields: string[],
+  data: SivicFieldType[],
+  format: string,
+}
+
 export type ErrorType = {
   message: string
 }
@@ -83,6 +94,7 @@ export type WarningsType = {
   siriusWithNoRoom: object[],
   glimsRowsWithPCRNotValid: object[],
   pacsRowsWithRadioNotValid: object[],
+  isSivicRetrait: object[],
 }
 
 export type GlimsByIppType = {
@@ -101,12 +113,18 @@ export type CapacityMapType = {
   [chambre: string]: CapacityFieldType[],
 }
 
+export type SivicMapType = {
+  [ipp: string]: SIVIC_COMMENTS
+}
+
 export type PatientType = {
   entryDate: string,
   isCovid: boolean,
   isPCR: boolean,
   isRadio: boolean,
   isNewBorn: boolean,
+  isSivicRetrait: boolean,
+  isSivicAjout: boolean,
   hospitalXYZ: string,
   localisationCDGFromSirius: string,
   siteCriseCovidFromSirius: string,
@@ -158,6 +176,17 @@ export type SiriusFieldType = {
   "Retenir ligne O/N": string,
 }
 
+export enum SIVIC_COMMENTS {
+  "RETRAIT" = "RETRAIT",
+  "AJOUT" = "AJOUT",
+  "RAS" = "RAS"
+}
+
+export type SivicFieldType = {
+  "ipp": string
+  "commentaires": SIVIC_COMMENTS
+}
+
 export type PatientsCountPerDayType = {
   x0: Date,
   x: Date,
@@ -192,6 +221,7 @@ export type ServiceDataType = {
   patientsCountCovid: number,
   patientsCountPCR: number,
   patientsCountRadio: number,
+  patientsCountSivicAjout: number,
   capacityTotal: string,
   capacityCovid: string,
   openBeds: number,

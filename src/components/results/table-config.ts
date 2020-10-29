@@ -32,6 +32,10 @@ export const columnsForHospitalTable = [
     accessor: 'patientsCountPCR',
   },
   {
+    Header: 'Patients Covid-19+ ajout Sivic',
+    accessor: 'patientsCountSivicAjout',
+  },
+  {
     Header: 'Patients Covid-19+ radiologie',
     accessor: 'patientsCountRadio',
   },
