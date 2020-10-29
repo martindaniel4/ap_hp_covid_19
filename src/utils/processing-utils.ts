@@ -11,6 +11,7 @@ import {
   PatientsCountPerDayType,
   CapacityMapType,
   SiriusFieldType,
+  SivicMapType,
   BreakdownPerHospitalType,
   ServiceDataType,
   WarningsType,
@@ -19,6 +20,7 @@ import {
   CapacityType,
   ServicesDedicatedToCovidMapType,
   CapacityFieldType,
+  SIVIC_COMMENTS,
 } from '../lib/types'
 import {
   HOSPITAL_CODES_MAP,
@@ -33,7 +35,7 @@ import {
 } from '../utils/date-utils'
 
 export const processFiles = (files: FilesDataType): ProcessingResultsType => {
-  const { orbis, glims, pacs, sirius, capacity } = files
+  const { orbis, glims, pacs, sirius, capacity, sivic } = files
 
   let warnings = {
     orbisWithNoRoom: [],
@@ -41,6 +43,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
     siriusWithNoRoom: [],
     glimsRowsWithPCRNotValid: [],
     pacsRowsWithRadioNotValid: [],
+    isSivicRetrait: [],
   }
 
   getWarningsFromGlims(glims, warnings)
@@ -54,10 +57,23 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
     sirius.data.filter(row => row['Retenir ligne O/N'] === SIRIUS_RETENIR_LIGNE_POSITIVE_VALUE),
     siriusField => getSiriusMapKey(siriusField)
   )
+  const sivicMap: SivicMapType = sivic.data.reduce(
+    (acc, el) => {
+      acc[el.ipp] = el.commentaires;
+      return acc;
+    },
+    {}
+  );
+
+  console.log('sivicMap', sivicMap);
   
   // PATIENTS LIST
-  const allPatients: PatientType[] = extendOrbis(orbis, glimsByIPP, pacsByIPP, siriusByChambre, warnings).filter(p => p.isNewBorn === false)
+  const totalPatients: PatientType[] = extendOrbis({orbis, glimsByIPP, pacsByIPP, siriusByChambre, warnings, sivicMap})
+  const allPatients = totalPatients.filter(p => !p.isNewBorn && !p.isSivicRetrait);
   const allPatientsCovid: PatientType[] = allPatients.filter(p => p.isCovid)
+
+  //console.log('totalPatients', totalPatients)
+  console.log('allPatients', allPatients)
   
   // BREAKDOWN PER HOSPITAL
   const patientsByHospital = _.groupBy(allPatients, p => p.hospitalXYZ)
@@ -75,6 +91,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
         const patientsInServiceCovid = patientsInService.filter(p => p.isCovid)
         const patientsInServicePCR = patientsInService.filter(p => p.isPCR)
         const patientsInServiceRadio = patientsInService.filter(p => p.isRadio)
+        const patientsFromSivicAjout = patientsInService.filter(p => p.isSivicAjout)
 
         const buildCapacityKey = getCapacityMapKey(hospitalXYZ, serviceName)
         const capacityTotal = capacityMap[buildCapacityKey] && capacityMap[buildCapacityKey][0]['lits_ouverts']
@@ -89,6 +106,7 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
           patientsCountCovid: patientsInServiceCovid.length,
           patientsCountPCR: patientsInServicePCR.length,
           patientsCountRadio: patientsInServiceRadio.length,
+          patientsCountSivicAjout: patientsFromSivicAjout.length,
           capacityTotal,
           capacityCovid,
           openBeds: capacityTotal - patientsInService.length,
@@ -117,22 +135,37 @@ export const processFiles = (files: FilesDataType): ProcessingResultsType => {
 // "PRIVATE" UTILS
 // =============================================
 
-function extendOrbis(
+function extendOrbis({
+  orbis,
+  glimsByIPP,
+  pacsByIPP,
+  siriusByChambre,
+  warnings,
+  sivicMap,
+}: {
   orbis: OrbisType,
   glimsByIPP: GlimsByIppType,
   pacsByIPP: PacsByIppType,
   siriusByChambre: SiriusByChambreType,
   warnings: WarningsType,
-): PatientType[] {
+  sivicMap: SivicMapType,
+}): PatientType[] {
   return orbis.data.map(orbisRow => {
     const entryDate = formatOrbisDate(orbisRow["Date d'entrée du dossier"])
     const birthDate = formatOrbisDate(orbisRow["Né(e) le"])
     const findPatientInGlims = glimsByIPP[orbisRow['IPP']]
     const findPatientInPacs = pacsByIPP[orbisRow['IPP']]
 
+    // Sivic stuff
+    const isSivicRetrait = sivicMap[orbisRow['IPP']] === SIVIC_COMMENTS.RETRAIT;
+    const isSivicAjout = sivicMap[orbisRow['IPP']] === SIVIC_COMMENTS.AJOUT;
+    if (isSivicRetrait) warnings['isSivicRetrait'].push(orbisRow)
+
+    if (isSivicAjout) { console.log(orbisRow['IPP']) }
+
     const isPCR = !!findPatientInGlims && findPatientInGlims[0]['is_pcr'] === GLIMS_IS_PCR_POSITIVE_VALUE
     const isRadio = !!findPatientInPacs && isPacsRadioFieldOne(findPatientInPacs[0]['radio'])
-    const isCovid = isPCR || isRadio
+    const isCovid = isPCR || isRadio || isSivicAjout
     const isObstetricService = _.contains(OBSTETRIC_SERVICES, orbisRow['U.Responsabilité'])
     const isNewBorn = isObstetricService && (moment(birthDate, "DD/MM/YYYY").year() === moment().year())
     if (isNewBorn) warnings['orbisIsNewBorn'].push(orbisRow)
@@ -151,6 +184,8 @@ function extendOrbis(
       isPCR,
       isRadio,
       isNewBorn,
+      isSivicRetrait,
+      isSivicAjout,
       hospitalXYZ,
       siteCriseCovidFromSirius: siriusRowForRoom && siriusRowForRoom['Intitulé Site Crise COVID'],
       localisationCDGFromSirius: siriusRowForRoom && siriusRowForRoom['Localisation'],

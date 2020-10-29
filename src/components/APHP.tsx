@@ -12,8 +12,9 @@ import { buildInitialStateFromFixture } from '../fixtures/fixtures-utils'
 export default function APHP() {
   const initialState = buildInitialStateFromFixture(useLocation())
   const [files, setFiles] = useState<FilesDataType>(initialState)
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
 
+  // run only on component mount
   useEffect(() => {
     areAllFilesValid(files) && process(files)
   }, [])
