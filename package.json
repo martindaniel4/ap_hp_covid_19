@@ -29,7 +29,7 @@
     "react-vis": "^1.11.7",
     "styled-components": "^5.0.1",
     "typescript": "^3.8.3",
-    "underscore": "^1.9.2",
+    "underscore": "^1.12.1",
     "xlsx": "^0.15.6"
   },
   "scripts": {
