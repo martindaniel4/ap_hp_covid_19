@@ -16,7 +16,7 @@
     "@types/styled-components": "^5.0.1",
     "@types/underscore": "^1.9.4",
     "excel-date-to-js": "^1.0.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "papaparse": "^5.1.1",
     "query-string": "^6.12.1",
     "react": "^16.12.0",
